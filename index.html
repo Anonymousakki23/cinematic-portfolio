@@ -2,261 +2,1083 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akshay Iyer — Lead Analyst & Trainer</title>
+    <title>vCard - Personal Portfolio</title>
+
+    <!--
+      - favicon
+    -->
+    <link rel="shortcut icon" href="./assets/images/logo.ico" type="image/x-icon">
+
+    <!--
+      - custom css link
+    -->
+    <link rel="stylesheet" href="style.css">
+
+    <!--
+      - google font link
+    -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!--
+      - icon font link
+    -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="page-wrapper">
-        <!-- Sidebar / vCard Profile -->
-        <aside class="sidebar">
-            <div class="sidebar-card">
-                <div class="avatar" aria-label="Akshay Iyer avatar">
-                    <span class="avatar-initials">AI</span>
-                </div>
-                <h1 class="name">Akshay Iyer</h1>
-                <p class="title">Lead Analyst & Trainer</p>
 
-                <ul class="contact-list">
-                    <li>
-                        <i class="fa-solid fa-envelope" aria-hidden="true"></i>
-                        <a href="mailto:akshayiyer23@gmail.com">akshayiyer23@gmail.com</a>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-phone" aria-hidden="true"></i>
-                        <a href="tel:+48729303604">(+48) 729303604</a>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-                        <span>Krakow, Poland</span>
-                    </li>
-                </ul>
+  <!--
+    - #MAIN
+  -->
 
-                <div class="social-links">
-                    <a href="https://linkedin.com/in/akshayiyer23" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                        <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>
-                    </a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Work Permit">
-                        <i class="fa-solid fa-id-card" aria-hidden="true"></i>
-                    </a>
-                </div>
+  <main>
 
-                <p class="work-permit">
-                    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                    Polish Karta pobytu (no work permit required)
+    <!--
+      - #SIDEBAR
+    -->
+
+    <aside class="sidebar" data-sidebar>
+
+      <div class="sidebar-info">
+
+        <figure class="avatar-box">
+          <img src="./assets/images/my-avatar.png" alt="Akshay Iyer avatar" width="80">
+        </figure>
+
+        <div class="info-content">
+          <h1 class="name" title="Akshay Iyer">Akshay Iyer</h1>
+
+          <p class="title">Lead Analyst & Trainer</p>
+        </div>
+
+        <button class="info_more-btn" data-sidebar-btn>
+          <span>Show Contacts</span>
+          <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+        </button>
+
+      </div>
+
+      <div class="sidebar-info_more">
+
+        <div class="separator"></div>
+
+        <ul class="contacts-list">
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Email</p>
+
+              <a href="mailto:akshayiyer23@gmail.com" class="contact-link">akshayiyer23@gmail.com</a>
+            </div>
+
+          </li>
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <i class="fa-solid fa-phone" aria-hidden="true"></i>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Phone</p>
+
+              <a href="tel:+48729303604" class="contact-link">(+48) 729303604</a>
+            </div>
+
+          </li>
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Location</p>
+
+              <address>Krakow, Poland</address>
+            </div>
+
+          </li>
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <i class="fa-solid fa-id-card" aria-hidden="true"></i>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Work Permit</p>
+
+              <p class="contact-link">Polish Karta pobytu (no work permit required)</p>
+            </div>
+
+          </li>
+
+        </ul>
+
+        <div class="separator"></div>
+
+        <ul class="social-list">
+
+          <li class="social-item">
+            <a href="https://linkedin.com/in/akshayiyer23" class="social-link" target="_blank" rel="noopener noreferrer">
+              <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>
+            </a>
+          </li>
+
+          <li class="social-item">
+            <a href="#" class="social-link">
+              <i class="fa-brands fa-github" aria-hidden="true"></i>
+            </a>
+          </li>
+
+          <li class="social-item">
+            <a href="#" class="social-link">
+              <i class="fa-brands fa-twitter" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        </ul>
+
+      </div>
+
+    </aside>
+
+    <!--
+      - #main-content
+    -->
+
+    <div class="main-content">
+
+      <!--
+        - #NAVBAR
+      -->
+
+      <nav class="navbar">
+
+        <ul class="navbar-list">
+
+          <li class="navbar-item">
+            <button class="navbar-link active" data-nav-link>About</button>
+          </li>
+
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link>Resume</button>
+          </li>
+
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link>Portfolio</button>
+          </li>
+
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link>Blog</button>
+          </li>
+
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link>Contact</button>
+          </li>
+
+        </ul>
+
+      </nav>
+
+      <!--
+        - #ABOUT
+      -->
+
+      <article class="about  active" data-page>
+
+        <header>
+          <h2 class="h2 article-title">About me</h2>
+        </header>
+
+        <section class="about-text">
+          <p class="section-text">
+            Results-oriented Lead Analyst and Trainer with proven expertise in global operations management (400+ members), data analytics, and project leadership. Demonstrated success in providing agreed deliverables, generating quality reports, and fostering collaborative team environments. Adept at onboarding, technical guidance, and proactive communication with stakeholders.
+          </p>
+        </section>
+
+        <!--
+          - service
+        -->
+
+        <section class="service">
+
+          <h3 class="h3 service-title">What I do</h3>
+
+          <ul class="service-list">
+
+            <li class="service-item">
+
+              <div class="service-icon-box">
+                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+              </div>
+
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Data & Analytics</h4>
+
+                <p class="service-item-text">
+                  QA checks, collection, SQL, and productivity reporting via Google Backend Systems (Gearloose).
                 </p>
-            </div>
-        </aside>
+              </div>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="main-card">
-                <!-- Tabbed Navigation -->
-                <nav class="tab-nav" role="tablist" aria-label="Portfolio sections">
-                    <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-about" id="tab-btn-about">About</button>
-                    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-resume" id="tab-btn-resume">Resume</button>
-                    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-contact" id="tab-btn-contact">Contact</button>
-                </nav>
+            </li>
 
-                <!-- Tab Panels -->
-                <div class="tab-panels">
-                    <!-- About Panel -->
-                    <section class="tab-panel active" id="tab-about" role="tabpanel" aria-labelledby="tab-btn-about">
-                        <div class="panel-section">
-                            <h2>About</h2>
-                            <p class="summary">
-                                Results-oriented Lead Analyst and Trainer with proven expertise in global operations management (400+ members), data analytics, and project leadership. Demonstrated success in providing agreed deliverables, generating quality reports, and fostering collaborative team environments. Adept at onboarding, technical guidance, and proactive communication with stakeholders.
-                            </p>
-                        </div>
+            <li class="service-item">
 
-                        <div class="panel-section">
-                            <h2>What I Do</h2>
-                            <div class="feature-grid">
-                                <article class="feature-card">
-                                    <div class="feature-icon"><i class="fa-solid fa-chart-line" aria-hidden="true"></i></div>
-                                    <h3>Data & Analytics</h3>
-                                    <p>QA checks, collection, SQL, and productivity reporting via Google Backend Systems (Gearloose).</p>
-                                </article>
-                                <article class="feature-card">
-                                    <div class="feature-icon"><i class="fa-solid fa-users-gear" aria-hidden="true"></i></div>
-                                    <h3>Global Leadership</h3>
-                                    <p>Direct oversight of 400+ staff, global team calibrations (India, Vietnam), and conflict resolution.</p>
-                                </article>
-                                <article class="feature-card">
-                                    <div class="feature-icon"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></div>
-                                    <h3>Training & Onboarding</h3>
-                                    <p>Curriculum design, onboarding paths, and LLM modules within the Google ecosystem.</p>
-                                </article>
-                                <article class="feature-card">
-                                    <div class="feature-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
-                                    <h3>Operations & Compliance</h3>
-                                    <p>SLA tracking, confidentiality protocols, and tracker maintenance.</p>
-                                </article>
-                            </div>
-                        </div>
+              <div class="service-icon-box">
+                <i class="fa-solid fa-users-gear" aria-hidden="true"></i>
+              </div>
 
-                        <div class="panel-section">
-                            <h2>Languages</h2>
-                            <div class="language-list">
-                                <div class="language-item">
-                                    <div class="language-label">
-                                        <span>English (C2)</span>
-                                        <span>100%</span>
-                                    </div>
-                                    <div class="progress-bar"><div class="progress-fill" style="--progress:100%"></div></div>
-                                </div>
-                                <div class="language-item">
-                                    <div class="language-label">
-                                        <span>Tamil (Native)</span>
-                                        <span>100%</span>
-                                    </div>
-                                    <div class="progress-bar"><div class="progress-fill" style="--progress:100%"></div></div>
-                                </div>
-                                <div class="language-item">
-                                    <div class="language-label">
-                                        <span>Hindi (C1)</span>
-                                        <span>85%</span>
-                                    </div>
-                                    <div class="progress-bar"><div class="progress-fill" style="--progress:85%"></div></div>
-                                </div>
-                                <div class="language-item">
-                                    <div class="language-label">
-                                        <span>Marathi (C1)</span>
-                                        <span>85%</span>
-                                    </div>
-                                    <div class="progress-bar"><div class="progress-fill" style="--progress:85%"></div></div>
-                                </div>
-                                <div class="language-item">
-                                    <div class="language-label">
-                                        <span>Polish (A2)</span>
-                                        <span>35%</span>
-                                    </div>
-                                    <div class="progress-bar"><div class="progress-fill" style="--progress:35%"></div></div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Global Leadership</h4>
 
-                    <!-- Resume Panel -->
-                    <section class="tab-panel" id="tab-resume" role="tabpanel" aria-labelledby="tab-btn-resume" hidden>
-                        <div class="panel-section">
-                            <h2>Experience</h2>
-                            <div class="timeline">
-                                <article class="timeline-item">
-                                    <div class="timeline-marker"><i class="fa-solid fa-briefcase" aria-hidden="true"></i></div>
-                                    <div class="timeline-content">
-                                        <h3>Ecommerce Trainer</h3>
-                                        <p class="timeline-org">TELUS International <span class="timeline-separator">·</span> Krakow, Poland</p>
-                                        <p class="timeline-date">June 2025 - Present</p>
-                                        <ul>
-                                            <li>Assist in new hire onboarding and standardized vendor knowledge transfers.</li>
-                                            <li>Track deliverables, reporting, and comprehensive project documentation.</li>
-                                            <li>Lead cross-regional calibrations across India and Vietnam.</li>
-                                            <li>Designed modules on LLM models within the Google ecosystem.</li>
-                                        </ul>
-                                    </div>
-                                </article>
-                                <article class="timeline-item">
-                                    <div class="timeline-marker"><i class="fa-solid fa-briefcase" aria-hidden="true"></i></div>
-                                    <div class="timeline-content">
-                                        <h3>Lead Analyst Trainer</h3>
-                                        <p class="timeline-org">HCL Technologies <span class="timeline-separator">·</span> Krakow, Poland</p>
-                                        <p class="timeline-date">July 2024 - June 2025</p>
-                                        <ul>
-                                            <li>Managed data vetting, project tracker maintenance, and high-fidelity QA.</li>
-                                            <li>Generated productivity, quality, and ad hoc status reports for leadership and clients.</li>
-                                            <li>Maintained compliance with confidential and sensitive data assets.</li>
-                                            <li>Awarded "Best Lead" (Q4 2024).</li>
-                                        </ul>
-                                    </div>
-                                </article>
-                                <article class="timeline-item">
-                                    <div class="timeline-marker"><i class="fa-solid fa-briefcase" aria-hidden="true"></i></div>
-                                    <div class="timeline-content">
-                                        <h3>Senior Data Analyst</h3>
-                                        <p class="timeline-org">HCL Technologies <span class="timeline-separator">·</span> Krakow, Poland</p>
-                                        <p class="timeline-date">October 2022 - July 2024</p>
-                                        <ul>
-                                            <li>Analyzed large datasets to deliver actionable business insights.</li>
-                                            <li>Created executive visualization tools and supported management dashboards.</li>
-                                            <li>Mentored junior analysts and conducted skill assessments.</li>
-                                        </ul>
-                                    </div>
-                                </article>
-                                <article class="timeline-item">
-                                    <div class="timeline-marker"><i class="fa-solid fa-briefcase" aria-hidden="true"></i></div>
-                                    <div class="timeline-content">
-                                        <h3>Technical Lead</h3>
-                                        <p class="timeline-org">PC-Clinik Sales and Service <span class="timeline-separator">·</span> Goa, India</p>
-                                        <p class="timeline-date">March 2014 - August 2017</p>
-                                        <ul>
-                                            <li>Managed operations for authorized service center handling major hardware brands (Asus, AOC).</li>
-                                            <li>Resolved high-pressure technical service issues and workflow bottlenecks.</li>
-                                        </ul>
-                                    </div>
-                                </article>
-                            </div>
-                        </div>
+                <p class="service-item-text">
+                  Direct oversight of 400+ staff, global team calibrations (India, Vietnam), and conflict resolution.
+                </p>
+              </div>
 
-                        <div class="panel-section">
-                            <h2>Education</h2>
-                            <div class="timeline education-timeline">
-                                <article class="timeline-item">
-                                    <div class="timeline-marker"><i class="fa-solid fa-cap-graduation" aria-hidden="true"></i></div>
-                                    <div class="timeline-content">
-                                        <h3>M.Sc. Plant and Environmental Biotechnology</h3>
-                                        <p class="timeline-org">Uniwersytet Rolniczy <span class="timeline-separator">·</span> Krakow, Poland</p>
-                                        <p class="timeline-date">Graduated: February 2022</p>
-                                    </div>
-                                </article>
-                                <article class="timeline-item">
-                                    <div class="timeline-marker"><i class="fa-solid fa-cap-graduation" aria-hidden="true"></i></div>
-                                    <div class="timeline-content">
-                                        <h3>B.Sc. Biotechnology</h3>
-                                        <p class="timeline-org">Sanquelim College of Arts, Science & Commerce, Goa University <span class="timeline-separator">·</span> India</p>
-                                        <p class="timeline-date">Graduated: May 2018</p>
-                                    </div>
-                                </article>
-                            </div>
-                        </div>
-                    </section>
+            </li>
 
-                    <!-- Contact Panel -->
-                    <section class="tab-panel" id="tab-contact" role="tabpanel" aria-labelledby="tab-btn-contact" hidden>
-                        <div class="panel-section contact-section">
-                            <h2>Contact</h2>
-                            <p class="contact-intro">
-                                I'd love to hear from you. Whether you have a question about my work, training programs, or just want to say hello, I'll try my best to get back to you!
-                            </p>
-                            <form class="contact-form" action="mailto:akshayiyer23@gmail.com" method="POST" enctype="text/plain" onsubmit="handleFormSubmit(event)">
-                                <div class="form-group">
-                                    <label for="contact-name">Full Name</label>
-                                    <input type="text" id="contact-name" name="name" placeholder="Your full name" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="contact-email">Email Address</label>
-                                    <input type="email" id="contact-email" name="email" placeholder="your.email@example.com" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="contact-message">Message</label>
-                                    <textarea id="contact-message" name="message" rows="5" placeholder="Write your message here..." required></textarea>
-                                </div>
-                                <button type="submit" class="submit-btn">
-                                    <span>Send Message</span>
-                                    <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </section>
+            <li class="service-item">
+
+              <div class="service-icon-box">
+                <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+              </div>
+
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Training & Onboarding</h4>
+
+                <p class="service-item-text">
+                  Curriculum design, onboarding paths, and LLM modules within the Google ecosystem.
+                </p>
+              </div>
+
+            </li>
+
+            <li class="service-item">
+
+              <div class="service-icon-box">
+                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+              </div>
+
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Operations & Compliance</h4>
+
+                <p class="service-item-text">
+                  SLA tracking, confidentiality protocols, and tracker maintenance.
+                </p>
+              </div>
+
+            </li>
+
+          </ul>
+
+        </section>
+
+        <!--
+          - testimonials
+        -->
+
+        <section class="testimonials">
+
+          <h3 class="h3 testimonials-title">Testimonials</h3>
+
+          <ul class="testimonials-list has-scrollbar" data-testimonials-list>
+
+            <li class="testimonials-item">
+              <div class="content-card" data-testimonials-item>
+
+                <figure class="testimonials-avatar-box">
+                  <img src="./assets/images/avatar-1.png" alt="Daniel lewis" width="60" data-testimonials-avatar>
+                </figure>
+
+                <h4 class="h4 testimonials-item-title" data-testimonials-title>Daniel lewis</h4>
+
+                <div class="testimonials-text" data-testimonials-text>
+                  <p>
+                    Akshay was a Lead Analyst at HCL Technologies, where he managed data vetting, project tracker maintenance, and high-fidelity QA. He generated productivity, quality, and ad hoc status reports for leadership and clients. Maintained compliance with confidential and sensitive data assets. Awarded "Best Lead" (Q4 2024).
+                  </p>
                 </div>
+
+              </div>
+            </li>
+
+            <li class="testimonials-item">
+              <div class="content-card" data-testimonials-item>
+
+                <figure class="testimonials-avatar-box">
+                  <img src="./assets/images/avatar-2.png" alt="Jessica miller" width="60" data-testimonials-avatar>
+                </div>
+
+                <h4 class="h4 testimonials-item-title" data-testimonials-title>Jessica miller</h4>
+
+                <div class="testimonials-text" data-testimonials-text>
+                  <p>
+                    Worked alongside Akshay on various project management and data analysis initiatives. His analytical skills and leadership in global operations management are exceptional. Always proactive in driving results and maintaining high standards.
+                  </p>
+                </div>
+
+              </div>
+            </li>
+
+            <li class="testimonials-item">
+              <div class="content-card" data-testimonials-item>
+
+                <figure class="testimonials-avatar-box">
+                  <img src="./assets/images/avatar-3.png" alt="Emily evans" width="60" data-testimonials-avatar>
+                </div>
+
+                <h4 class="h4 testimonials-item-title" data-testimonials-title>Emily evans</h4>
+
+                <div class="testimonials-text" data-testimonials-text>
+                  <p>
+                    Akshay designed comprehensive training modules on LLM models within the Google ecosystem for new hires and existing staff. His curriculum design and onboarding paths significantly improved team productivity and knowledge retention.
+                  </p>
+                </div>
+
+              </div>
+            </li>
+
+          </ul>
+
+        </section>
+
+        <!--
+          - testimonials modal
+        -->
+
+        <div class="modal-container" data-modal-container>
+
+          <div class="overlay" data-overlay></div>
+
+          <section class="testimonials-modal">
+
+            <button class="modal-close-btn" data-modal-close-btn>
+              <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+
+            <div class="modal-img-wrapper">
+              <figure class="modal-avatar-box">
+                <img src="./assets/images/avatar-1.png" alt="Daniel lewis" width="80">
+              </figure>
+
+              <img src="./assets/images/icon-quote.svg" alt="quote icon">
             </div>
-        </main>
+
+            <div class="modal-content">
+
+              <h4 class="h3 modal-title" data-modal-title>Daniel lewis</h4>
+
+              <time datetime="2021-02-23">23 February, 2021</time>
+
+              <div data-modal-text>
+                <p>
+                  Akshay was a Lead Analyst at HCL Technologies, where he managed data vetting, project tracker maintenance, and high-fidelity QA. He generated productivity, quality, and ad hoc status reports for leadership and clients. Maintained compliance with confidential and sensitive data assets. Awarded "Best Lead" (Q4 2024).
+                </p>
+              </div>
+
+            </div>
+
+          </section>
+
+        </div>
+
+        <!--
+          - languages
+        -->
+
+        <section class="languages">
+
+          <h3 class="h3 languages-title">Languages</h3>
+
+          <ul class="skills-list has-scrollbar" data-skills-list>
+
+            <li class="skills-item">
+              <div class="title-wrapper">
+                <h5 class="h5">English (C2)</h5>
+
+                <data value="100">100%</data>
+              </div>
+
+              <div class="skill-progress-bg">
+                <div class="skill-progress-fill" style="width: 100%"></div>
+              </div>
+
+            </li>
+
+            <li class="skills-item">
+              <div class="title-wrapper">
+                <h5 class="h5">Tamil (Native)</h5>
+
+                <data value="100">100%</data>
+              </div>
+
+              <div class="skill-progress-bg">
+                <div class="skill-progress-fill" style="width: 100%"></div>
+              </div>
+
+            </li>
+
+            <li class="skills-item">
+              <div class="title-wrapper">
+                <h5 class="h5">Hindi (C1)</h5>
+
+                <data value="85">85%</data>
+              </div>
+
+              <div class="skill-progress-bg">
+                <div class="skill-progress-fill" style="width: 85%"></div>
+              </div>
+
+            </li>
+
+            <li class="skills-item">
+              <div class="title-wrapper">
+                <h5 class="h5">Marathi (C1)</h5>
+
+                <data value="85">85%</data>
+              </div>
+
+              <div class="skill-progress-bg">
+                <div class="skill-progress-fill" style="width: 85%"></div>
+              </div>
+
+            </li>
+
+            <li class="skills-item">
+              <div class="title-wrapper">
+                <h5 class="h5">Polish (A2)</h5>
+
+                <data value="35">35%</data>
+              </div>
+
+              <div class="skill-progress-bg">
+                <div class="skill-progress-fill" style="width: 35%"></div>
+              </div>
+
+            </li>
+
+          </ul>
+
+        </section>
+
+      </article>
+
+      <!--
+        - #RESUME
+      -->
+
+      <article class="resume" data-page>
+
+        <header>
+          <h2 class="h2 article-title">Resume</h2>
+        </header>
+
+        <section class="timeline">
+
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <i class="fa-solid fa-briefcase" aria-hidden="true"></i>
+            </div>
+
+            <h3 class="h3">Experience</h3>
+          </div>
+
+          <ol class="timeline-list">
+
+            <li class="timeline-item">
+
+              <h4 class="h4 timeline-item-title">Ecommerce Trainer</h4>
+
+              <span>TELUS International • Krakow, Poland</span>
+
+              <p class="timeline-date">June 2025 - Present</p>
+
+              <p class="timeline-text">
+                Assist in new hire onboarding and standardized vendor knowledge transfers. Track deliverables, reporting, and comprehensive project documentation. Lead cross-regional calibrations across India and Vietnam. Designed modules on LLM models within the Google ecosystem.
+              </p>
+
+            </li>
+
+            <li class="timeline-item">
+
+              <h4 class="h4 timeline-item-title">Lead Analyst Trainer</h4>
+
+              <span>HCL Technologies • Krakow, Poland</span>
+
+              <p class="timeline-date">July 2024 - June 2025</p>
+
+              <p class="timeline-text">
+                Managed data vetting, project tracker maintenance, and high-fidelity QA. Generated productivity, quality, and ad hoc status reports for leadership and clients. Maintained compliance with confidential and sensitive data assets. Awarded "Best Lead" (Q4 2024).
+              </p>
+
+            </li>
+
+            <li class="timeline-item">
+
+              <h4 class="h4 timeline-item-title">Senior Data Analyst</h4>
+
+              <span>HCL Technologies • Krakow, Poland</span>
+
+              <p class="timeline-date">October 2022 - July 2024</p>
+
+              <p class="timeline-text">
+                Analyzed large datasets to deliver actionable business insights. Created executive visualization tools and supported management dashboards. Mentored junior analysts and conducted skill assessments.
+              </p>
+
+            </li>
+
+            <li class="timeline-item">
+
+              <h4 class="h4 timeline-item-title">Technical Lead</h4>
+
+              <span>PC-Clinik Sales and Service • Goa, India</span>
+
+              <p class="timeline-date">March 2014 - August 2017</p>
+
+              <p class="timeline-text">
+                Managed operations for authorized service center handling major hardware brands (Asus, AOC). Resolved high-pressure technical service issues and workflow bottlenecks.
+              </p>
+
+            </li>
+
+          </ol>
+
+        </section>
+
+        <section class="timeline">
+
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <i class="fa-solid fa-cap-graduation" aria-hidden="true"></i>
+            </div>
+
+            <h3 class="h3">Education</h3>
+          </div>
+
+          <ol class="timeline-list">
+
+            <li class="timeline-item">
+
+              <h4 class="h4 timeline-item-title">M.Sc. Plant and Environmental Biotechnology</h4>
+
+              <span>Uniwersytet Rolniczy • Krakow, Poland</span>
+
+              <p class="timeline-date">February 2022</p>
+
+            </li>
+
+            <li class="timeline-item">
+
+              <h4 class="h4 timeline-item-title">B.Sc. Biotechnology</h4>
+
+              <span>Sanquelim College of Arts, Science & Commerce, Goa University • India</span>
+
+              <p class="timeline-date">May 2018</p>
+
+            </li>
+
+          </ol>
+
+        </section>
+
+      </article>
+
+      <!--
+        - #PORTFOLIO
+      -->
+
+      <article class="portfolio" data-page>
+
+        <header>
+          <h2 class="h2 article-title">Portfolio</h2>
+        </header>
+
+        <section class="projects">
+
+          <ul class="filter-list">
+
+            <li class="filter-item">
+              <button class="active" data-filter-btn>All</button>
+            </li>
+
+            <li class="filter-item">
+              <button data-filter-btn>Google Backend Systems</button>
+            </li>
+
+            <li class="filter-item">
+              <button data-filter-btn>Global Operations</button>
+            </li>
+
+            <li class="filter-item">
+              <button data-filter-btn>LLM Training</button>
+            </li>
+
+            <li class="filter-item">
+              <button data-filter-btn>Operations Management</button>
+            </li>
+
+          </ul>
+
+          <div class="filter-select-box">
+
+            <button class="filter-select" data-select>
+
+              <div class="select-value" data-select-value>Select category</div>
+
+              <div class="select-icon">
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </div>
+
+            </button>
+
+            <ul class="select-list">
+
+              <li class="select-item">
+                <button data-select-item>All</button>
+              </li>
+
+              <li class="select-item">
+                <button data-select-item>Google Backend Systems</button>
+              </li>
+
+              <li class="select-item">
+                <button data-select-item>Global Operations</button>
+              </li>
+
+              <li class="select-item">
+                <button data-select-item>LLM Training</button>
+              </li>
+
+              <li class="select-item">
+                <button data-select-item>Operations Management</button>
+              </li>
+
+            </ul>
+
+          </div>
+
+          <ul class="project-list">
+
+            <li class="project-item  active" data-filter-item data-category="google backend systems">
+              <a href="#">
+
+                <figure class="project-img">
+                  <div class="project-item-icon-box">
+                    <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>
+                  </div>
+
+                  <img src="./assets/images/project-1.jpg" alt="Google Backend Systems" loading="lazy">
+                </figure>
+
+                <h3 class="project-title">Google Backend Systems</h3>
+
+                <p class="project-category">Google Backend Systems</p>
+
+              </a>
+            </li>
+
+            <li class="project-item  active" data-filter-item data-category="global operations">
+              <a href="#">
+
+                <figure class="project-img">
+                  <div class="project-item-icon-box">
+                    <i class="fa-solid fa-users" aria-hidden="true"></i>
+                  </div>
+
+                  <img src="./assets/images/project-2.jpg" alt="Global Operations" loading="lazy">
+                </figure>
+
+                <h3 class="project-title">Global Operations</h3>
+
+                <p class="project-category">Global Operations</p>
+
+              </a>
+            </li>
+
+            <li class="project-item  active" data-filter-item data-category="llm training">
+              <a href="#">
+
+                <figure class="project-img">
+                  <div class="project-item-icon-box">
+                    <i class="fa-solid fa-brain" aria-hidden="true"></i>
+                  </div>
+
+                  <img src="./assets/images/project-3.jpg" alt="LLM Training" loading="lazy">
+                </figure>
+
+                <h3 class="project-title">LLM Training</h3>
+
+                <p class="project-category">LLM Training</p>
+
+              </a>
+            </li>
+
+            <li class="project-item  active" data-filter-item data-category="operations management">
+              <a href="#">
+
+                <figure class="project-img">
+                  <div class="project-item-icon-box">
+                    <i class="fa-solid fa-gear" aria-hidden="true"></i>
+                  </div>
+
+                  <img src="./assets/images/project-4.jpg" alt="Operations Management" loading="lazy">
+                </figure>
+
+                <h3 class="project-title">Operations Management</h3>
+
+                <p class="project-category">Operations Management</p>
+
+              </a>
+            </li>
+
+            <li class="project-item  active" data-filter-item data-category="global operations">
+              <a href="#">
+
+                <figure class="project-img">
+                  <div class="project-item-icon-box">
+                    <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                  </div>
+
+                  <img src="./assets/images/project-5.jpg" alt="Cross-regional Calibrations" loading="lazy">
+                </figure>
+
+                <h3 class="project-title">Cross-regional Calibrations</h3>
+
+                <p class="project-category">Global Operations</p>
+
+              </a>
+            </li>
+
+            <li class="project-item  active" data-filter-item data-category="google backend systems">
+              <a href="#">
+
+                <figure class="project-img">
+                  <div class="project-item-icon-box">
+                    <i class="fa-solid fa-database" aria-hidden="true"></i>
+                  </div>
+
+                  <img src="./assets/images/project-6.jpg" alt="Data Analytics" loading="lazy">
+                </figure>
+
+                <h3 class="project-title">Data Analytics</h3>
+
+                <p class="project-category">Google Backend Systems</p>
+
+              </a>
+            </li>
+
+          </ul>
+
+        </section>
+
+      </article>
+
+      <!--
+        - #BLOG
+      -->
+
+      <article class="blog" data-page>
+
+        <header>
+          <h2 class="h2 article-title">Blog</h2>
+        </header>
+
+        <section class="blog-posts">
+
+          <ul class="blog-posts-list">
+
+            <li class="blog-post-item">
+              <a href="#">
+
+                <figure class="blog-banner-box">
+                  <img src="./assets/images/blog-1.jpg" alt="Global Operations Management Best Practices" loading="lazy">
+                </figure>
+
+                <div class="blog-content">
+
+                  <div class="blog-meta">
+                    <p class="blog-category">Global Operations</p>
+
+                    <span class="dot"></span>
+
+                    <time datetime="2025-06-15">June 15, 2025</time>
+                  </div>
+
+                  <h3 class="h3 blog-item-title">Global Operations Management Best Practices</h3>
+
+                  <p class="blog-text">
+                    Exploring key strategies for effective global team management and operational excellence.
+                  </p>
+
+                </div>
+
+              </a>
+            </li>
+
+            <li class="blog-post-item">
+              <a href="#">
+
+                <figure class="blog-banner-box">
+                  <img src="./assets/images/blog-2.jpg" alt="LLM Implementation in Corporate Training" loading="lazy">
+
+                </figure>
+
+                <div class="blog-content">
+
+                  <div class="blog-meta">
+                    <p class="blog-category">LLM Training</p>
+
+                    <span class="dot"></span>
+
+                    <time datetime="2025-06-10">June 10, 2025</time>
+                  </div>
+
+                  <h3 class="h3 blog-item-title">LLM Implementation in Corporate Training</h3>
+
+                  <p class="blog-text">
+                    How Large Language Models are revolutionizing the training and onboarding process in modern enterprises.
+                  </p>
+
+                </div>
+
+              </a>
+            </li>
+
+            <li class="blog-post-item">
+              <a href="#">
+
+                <figure class="blog-banner-box">
+                  <img src="./assets/images/blog-3.jpg" alt="Data Analytics for SME Growth" loading="lazy">
+
+                </figure>
+
+                <div class="blog-content">
+
+                  <div class="blog-meta">
+                    <p class="blog-category">Data Analytics</p>
+
+                    <span class="dot"></span>
+
+                    <time datetime="2025-06-05">June 5, 2025</time>
+                  </div>
+
+                  <h3 class="h3 blog-item-title">Data Analytics for SME Growth</h3>
+
+                  <p class="blog-text">
+                    Practical insights on leveraging data analytics to drive business growth for small and medium enterprises.
+                  </p>
+
+                </div>
+
+              </a>
+            </li>
+
+            <li class="blog-post-item">
+              <a href="#">
+
+                <figure class="blog-banner-box">
+                  <img src="./assets/images/blog-4.jpg" alt="Cross-regional Team Calibration" loading="lazy">
+
+                </figure>
+
+                <div class="blog-content">
+
+                  <div class="blog-meta">
+                    <p class="blog-category">Global Operations</p>
+
+                    <span class="dot"></span>
+
+                    <time datetime="2025-05-30">May 30, 2025</time>
+                  </div>
+
+                  <h3 class="h3 blog-item-title">Cross-regional Team Calibration</h3>
+
+                  <p class="blog-text">
+                    Techniques for successful cross-cultural team alignment and collaboration across different time zones.
+                  </p>
+
+                </div>
+
+              </a>
+            </li>
+
+            <li class="blog-post-item">
+              <a href="#">
+
+                <figure class="blog-banner-box">
+                  <img src="./assets/images/blog-5.jpg" alt="Compliance in Data Analytics" loading="lazy">
+
+                </figure>
+
+                <div class="blog-content">
+
+                  <div class="blog-meta">
+                    <p class="blog-category">Operations & Compliance</p>
+
+                    <span class="dot"></span>
+
+                    <time datetime="2025-05-25">May 25, 2025</time>
+                  </div>
+
+                  <h3 class="h3 blog-item-title">Compliance in Data Analytics</h3>
+
+                  <p class="blog-text">
+                    Essential guidelines for maintaining data privacy and compliance in analytical projects.
+                  </p>
+
+                </div>
+
+              </a>
+            </li>
+
+            <li class="blog-post-item">
+              <a href="#">
+
+                <figure class="blog-banner-box">
+                  <img src="./assets/images/blog-6.jpg" alt="Technical Skills for Modern Analysts" loading="lazy">
+
+                </figure>
+
+                <div class="blog-content">
+
+                  <div class="blog-meta">
+                    <p class="blog-category">Training</p>
+
+                    <span class="dot"></span>
+
+                    <time datetime="2025-05-20">May 20, 2025</time>
+                  </div>
+
+                  <h3 class="h3 blog-item-title">Technical Skills for Modern Analysts</h3>
+
+                  <p class="blog-text">
+                    Key technical competencies every analyst should master in today's data-driven environment.
+                  </p>
+
+                </div>
+
+              </a>
+            </li>
+
+          </ul>
+
+        </section>
+
+      </article>
+
+      <!--
+        - #CONTACT
+      -->
+
+      <article class="contact" data-page>
+
+        <header>
+          <h2 class="h2 article-title">Contact</h2>
+        </header>
+
+        <section class="contact-form">
+
+          <h3 class="h3 form-title">Contact Form</h3>
+
+          <form action="mailto:akshayiyer23@gmail.com" class="input-wrapper" method="POST" enctype="text/plain">
+
+            <div class="input-box">
+
+              <input type="text" name="name" class="form-input" placeholder="Full name" required>
+              <input type="email" name="email" class="form-input" placeholder="Email address" required>
+
+            </div>
+
+            <textarea name="message" class="form-input" placeholder="Your Message" required></textarea>
+
+            <button class="form-btn" type="submit">
+              <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+              <span>Send Message</span>
+            </button>
+
+          </form>
+
+          <aside>
+
+            <h3 class="h3 form-title">Other Ways to Reach Me</h3>
+
+            <ul class="contacts-list">
+
+              <li class="contact-item">
+
+                <div class="icon-box">
+                  <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                </div>
+
+                <div class="contact-info">
+                  <p class="contact-title">Email</p>
+
+                  <a href="mailto:akshayiyer23@gmail.com" class="contact-link">akshayiyer23@gmail.com</a>
+                </div>
+
+              </li>
+
+              <li class="contact-item">
+
+                <div class="icon-box">
+                  <i class="fa-solid fa-phone" aria-hidden="true"></i>
+                </div>
+
+                <div class="class contact-info">
+                  <p class="contact-title">Phone</p>
+
+                  <a href="tel:+48729303604" class="contact-link">(+48) 729303604</a>
+                </div>
+
+              </li>
+
+              <li class="contact-item">
+
+                <div class="icon-box">
+                  <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                </div>
+
+                <div class="contact-info">
+                  <p class="contact-title">Location</p>
+
+                  <address>Krakow, Poland</address>
+                </div>
+
+              </li>
+
+            </ul>
+
+          </aside>
+
+        </section>
+
+      </article>
+
     </div>
 
-    <script src="script.js"></script>
+  </main>
+
+  <!--
+    - custom js link
+  -->
+  <script src="script.js"></script>
+
+  <!--
+    - ionicon link
+  -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
