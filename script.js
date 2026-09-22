@@ -1,80 +1,80 @@
 /**
- * vCard Portfolio Controller
- * Handles sidebar toggle, tab navigation, testimonials modal, and portfolio filtering.
- * Mirrors the interaction patterns of the codewithsadee vCard template.
+ * Sci-Fi Portfolio Controller
+ * Handles sidebar toggle, tab navigation, photography filters,
+ * photography lightbox, testimonials modal, skill bars, and contact form.
  */
 (function () {
     'use strict';
 
-    /* ---------- Sidebar: Show/Hide Contacts ---------- */
-    const sidebar = document.querySelector('[data-sidebar]');
-    const sidebarBtn = document.querySelector('[data-sidebar-btn]');
+    /* ==============================================
+       SIDEBAR: Show/Hide Contacts
+       ============================================== */
+    var sidebar = document.querySelector('[data-sidebar]');
+    var sidebarBtn = document.querySelector('[data-sidebar-btn]');
 
     if (sidebar && sidebarBtn) {
-        const contactsList = sidebar.querySelector('.contacts-list');
-        const showBtn = sidebarBtn.querySelector('span');
-        const chevron = sidebarBtn.querySelector('i');
-        let isExpanded = true;
+        var contactsList = sidebar.querySelector('.contacts-list');
+        var showBtn = sidebarBtn.querySelector('[data-sidebar-btn-label]');
+        var chevron = sidebarBtn.querySelector('i');
+        var isExpanded = false; /* Start collapsed on mobile-friendly note */
 
         function toggleSidebar() {
             isExpanded = !isExpanded;
-            contactsList.style.maxHeight = isExpanded ? contactsList.scrollHeight + 'px' : '0px';
-            contactsList.style.overflow = isExpanded ? 'visible' : 'hidden';
-            contactsList.style.marginTop = isExpanded ? '16px' : '0px';
-            contactsList.style.opacity = isExpanded ? '1' : '0.5';
-            contactsList.style.transition = 'all 0.3s ease';
-
-            sidebarBtn.querySelector('span').textContent = isExpanded ? 'Hide Contacts' : 'Show Contacts';
-            chevron.style.transform = isExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
+            contactsList.classList.toggle('collapsed', !isExpanded);
+            showBtn.textContent = isExpanded ? 'Hide Contacts' : 'Show Contacts';
+            if (chevron) chevron.style.transform = isExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
         }
 
         sidebarBtn.addEventListener('click', toggleSidebar);
-        contactsList.style.maxHeight = contactsList.scrollHeight + 'px';
     }
 
-    /* ---------- Tab Navigation ---------- */
-    const navLinks = document.querySelectorAll('[data-nav-link]');
-    const pages = document.querySelectorAll('[data-page]');
+    /* ==============================================
+       TAB NAVIGATION
+       ============================================== */
+    var navLinks = document.querySelectorAll('[data-nav-link]');
+    var pages = document.querySelectorAll('[data-page]');
 
     function switchPage(targetLink) {
-        navLinks.forEach(link => {
+        var targetPageName = targetLink.getAttribute('data-nav-link');
+
+        navLinks.forEach(function (link) {
             link.classList.remove('active');
             link.setAttribute('aria-selected', 'false');
             link.setAttribute('tabindex', '-1');
         });
 
-        pages.forEach(page => {
+        pages.forEach(function (page) {
             page.classList.remove('active');
-            page.setAttribute('hidden', '');
         });
 
         targetLink.classList.add('active');
         targetLink.setAttribute('aria-selected', 'true');
         targetLink.removeAttribute('tabindex');
 
-        const targetPage = document.querySelector('[data-page="' + targetLink.getAttribute('data-nav-link') + '"]');
+        var targetPage = document.querySelector('[data-page="' + targetPageName + '"]');
         if (targetPage) {
             targetPage.classList.add('active');
-            targetPage.removeAttribute('hidden');
-
-            if (targetLink.getAttribute('data-nav-link') === 'About') {
+            /* Re-trigger animations when switching tabs */
+            if (targetPageName === 'About') {
                 animateSkillBars();
             }
         }
     }
 
-    navLinks.forEach((link, index) => {
+    navLinks.forEach(function (link, index) {
         link.setAttribute('aria-selected', link.classList.contains('active') ? 'true' : 'false');
         if (!link.classList.contains('active')) {
             link.setAttribute('tabindex', '-1');
         }
 
-        link.addEventListener('click', () => switchPage(link));
+        link.addEventListener('click', function () {
+            switchPage(link);
+        });
 
-        link.addEventListener('keydown', (e) => {
-            const navArray = Array.from(navLinks);
-            const linkIndex = navArray.indexOf(link);
-            let newIndex;
+        link.addEventListener('keydown', function (e) {
+            var navArray = Array.from(navLinks);
+            var linkIndex = navArray.indexOf(link);
+            var newIndex;
 
             if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
                 e.preventDefault();
@@ -98,131 +98,167 @@
         });
     });
 
-    /* ---------- Skill Bars (Languages) ---------- */
+    /* ==============================================
+       PHOTOGRAPHY FILTER
+       ============================================== */
+    var photoFilterButtons = document.querySelectorAll('[data-photo-filter]');
+    var photoItems = document.querySelectorAll('[data-photo-item]');
+
+    function applyPhotoFilter(category) {
+        photoItems.forEach(function (item) {
+            var matches = category === 'all' || item.getAttribute('data-category') === category;
+            item.classList.toggle('active', matches);
+        });
+    }
+
+    photoFilterButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            photoFilterButtons.forEach(function (b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            applyPhotoFilter(btn.getAttribute('data-photo-filter'));
+        });
+    });
+
+    /* ==============================================
+       PHOTOGRAPHY LIGHTBOX
+       ============================================== */
+    var lightbox = document.querySelector('[data-lightbox]');
+    var lightboxClose = document.querySelector('[data-lightbox-close]');
+    var lightboxImg = document.querySelector('[data-lightbox-img]');
+    var lightboxTitle = document.querySelector('[data-lightbox-title]');
+    var lightboxCategory = document.querySelector('[data-lightbox-category]');
+    var lightboxDate = document.querySelector('[data-lightbox-date]');
+
+    photoItems.forEach(function (item) {
+        item.addEventListener('click', function () {
+            var svg = item.querySelector('.photo-img svg');
+            if (!svg) return;
+
+            var clone = svg.cloneNode(true);
+            lightboxImg.innerHTML = '';
+            lightboxImg.appendChild(clone);
+
+            var caption = item.querySelector('.photo-caption');
+            lightboxTitle.textContent = caption ? caption.querySelector('.photo-title').textContent : '';
+            lightboxCategory.textContent = caption ? caption.querySelector('.category').textContent : '';
+            lightboxDate.textContent = caption ? caption.querySelector('.photo-meta span:last-child').textContent : '';
+
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    });
+
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+    if (lightbox) {
+        lightbox.addEventListener('click', function (e) {
+            if (e.target === lightbox) closeLightbox();
+        });
+    }
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeLightbox();
+        }
+    });
+
+    /* ==============================================
+       TESTIMONIALS MODAL
+       ============================================== */
+    var modalContainer = document.querySelector('[data-modal-container]');
+    var modalCloseBtn = document.querySelector('[data-modal-close-btn]');
+    var modalTitle = document.querySelector('[data-modal-title]');
+    var modalText = document.querySelector('[data-modal-text]');
+    var modalAvatar = document.querySelector('[data-modal-avatar]');
+    var modalDate = document.querySelector('[data-modal-date]');
+    var testimonialsItems = document.querySelectorAll('[data-testimonials-item]');
+    var lastFocused = null;
+
+    /* Set date text for testimonial items if not present */
+    testimonialsItems.forEach(function (item) {
+        var titleEl = item.querySelector('[data-testimonials-title]');
+        var textEl = item.querySelector('[data-testimonials-text]');
+        if (titleEl && textEl) {
+            var card = item.querySelector('.content-card');
+            if (card) card.setAttribute('role', 'button');
+        }
+    });
+
+    testimonialsItems.forEach(function (item) {
+        item.addEventListener('click', function () {
+            lastFocused = item;
+            var title = item.querySelector('[data-testimonials-title]');
+            var text = item.querySelector('[data-testimonials-text]');
+            if (modalTitle && title) modalTitle.textContent = title.textContent;
+            if (modalText && text) modalText.innerHTML = text.innerHTML;
+
+            var avatar = item.querySelector('[data-testimonials-avatar]');
+            if (modalAvatar && avatar) {
+                modalAvatar.setAttribute('src', avatar.getAttribute('src'));
+                modalAvatar.setAttribute('alt', avatar.getAttribute('alt'));
+            }
+
+            if (modalContainer) {
+                modalContainer.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                if (modalCloseBtn) modalCloseBtn.focus();
+            }
+        });
+    });
+
+    function closeModal() {
+        if (modalContainer) modalContainer.classList.remove('active');
+        document.body.style.overflow = '';
+        if (lastFocused) lastFocused.focus();
+    }
+
+    if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+    var overlay = document.querySelector('[data-overlay]');
+    if (overlay) overlay.addEventListener('click', closeModal);
+
+    /* ==============================================
+       SKILL BARS (Languages) - Animated on view
+       ============================================== */
     function animateSkillBars() {
-        const fills = document.querySelectorAll('.skill-progress-fill');
-        fills.forEach(fill => {
-            const targetWidth = fill.style.width;
+        var fills = document.querySelectorAll('.skill-progress-fill');
+        fills.forEach(function (fill) {
+            var targetWidth = fill.style.width;
             fill.style.width = '0';
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () {
                     fill.style.width = targetWidth;
                 });
             });
         });
     }
 
-    /* ---------- Testimonials Modal ---------- */
-    const modalContainer = document.querySelector('[data-modal-container]');
-    const modalCloseBtn = document.querySelector('[data-modal-close-btn]');
-    const modalTitle = document.querySelector('[data-modal-title]');
-    const modalText = document.querySelector('[data-modal-text]');
-    const modalAvatar = document.querySelector('[data-modal-container] img[alt*="Daniel"]');
-    const testimonialsList = document.querySelector('[data-testimonials-list]');
-    const testimonialsItems = document.querySelectorAll('[data-testimonials-item]');
-    let lastFocused = null;
-
-    testimonialsItems.forEach(item => {
-        item.addEventListener('click', () => {
-            lastFocused = item;
-            modalTitle.textContent = item.querySelector('[data-testimonials-title]').textContent;
-            modalText.innerHTML = item.querySelector('[data-testimonials-text]').innerHTML;
-
-            const avatar = item.querySelector('[data-testimonials-avatar]');
-            if (modalAvatar && avatar) {
-                modalAvatar.setAttribute('src', avatar.getAttribute('src'));
-                modalAvatar.setAttribute('alt', avatar.getAttribute('alt'));
-            }
-
-            modalContainer.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            modalCloseBtn.focus();
-        });
-    });
-
-    function closeModal() {
-        modalContainer.classList.remove('active');
-        document.body.style.overflow = '';
-        if (lastFocused) {
-            lastFocused.focus();
-        }
-    }
-
-    modalCloseBtn.addEventListener('click', closeModal);
-    modalContainer.querySelector('[data-overlay]').addEventListener('click', closeModal);
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modalContainer.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
-    /* ---------- Portfolio Filtering ---------- */
-    const filterButtons = document.querySelectorAll('[data-filter-btn]');
-    const selectBox = document.querySelector('[data-select]');
-    const selectList = document.querySelector('[data-select-list]');
-    const selectItems = document.querySelectorAll('[data-select-item]');
-    const selectValue = document.querySelector('[data-select-value]');
-    const selectIcon = document.querySelector('[data-select-icon]');
-    const projectItems = document.querySelectorAll('[data-filter-item]');
-
-    function applyFilter(category) {
-        projectItems.forEach(item => {
-            const matches = item.getAttribute('data-category').includes(category.toLowerCase());
-            item.classList.toggle('active', matches);
-        });
-    }
-
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            applyFilter(btn.textContent.trim());
-        });
-    });
-
-    if (selectBox && selectList && selectItems.length > 0) {
-        selectBox.addEventListener('click', (e) => {
-            e.stopPropagation();
-            selectList.classList.toggle('active');
-            selectIcon.style.transform = selectList.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
-        });
-
-        selectItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const value = item.textContent.trim();
-                selectValue.textContent = value === 'All' ? 'Select category' : value;
-                selectList.classList.remove('active');
-                selectIcon.style.transform = 'rotate(0deg)';
-                applyFilter(value);
-                selectBox.querySelector('[data-filter-btn]').classList.add('active');
-            });
-        });
-
-        document.addEventListener('click', () => {
-            selectList.classList.remove('active');
-            selectIcon.style.transform = 'rotate(0deg)';
-        });
-    }
-
-    /* ---------- Contact Form ---------- */
+    /* ==============================================
+       CONTACT FORM HANDLER (mailto: integration)
+       ============================================== */
     function handleFormSubmit(e) {
         e.preventDefault();
-
-        const form = e.target;
-        const formData = new FormData(form);
-        const subject = encodeURIComponent('Message from Portfolio Contact Form');
-        const body = encodeURIComponent(
-            `Name: ${formData.get('name')}\nEmail: ${formData.get('email')}\n\nMessage:\n${formData.get('message')}`
+        var form = e.target;
+        var formData = new FormData(form);
+        var subject = encodeURIComponent('Message from Portfolio Contact Form');
+        var body = encodeURIComponent(
+            'Name: ' + (formData.get('name') || '') +
+            '\nEmail: ' + (formData.get('email') || '') +
+            '\n\nMessage:\n' + (formData.get('message') || '')
         );
-
-        window.location.href = `mailto:akshayiyer23@gmail.com?subject=${subject}&body=${body}`;
+        window.location.href = 'mailto:akshayiyer23@gmail.com?subject=' + subject + '&body=' + body;
     }
 
-    const contactForm = document.querySelector('.contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', handleFormSubmit);
-    }
+    var contactForms = document.querySelectorAll('.contact-form');
+    contactForms.forEach(function (form) {
+        /* The form has action="mailto:..." — intercept for enhanced handling */
+        form.addEventListener('submit', handleFormSubmit);
+    });
 
-    /* ---------- Initialize ---------- */
+    /* ==============================================
+       INITIALIZE
+       ============================================== */
     animateSkillBars();
 })();
