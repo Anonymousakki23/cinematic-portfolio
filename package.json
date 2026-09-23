@@ -25,11 +25,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d out"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Anonymousakki23/portfolio.git"
+    "url": "git+https://github.com/Anonymousakki23/cinematic-portfolio.git"
   },
   "keywords": [],
   "author": "",
@@ -37,12 +39,13 @@
   "bugs": {
     "url": "https://github.com/Anonymousakki23/portfolio/issues"
   },
-  "homepage": "https://github.com/Anonymousakki23/portfolio#readme",
+  "homepage": "https://Anonymousakki23.github.io/cinematic-portfolio",
   "type": "module",
   "devDependencies": {
     "@types/node": "26.6.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "gh-pages": "^6.3.0",
     "typescript": "^5"
   }
 }
