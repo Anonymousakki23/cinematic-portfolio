@@ -55,9 +55,10 @@ interface SheetContentProps
 function SheetContent({
   className,
   children,
-  side = "right",
+  side: sideProp = "right" as "bottom" | "left" | "right" | "top",
   ...props
 }: SheetContentProps) {
+  const side = sideProp;
   return (
     <SheetPortal>
       <SheetOverlay />

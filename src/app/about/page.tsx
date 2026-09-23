@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-import { MapPin, Mail, Phone, Link } from "lucide-react";
+import { MapPin, Mail, Phone, Link as LinkIcon } from "lucide-react";
 
 const skills = [
   { name: "Data & Analytics", level: 95 },
@@ -102,7 +102,7 @@ export default function AboutPage() {
                   <div className="flex items-center gap-3 text-white/80"><Mail className="h-5 w-5 text-sci-purple" /><span>akshayiyer23@gmail.com</span></div>
                   <div className="flex items-center gap-3 text-white/80"><Phone className="h-5 w-5 text-sci-magenta" /><span>(+48) 729303604</span></div>
                 </div>
-                <div className="flex items-center gap-3 text-white/80"><span className="text-sci-cyan font-mono-sci">in</span><a href="https://linkedin.com/in/akshayiyer23" target="_blank" rel="noopener noreferrer" className="hover:text-sci-cyan transition-colors">linkedin.com/in/akshayiyer23</a></div>
+                <div className="flex items-center gap-3 text-white/80"><LinkIcon className="h-5 w-5 text-sci-cyan" /><a href="https://linkedin.com/in/akshayiyer23" target="_blank" rel="noopener noreferrer" className="hover:text-sci-cyan transition-colors">linkedin.com/in/akshayiyer23</a></div>
                 <div><Badge variant="outline" className="border-sci-cyan/50 text-sci-cyan">Polish Karta pobytu (no work permit required)</Badge></div>
               </div>
             </CardContent>
