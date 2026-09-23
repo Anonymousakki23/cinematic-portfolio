@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Float, Text, Text3D } from "@react-three/drei";
+import { OrbitControls, Float } from "@react-three/drei";
 import { useRef, useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import * as THREE from "three";
@@ -115,11 +115,11 @@ function Sphere() {
 
 export default function Hero3D() {
   return (
-    <div className="absolute inset-0 -z-10">
+    <div className="fixed inset-0 -z-10 w-full h-full">
       <Canvas
         camera={{ position: [0, 0, 12], fov: 50 }}
         style={{ width: "100%", height: "100%" }}
-        gl={{ alpha: true, antialias: true }}
+        gl={{ alpha: true, antialias: true, preserveDrawingBuffer: true }}
       >
         <ambientLight intensity={0.3} />
         <pointLight position={[10, 10, 10]} intensity={1} color="#00FFFF" />
@@ -137,3 +137,4 @@ export default function Hero3D() {
     </div>
   );
 }
+
