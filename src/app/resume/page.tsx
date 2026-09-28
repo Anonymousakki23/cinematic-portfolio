@@ -165,7 +165,7 @@ export default function ResumePage() {
               { label: "Years Experience", value: "10+", icon: <Calendar className="h-6 w-6" /> },
               { label: "Team Size Managed", value: "400+", icon: <Users className="h-6 w-6" /> },
               { label: "Awards Won", value: "2+", icon: <Award className="h-6 w-6" /> },
-              { label: "Countries Worked", value: "3", icon: <MapPin className="h-6 w-6" /> },
+              { label: "Countries Worked", value: "2", icon: <MapPin className="h-6 w-6" /> },
             ].map((stat, i) => (
               <Card key={i} className="card-sci text-center p-8">
                 <div className="text-sci-cyan mb-3">{stat.icon}</div>

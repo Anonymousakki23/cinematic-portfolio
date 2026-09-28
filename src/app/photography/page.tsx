@@ -9,15 +9,16 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
 const photos = [
-  { src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800", category: "Landscape", alt: "Mountain landscape" },
-  { src: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800", category: "Landscape", alt: "Night sky stars" },
-  { src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800", category: "Portrait", alt: "Portrait photo" },
-  { src: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800", category: "Portrait", alt: "Person portrait" },
-  { src: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800", category: "Food", alt: "Food photography" },
-  { src: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800", category: "Food", alt: "Pizza" },
-  { src: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800", category: "Architecture", alt: "Modern architecture" },
-  { src: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800", category: "Architecture", alt: "City building" },
-  { src: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800", category: "Nature", alt: "Nature" },
+  { src: "/cinematic-portfolio/photography/ig-bee.webp", category: "Macro", alt: "Honey bee macro" },
+  { src: "/cinematic-portfolio/photography/ig-squirrel.webp", category: "Wildlife", alt: "Red squirrel, Park Jordana" },
+  { src: "/cinematic-portfolio/photography/ig-spider.jpg", category: "Macro", alt: "Striped lynx spider" },
+  { src: "/cinematic-portfolio/photography/ig-lightning.jpg", category: "Landscape", alt: "Lightning storm over the city" },
+  { src: "/cinematic-portfolio/photography/ig-moss.jpg", category: "Macro", alt: "Forest floor micro-ecosystem" },
+  { src: "/cinematic-portfolio/photography/ig-kingfisher.jpg", category: "Wildlife", alt: "Common kingfisher with catch" },
+  { src: "/cinematic-portfolio/photography/ig-glowshroom.jpg", category: "Macro", alt: "Glowing mushroom in the forest" },
+  { src: "/cinematic-portfolio/photography/ig-snake.jpg", category: "Wildlife", alt: "Checkered keelback" },
+  { src: "/cinematic-portfolio/photography/ig-ant.jpg", category: "Macro", alt: "Weaver ant" },
+  { src: "/cinematic-portfolio/photography/ig-butterfly.jpg", category: "Macro", alt: "Butterfly in monochrome" },
 ];
 
 const categories = ["All", ...new Set(photos.map((p) => p.category))];
