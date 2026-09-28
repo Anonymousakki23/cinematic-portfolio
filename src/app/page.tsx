@@ -1,10 +1,11 @@
 "use client";
 
-import { motion, useInView, animate } from "motion/react";
+import { motion, useInView, animate, useTransform } from "motion/react";
 import { ChevronRight, ChevronDown, BarChart3, Users, Camera } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Hero3D from "@/components/hero-3d";
+import { usePointerMotion, TiltCard } from "@/components/motion-controls";
 
 const navItems = [
   { href: "/about", label: "About", color: "bg-sci-cyan" },
@@ -95,14 +96,41 @@ function SectionEyebrow({ children }: { children: string }) {
 }
 
 export default function HomePage() {
+  const { x, y, needsPermission, enableTilt } = usePointerMotion();
+  // Hero drifts subtly against the pointer; the glow follows it.
+  const heroX = useTransform(x, (v) => v * -22);
+  const heroY = useTransform(y, (v) => v * -14);
+  const glowX = useTransform(x, (v) => v * 140);
+  const glowY = useTransform(y, (v) => v * 100);
+
   return (
     <main className="relative min-h-screen bg-[#050510] overflow-hidden">
       <Hero3D />
+      {needsPermission && (
+        <button
+          onClick={enableTilt}
+          className="fixed bottom-5 right-5 z-50 rounded-full border border-sci-cyan/40 bg-black/60 px-4 py-2 font-mono-sci text-xs tracking-widest text-sci-cyan uppercase backdrop-blur-sm hover:bg-sci-cyan/10"
+        >
+          Enable motion
+        </button>
+      )}
       <div className="relative z-10">
         {/* Hero */}
         <section className="grid-bg mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-6 pt-24 pb-16">
           <motion.div
-            className="w-full max-w-4xl text-center"
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-1/3 h-[36rem] w-[36rem] rounded-full opacity-25 blur-3xl"
+            style={{
+              x: glowX,
+              y: glowY,
+              marginLeft: "-18rem",
+              marginTop: "-18rem",
+              background:
+                "radial-gradient(circle, rgba(0,255,255,0.35), rgba(123,97,255,0.15) 45%, transparent 65%)",
+            }}
+          />
+          <motion.div className="w-full max-w-4xl text-center" style={{ x: heroX, y: heroY }}>
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -151,6 +179,7 @@ export default function HomePage() {
                     show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
                   }}
                 >
+                  <TiltCard max={6}>
                   <Link
                     href={item.href}
                     className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-white/10 bg-white/5 px-7 py-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-sci-cyan/50 hover:bg-sci-cyan/10 hover:glow-cyan"
@@ -161,6 +190,7 @@ export default function HomePage() {
                     </span>
                     <ChevronRight className="h-4 w-4 text-sci-cyan/50 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-sci-cyan" />
                   </Link>
+                  </TiltCard>
                 </motion.div>
               ))}
             </motion.div>
@@ -175,6 +205,7 @@ export default function HomePage() {
               <span className="mx-2 text-white/20">|</span>
               <span>data · training · photography</span>
             </motion.div>
+          </motion.div>
           </motion.div>
 
           <motion.a
@@ -247,9 +278,10 @@ export default function HomePage() {
           <SectionEyebrow>{"// what i do"}</SectionEyebrow>
           <div className="grid gap-6 md:grid-cols-3">
             {capabilities.map((cap, i) => (
-              <motion.div
+              <TiltCard
                 key={cap.title}
-                className={`glass-card group p-8 transition-all duration-300 hover:-translate-y-1 ${cap.ring}`}
+                max={8}
+                className={`glass-card group p-8 ${cap.ring}`}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
@@ -260,7 +292,7 @@ export default function HomePage() {
                   {cap.title}
                 </h3>
                 <p className="text-sm leading-relaxed text-white/60">{cap.text}</p>
-              </motion.div>
+              </TiltCard>
             ))}
           </div>
         </section>
