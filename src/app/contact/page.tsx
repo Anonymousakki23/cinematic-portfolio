@@ -4,8 +4,19 @@ import PathDrawingPortfolioHero from "@/components/ui/path-drawing-portfolio-her
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { MapPin, Mail, Phone, Link } from "lucide-react";
+import { useState } from "react";
 
 export default function ContactPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const subject = encodeURIComponent(`Portfolio contact from ${name}`);
+    const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
+    window.location.href = `mailto:akshayiyer23@gmail.com?subject=${subject}&body=${body}`;
+  };
   return (
     <main className="min-h-screen bg-[#050510]">
       <PathDrawingPortfolioHero
@@ -20,11 +31,13 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h2 className="text-3xl font-bold font-orbitron text-sci-cyan mb-6">Get In Touch</h2>
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSubmit}>
                 <div>
                   <label className="block text-sm font-medium text-white/80 mb-2">Full Name</label>
                   <input
                     type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/40 focus:outline-none focus:border-sci-cyan focus:bg-white/10 transition-colors"
                     placeholder="Your name"
                     required
@@ -34,6 +47,8 @@ export default function ContactPage() {
                   <label className="block text-sm font-medium text-white/80 mb-2">Email Address</label>
                   <input
                     type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/40 focus:outline-none focus:border-sci-cyan focus:bg-white/10 transition-colors"
                     placeholder="you@example.com"
                     required
@@ -43,6 +58,8 @@ export default function ContactPage() {
                   <label className="block text-sm font-medium text-white/80 mb-2">Message</label>
                   <textarea
                     rows={4}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                     className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/40 resize-none focus:outline-none focus:border-sci-cyan focus:bg-white/10 transition-colors"
                     placeholder="Your message..."
                     required

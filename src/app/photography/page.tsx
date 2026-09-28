@@ -136,14 +136,31 @@ export default function PhotographyPage() {
               >
                 <X className="h-5 w-5" />
               </button>
-              <div className="flex items-center justify-center gap-4 p-4">
-                <button onClick={goPrev} className="p-2 rounded-full bg-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-colors" aria-label="Previous">
+              <div className="relative flex items-center justify-center p-4 sm:p-8">
+                <img src={filtered[selectedIdx].src} alt={filtered[selectedIdx].alt} className="max-h-[76vh] max-w-full rounded-lg object-contain" />
+                <button
+                  onClick={goPrev}
+                  className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 text-white/80 border border-white/10 hover:text-sci-cyan hover:border-sci-cyan/50 transition-colors"
+                  aria-label="Previous photo"
+                >
                   <ChevronLeft className="h-6 w-6" />
                 </button>
-                <img src={filtered[selectedIdx].src} alt={filtered[selectedIdx].alt} className="max-h-[80vh] max-w-full rounded-lg object-contain" />
-                <button onClick={goNext} className="p-2 rounded-full bg-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-colors" aria-label="Next">
+                <button
+                  onClick={goNext}
+                  className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 text-white/80 border border-white/10 hover:text-sci-cyan hover:border-sci-cyan/50 transition-colors"
+                  aria-label="Next photo"
+                >
                   <ChevronRight className="h-6 w-6" />
                 </button>
+              </div>
+              <div className="flex items-center justify-between border-t border-white/10 px-6 py-4">
+                <div>
+                  <p className="font-orbitron text-sm text-white">{filtered[selectedIdx].alt}</p>
+                  <p className="text-xs text-sci-cyan mt-0.5">{filtered[selectedIdx].category}</p>
+                </div>
+                <span className="font-mono-sci text-xs text-white/50">
+                  {selectedIdx + 1} / {filtered.length}
+                </span>
               </div>
             </DialogContent>
           </Dialog>

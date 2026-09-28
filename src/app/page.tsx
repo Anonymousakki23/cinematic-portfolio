@@ -1,15 +1,15 @@
 "use client";
 
 import { motion } from "motion/react";
-import { ChevronDown } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Hero3D from "@/components/hero-3d";
 
 const navItems = [
-  { href: "/about", label: "About", color: "sci-cyan" },
-  { href: "/resume", label: "Resume", color: "sci-purple" },
-  { href: "/photography", label: "Photography", color: "sci-magenta" },
-  { href: "/contact", label: "Contact", color: "sci-cyan" },
+  { href: "/about", label: "About", color: "bg-sci-cyan" },
+  { href: "/resume", label: "Resume", color: "bg-sci-purple" },
+  { href: "/photography", label: "Photography", color: "bg-sci-magenta" },
+  { href: "/contact", label: "Contact", color: "bg-sci-cyan" },
 ];
 
 export default function HomePage() {
@@ -17,38 +17,33 @@ export default function HomePage() {
     <main className="relative min-h-screen bg-[#050510] overflow-hidden">
       <Hero3D />
       <div className="relative z-10 grid-bg min-h-screen">
-        <section className="mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-6">
+        <section className="mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-6 pt-24 pb-16">
           <motion.div
             className="w-full max-w-4xl text-center"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="mb-4 flex justify-center gap-2">
-              {navItems.map((item, i) => (
-                <motion.span
-                  key={item.href}
-                  className={`font-mono-sci text-xs ${item.color === 'sci-cyan' ? 'text-sci-cyan' : item.color === 'sci-purple' ? 'text-sci-purple' : 'text-sci-magenta'}`}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.2 }}
-                >
-                  /
-                </motion.span>
-              ))}
-            </div>
+            <motion.p
+              className="mb-6 font-mono-sci text-xs tracking-[0.3em] text-sci-cyan/80 uppercase"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              {"// portfolio v2.0 — online"}
+            </motion.p>
 
             <motion.h1
               className="font-orbitron text-6xl font-bold text-white sm:text-7xl md:text-8xl"
-              whileHover={{ scale: 1.05, textShadow: "0 0 30px rgba(0, 255, 255, 0.6)" }}
+              whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
               Akshay
-              <span className="text-sci-cyan"> Iyer</span>
+              <span className="text-gradient"> Iyer</span>
             </motion.h1>
 
             <motion.p
-              className="mx-auto mt-6 max-w-2xl text-center text-lg text-white/70 font-sans sm:text-xl"
+              className="mx-auto mt-6 max-w-2xl text-center text-lg text-white/70 font-sans sm:text-xl text-balance"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
@@ -57,48 +52,46 @@ export default function HomePage() {
             </motion.p>
 
             <motion.div
-              className="mt-12 flex flex-wrap justify-center gap-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
+              className="mt-12 flex flex-wrap justify-center gap-4 sm:gap-6"
+              initial="hidden"
+              animate="show"
+              variants={{
+                hidden: {},
+                show: { transition: { staggerChildren: 0.1, delayChildren: 0.5 } },
+              }}
             >
-              {navItems.map((item, i) => (
-                <Link
+              {navItems.map((item) => (
+                <motion.div
                   key={item.href}
-                  href={item.href}
-                  className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 px-8 py-4 backdrop-blur-sm transition-all hover:border-sci-cyan/50 hover:bg-sci-cyan/10 hover:glow-cyan"
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+                  }}
                 >
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={`h-2 w-2 rounded-full ${item.color === 'sci-cyan' ? 'bg-sci-cyan' : item.color === 'sci-purple' ? 'bg-sci-purple' : 'bg-sci-magenta'} animate-pulse`}
-                    />
+                  <Link
+                    href={item.href}
+                    className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-white/10 bg-white/5 px-7 py-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-sci-cyan/50 hover:bg-sci-cyan/10 hover:glow-cyan"
+                  >
+                    <span className={`h-2 w-2 rounded-full ${item.color} animate-pulse`} />
                     <span className="font-orbitron text-sm tracking-wide text-white group-hover:text-sci-cyan">
                       {item.label}
                     </span>
-                    <ChevronDown className="h-4 w-4 rotate-90 text-sci-cyan/50" />
-                  </div>
-                </Link>
+                    <ChevronRight className="h-4 w-4 text-sci-cyan/50 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-sci-cyan" />
+                  </Link>
+                </motion.div>
               ))}
             </motion.div>
 
             <motion.div
-              className="mt-8 text-sm font-mono-sci text-white/40"
+              className="mt-10 font-mono-sci text-xs text-white/40"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.9 }}
+              transition={{ duration: 0.6, delay: 1 }}
             >
-              Navigate to explore / project | details | experience | work
+              <span className="text-sci-cyan/60">krakow,pl</span>
+              <span className="mx-2 text-white/20">|</span>
+              <span>data · training · photography</span>
             </motion.div>
-          </motion.div>
-
-          <motion.div
-            className="absolute bottom-8 flex flex-col items-center gap-2 text-white/40"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 1.2 }}
-          >
-            <span className="text-[0.65rem] uppercase tracking-[0.28em]">Scroll to explore</span>
-            <span className="block h-16 w-px origin-top bg-gradient-to-b from-sci-cyan via-sci-purple to-transparent" />
           </motion.div>
         </section>
       </div>

@@ -14,10 +14,20 @@
   --font-mono: "Share Tech Mono", monospace;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: var(--font-sans);
-  background: var(--background);
-  color: var(--foreground);
+  background-color: #050510;
+  color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(0, 255, 255, 0.25);
+  color: #ffffff;
 }
 
 @utility glow-cyan {

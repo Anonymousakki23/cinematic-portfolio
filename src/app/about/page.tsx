@@ -102,8 +102,10 @@ export default function AboutPage() {
                   <div className="flex items-center gap-3 text-white/80"><Mail className="h-5 w-5 text-sci-purple" /><span>akshayiyer23@gmail.com</span></div>
                   <div className="flex items-center gap-3 text-white/80"><Phone className="h-5 w-5 text-sci-magenta" /><span>(+48) 729303604</span></div>
                 </div>
-                <div className="flex items-center gap-3 text-white/80"><LinkIcon className="h-5 w-5 text-sci-cyan" /><a href="https://linkedin.com/in/akshayiyer23" target="_blank" rel="noopener noreferrer" className="hover:text-sci-cyan transition-colors">linkedin.com/in/akshayiyer23</a></div>
-                <div><Badge variant="outline" className="border-sci-cyan/50 text-sci-cyan">Polish Karta pobytu (no work permit required)</Badge></div>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 text-white/80"><LinkIcon className="h-5 w-5 text-sci-cyan" /><a href="https://linkedin.com/in/akshayiyer23" target="_blank" rel="noopener noreferrer" className="hover:text-sci-cyan transition-colors">linkedin.com/in/akshayiyer23</a></div>
+                  <div><Badge variant="outline" className="border-sci-cyan/50 text-sci-cyan">Polish Karta pobytu (no work permit required)</Badge></div>
+                </div>
               </div>
             </CardContent>
           </Card>

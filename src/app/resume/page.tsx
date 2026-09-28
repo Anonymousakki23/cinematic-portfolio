@@ -85,7 +85,7 @@ export default function ResumePage() {
           <div className="relative border-l-2 border-sci-cyan/30 pl-8">
             {experience.map((job, idx) => (
               <div key={job.title} className="relative mb-12 last:mb-0">
-                <div className="absolute left-[-28px] top-0 flex h-4 w-4 items-center justify-center">
+                <div className="absolute left-[-39px] top-0 flex h-4 w-4 items-center justify-center">
                   <div className="relative flex h-4 w-4 items-center justify-center rounded-full border-2 border-sci-cyan bg-[#050510] z-10">
                     <div className="h-1.5 w-1.5 rounded-full bg-sci-cyan" />
                   </div>
@@ -125,7 +125,7 @@ export default function ResumePage() {
           <div className="relative border-l-2 border-sci-purple/30 pl-8">
             {education.map((edu, idx) => (
               <div key={edu.degree} className="relative mb-12 last:mb-0">
-                <div className="absolute left-[-28px] top-0 flex h-4 w-4 items-center justify-center">
+                <div className="absolute left-[-39px] top-0 flex h-4 w-4 items-center justify-center">
                   <div className="relative flex h-4 w-4 items-center justify-center rounded-full border-2 border-sci-purple bg-[#050510] z-10">
                     <div className="h-1.5 w-1.5 rounded-full bg-sci-purple" />
                   </div>

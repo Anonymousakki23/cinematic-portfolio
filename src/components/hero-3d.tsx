@@ -119,7 +119,7 @@ export default function Hero3D() {
       <Canvas
         camera={{ position: [0, 0, 12], fov: 50 }}
         style={{ width: "100%", height: "100%" }}
-        gl={{ alpha: true, antialias: true, preserveDrawingBuffer: true }}
+        gl={{ alpha: true, antialias: true }}
       >
         <ambientLight intensity={0.3} />
         <pointLight position={[10, 10, 10]} intensity={1} color="#00FFFF" />
