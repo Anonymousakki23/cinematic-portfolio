@@ -19,6 +19,13 @@ const photos = [
   { src: "/cinematic-portfolio/photography/ig-snake.jpg", category: "Wildlife", alt: "Checkered keelback" },
   { src: "/cinematic-portfolio/photography/ig-ant.jpg", category: "Macro", alt: "Weaver ant" },
   { src: "/cinematic-portfolio/photography/ig-butterfly.jpg", category: "Macro", alt: "Butterfly in monochrome" },
+  { src: "/cinematic-portfolio/photography/ig-peacock.jpg", category: "Wildlife", alt: "Peacock in flight" },
+  { src: "/cinematic-portfolio/photography/ig-lily.jpg", category: "Macro", alt: "Water lily in bloom" },
+  { src: "/cinematic-portfolio/photography/ig-lizard.jpg", category: "Wildlife", alt: "Monitor lizard portrait" },
+  { src: "/cinematic-portfolio/photography/ig-waterfall.jpg", category: "Landscape", alt: "Waterfall long exposure, Bali" },
+  { src: "/cinematic-portfolio/photography/ig-trainstreet.jpg", category: "Travel", alt: "Train Street, Hanoi at dusk" },
+  { src: "/cinematic-portfolio/photography/ig-lanterns.jpg", category: "Travel", alt: "Lantern-lit night market" },
+  { src: "/cinematic-portfolio/photography/ig-bonfire.jpg", category: "Landscape", alt: "Beach bonfire at sunset" },
 ];
 
 const categories = ["All", ...new Set(photos.map((p) => p.category))];
