@@ -26,6 +26,14 @@ const photos = [
   { src: "/cinematic-portfolio/photography/ig-trainstreet.jpg", category: "Travel", alt: "Train Street, Hanoi at dusk" },
   { src: "/cinematic-portfolio/photography/ig-lanterns.jpg", category: "Travel", alt: "Lantern-lit night market" },
   { src: "/cinematic-portfolio/photography/ig-bonfire.jpg", category: "Landscape", alt: "Beach bonfire at sunset" },
+  { src: "/cinematic-portfolio/photography/ig-reichstag.jpg", category: "Travel", alt: "Reichstag dome interior, Berlin" },
+  { src: "/cinematic-portfolio/photography/ig-dragon.jpg", category: "Travel", alt: "Wawel dragon breathing fire" },
+  { src: "/cinematic-portfolio/photography/ig-pagoda.jpg", category: "Travel", alt: "Pagoda on the lake, Vietnam" },
+  { src: "/cinematic-portfolio/photography/ig-baligate.jpg", category: "Travel", alt: "Temple gate, Bali" },
+  { src: "/cinematic-portfolio/photography/ig-prague.jpg", category: "Travel", alt: "Prague old town panorama" },
+  { src: "/cinematic-portfolio/photography/ig-ghost.jpg", category: "Travel", alt: "Hooded statue, Prague" },
+  { src: "/cinematic-portfolio/photography/ig-bruges.jpg", category: "Travel", alt: "Bruges canal at night" },
+  { src: "/cinematic-portfolio/photography/ig-strasbourg.jpg", category: "Travel", alt: "Strasbourg Cathedral" },
 ];
 
 const categories = ["All", ...new Set(photos.map((p) => p.category))];
