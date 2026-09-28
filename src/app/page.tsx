@@ -1,8 +1,9 @@
 "use client";
 
-import { motion } from "motion/react";
-import { ChevronRight } from "lucide-react";
+import { motion, useInView, animate } from "motion/react";
+import { ChevronRight, ChevronDown, BarChart3, Users, Camera } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import Hero3D from "@/components/hero-3d";
 
 const navItems = [
@@ -12,12 +13,94 @@ const navItems = [
   { href: "/contact", label: "Contact", color: "bg-sci-cyan" },
 ];
 
+const galleryShots = [
+  { src: "/cinematic-portfolio/photography/ig-bee.webp", alt: "Honey bee macro" },
+  { src: "/cinematic-portfolio/photography/ig-lightning.jpg", alt: "Lightning storm over the city" },
+  { src: "/cinematic-portfolio/photography/ig-squirrel.webp", alt: "Red squirrel, Park Jordana" },
+  { src: "/cinematic-portfolio/photography/ig-spider.jpg", alt: "Striped lynx spider" },
+  { src: "/cinematic-portfolio/photography/ig-kingfisher.jpg", alt: "Common kingfisher with catch" },
+  { src: "/cinematic-portfolio/photography/ig-moss.jpg", alt: "Forest floor micro-ecosystem" },
+  { src: "/cinematic-portfolio/photography/ig-snake.jpg", alt: "Checkered keelback" },
+  { src: "/cinematic-portfolio/photography/ig-glowshroom.jpg", alt: "Glowing mushroom in the forest" },
+  { src: "/cinematic-portfolio/photography/ig-ant.jpg", alt: "Weaver ant" },
+  { src: "/cinematic-portfolio/photography/ig-butterfly.jpg", alt: "Butterfly in monochrome" },
+];
+
+const stats = [
+  { value: 10, suffix: "+", label: "Years Experience" },
+  { value: 400, suffix: "+", label: "Team Members Led" },
+  { value: 2, suffix: "", label: "Countries Worked" },
+  { value: 2, suffix: "+", label: "Awards Won" },
+];
+
+const capabilities = [
+  {
+    icon: <BarChart3 className="h-7 w-7" />,
+    title: "Data Analysis",
+    text: "Pipelines, dashboards and insights that turn raw data into decisions.",
+    accent: "text-sci-cyan",
+    ring: "hover:border-sci-cyan/50",
+  },
+  {
+    icon: <Users className="h-7 w-7" />,
+    title: "Training & Leadership",
+    text: "Built and mentored high-performing teams across regions and time zones.",
+    accent: "text-sci-purple",
+    ring: "hover:border-sci-purple/50",
+  },
+  {
+    icon: <Camera className="h-7 w-7" />,
+    title: "Photography",
+    text: "Macro and wildlife photography — patience, light and a Canon 77D.",
+    accent: "text-sci-magenta",
+    ring: "hover:border-sci-magenta/50",
+  },
+];
+
+function StatCounter({ to, suffix }: { to: number; suffix: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const [val, setVal] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+    const controls = animate(0, to, {
+      duration: 1.6,
+      ease: [0.22, 1, 0.36, 1],
+      onUpdate: (v) => setVal(Math.round(v)),
+    });
+    return () => controls.stop();
+  }, [inView, to]);
+
+  return (
+    <span ref={ref}>
+      {val}
+      {suffix}
+    </span>
+  );
+}
+
+function SectionEyebrow({ children }: { children: string }) {
+  return (
+    <motion.p
+      className="mb-8 text-center font-mono-sci text-xs tracking-[0.3em] text-sci-cyan/80 uppercase"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+    >
+      {children}
+    </motion.p>
+  );
+}
+
 export default function HomePage() {
   return (
     <main className="relative min-h-screen bg-[#050510] overflow-hidden">
       <Hero3D />
-      <div className="relative z-10 grid-bg min-h-screen">
-        <section className="mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-6 pt-24 pb-16">
+      <div className="relative z-10">
+        {/* Hero */}
+        <section className="grid-bg mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-6 pt-24 pb-16">
           <motion.div
             className="w-full max-w-4xl text-center"
             initial={{ opacity: 0, y: 30 }}
@@ -93,6 +176,93 @@ export default function HomePage() {
               <span>data · training · photography</span>
             </motion.div>
           </motion.div>
+
+          <motion.a
+            href="#showreel"
+            aria-label="Scroll to showreel"
+            className="absolute bottom-8 text-sci-cyan/60 hover:text-sci-cyan transition-colors"
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <ChevronDown className="h-6 w-6" />
+          </motion.a>
+        </section>
+
+        {/* Photo filmstrip */}
+        <section id="showreel" className="relative py-16">
+          <SectionEyebrow>{"// showreel — through my lens"}</SectionEyebrow>
+          <div className="marquee-hover overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
+            <div className="animate-marquee motion-reduce:animate-none flex w-max gap-4 pr-4">
+              {[...galleryShots, ...galleryShots].map((shot, i) => (
+                <div
+                  key={`${shot.src}-${i}`}
+                  className="group relative h-44 w-44 shrink-0 overflow-hidden rounded-xl border border-white/10 sm:h-52 sm:w-52"
+                >
+                  <img
+                    src={shot.src}
+                    alt={shot.alt}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                    <span className="text-xs text-white/90 font-mono-sci">{shot.alt}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <p className="mt-6 text-center">
+            <Link href="/photography" className="font-mono-sci text-xs tracking-[0.2em] text-sci-cyan/70 uppercase hover:text-sci-cyan transition-colors">
+              {"view full gallery →"}
+            </Link>
+          </p>
+        </section>
+
+        {/* Stats */}
+        <section className="mx-auto max-w-6xl px-6 py-16">
+          <SectionEyebrow>{"// by the numbers"}</SectionEyebrow>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+            {stats.map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                className="glass-card p-6 text-center"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+              >
+                <div className="font-orbitron text-4xl font-bold text-gradient md:text-5xl">
+                  <StatCounter to={stat.value} suffix={stat.suffix} />
+                </div>
+                <div className="mt-2 font-mono-sci text-xs tracking-widest text-white/50 uppercase">
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Capabilities */}
+        <section className="mx-auto max-w-6xl px-6 py-16 pb-24">
+          <SectionEyebrow>{"// what i do"}</SectionEyebrow>
+          <div className="grid gap-6 md:grid-cols-3">
+            {capabilities.map((cap, i) => (
+              <motion.div
+                key={cap.title}
+                className={`glass-card group p-8 transition-all duration-300 hover:-translate-y-1 ${cap.ring}`}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+              >
+                <div className={`${cap.accent} mb-5`}>{cap.icon}</div>
+                <h3 className="font-orbitron text-lg font-semibold text-white mb-3">
+                  {cap.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-white/60">{cap.text}</p>
+              </motion.div>
+            ))}
+          </div>
         </section>
       </div>
     </main>
