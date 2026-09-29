@@ -63,7 +63,7 @@ export default function ClassicalIntro({ onDone }: { onDone?: () => void }) {
   // Ceremony timeline, then auto-dismiss
   useEffect(() => {
     if (!visible) return;
-    const t = window.setTimeout(dismiss, reducedMotion ? 1200 : 6000);
+    const t = window.setTimeout(dismiss, reducedMotion ? 1200 : 12000);
     return () => window.clearTimeout(t);
   }, [visible, reducedMotion, dismiss]);
 
