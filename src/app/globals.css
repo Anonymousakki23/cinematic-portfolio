@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@200;300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@200;300;400;500;600;700&family=Share+Tech+Mono&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -65,6 +65,9 @@ body {
 }
 @utility font-orbitron {
   font-family: "Orbitron", sans-serif;
+}
+@utility font-classical {
+  font-family: "Cormorant Garamond", Georgia, serif;
 }
 @utility font-mono-sci {
   font-family: "Share Tech Mono", monospace;

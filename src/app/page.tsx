@@ -5,6 +5,7 @@ import { ChevronRight, ChevronDown, BarChart3, Users, Camera } from "lucide-reac
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Hero3D from "@/components/hero-3d";
+import ClassicalIntro from "@/components/classical-intro";
 import { usePointerMotion, TiltCard } from "@/components/motion-controls";
 
 const navItems = [
@@ -96,6 +97,7 @@ function SectionEyebrow({ children }: { children: string }) {
 }
 
 export default function HomePage() {
+  const [showIntro, setShowIntro] = useState(true);
   const { x, y, needsPermission, enableTilt } = usePointerMotion();
   // Hero drifts subtly against the pointer; the glow follows it.
   const heroX = useTransform(x, (v) => v * -22);
@@ -105,6 +107,7 @@ export default function HomePage() {
 
   return (
     <main className="relative min-h-screen bg-[#050510] overflow-hidden">
+      {showIntro && <ClassicalIntro onDone={() => setShowIntro(false)} />}
       <Hero3D />
       {needsPermission && (
         <button
