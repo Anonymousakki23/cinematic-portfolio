@@ -16,16 +16,16 @@ const navItems = [
 ];
 
 const galleryShots = [
-  { src: "/cinematic-portfolio/photography/ig-bee.webp", alt: "Honey bee macro" },
-  { src: "/cinematic-portfolio/photography/ig-lightning.jpg", alt: "Lightning storm over the city" },
-  { src: "/cinematic-portfolio/photography/ig-squirrel.webp", alt: "Red squirrel, Park Jordana" },
-  { src: "/cinematic-portfolio/photography/ig-spider.jpg", alt: "Striped lynx spider" },
-  { src: "/cinematic-portfolio/photography/ig-kingfisher.jpg", alt: "Common kingfisher with catch" },
-  { src: "/cinematic-portfolio/photography/ig-moss.jpg", alt: "Forest floor micro-ecosystem" },
-  { src: "/cinematic-portfolio/photography/ig-snake.jpg", alt: "Checkered keelback" },
-  { src: "/cinematic-portfolio/photography/ig-glowshroom.jpg", alt: "Glowing mushroom in the forest" },
-  { src: "/cinematic-portfolio/photography/ig-ant.jpg", alt: "Weaver ant" },
-  { src: "/cinematic-portfolio/photography/ig-butterfly.jpg", alt: "Butterfly in monochrome" },
+  { src: "/photography/ig-bee.webp", alt: "Honey bee macro" },
+  { src: "/photography/ig-lightning.jpg", alt: "Lightning storm over the city" },
+  { src: "/photography/ig-squirrel.webp", alt: "Red squirrel, Park Jordana" },
+  { src: "/photography/ig-spider.jpg", alt: "Striped lynx spider" },
+  { src: "/photography/ig-kingfisher.jpg", alt: "Common kingfisher with catch" },
+  { src: "/photography/ig-moss.jpg", alt: "Forest floor micro-ecosystem" },
+  { src: "/photography/ig-snake.jpg", alt: "Checkered keelback" },
+  { src: "/photography/ig-glowshroom.jpg", alt: "Glowing mushroom in the forest" },
+  { src: "/photography/ig-ant.jpg", alt: "Weaver ant" },
+  { src: "/photography/ig-butterfly.jpg", alt: "Butterfly in monochrome" },
 ];
 
 const stats = [

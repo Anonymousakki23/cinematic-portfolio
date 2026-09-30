@@ -16,8 +16,7 @@ const links = [
 ];
 
 function isActive(pathname: string, href: string) {
-  const clean = pathname.replace(/^\/cinematic-portfolio/, "") || "/";
-  return clean === href;
+  return pathname === href;
 }
 
 export function Navigation() {

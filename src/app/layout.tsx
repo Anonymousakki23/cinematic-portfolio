@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
 
-const siteUrl = "https://anonymousakki23.github.io/cinematic-portfolio";
+const siteUrl = "https://akshayiyer.info";
 
 export const metadata: Metadata = {
   title: {
