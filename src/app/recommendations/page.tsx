@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import {
   RECOMMENDATIONS_CONFIG,
+  STATIC_COMMUNITY,
   recommendationsCsvUrl,
   toCommunityRecommendations,
   isFormConfigured,
@@ -98,6 +99,7 @@ export default function RecommendationsPage() {
 
   useEffect(() => {
     if (!sheetReady) {
+      setCommunity(STATIC_COMMUNITY);
       setLoading(false);
       return;
     }
@@ -108,10 +110,11 @@ export default function RecommendationsPage() {
         return res.text();
       })
       .then((csv) => {
-        if (!cancelled) setCommunity(toCommunityRecommendations(csv));
+        if (!cancelled)
+          setCommunity([...STATIC_COMMUNITY, ...toCommunityRecommendations(csv)]);
       })
       .catch(() => {
-        if (!cancelled) setLoadError(true);
+        if (!cancelled) setCommunity(STATIC_COMMUNITY);
       })
       .finally(() => {
         if (!cancelled) setLoading(false);

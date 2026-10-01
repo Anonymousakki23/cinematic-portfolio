@@ -12,6 +12,7 @@ const navItems = [
   { href: "/about", label: "About", color: "bg-sci-cyan" },
   { href: "/resume", label: "Resume", color: "bg-sci-purple" },
   { href: "/photography", label: "Photography", color: "bg-sci-magenta" },
+  { href: "/recommendations", label: "Recommendations", color: "bg-sci-purple" },
   { href: "/contact", label: "Contact", color: "bg-sci-cyan" },
 ];
 
