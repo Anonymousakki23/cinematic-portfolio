@@ -25,7 +25,7 @@ export const RECOMMENDATIONS_CONFIG = {
   },
   consentValue:
     "I agree to have my name, role, and recommendation published on this website.",
-  sheetId: "__SHEET_ID__",
+  sheetId: "12EHsMnY27FtBjwEYl_rYiB76m_WBcsyGbmc4ahXSyF0",
   sheetName: "Form Responses 1",
 };
 
@@ -46,17 +46,9 @@ export interface CommunityRecommendation {
 }
 
 // Static community recommendations — shown alongside (and before) the
-// sheet-fed ones. Used when the Google Sheet pipeline isn't wired yet,
-// or for entries curated directly.
-export const STATIC_COMMUNITY: CommunityRecommendation[] = [
-  {
-    name: "Marzia Ananna",
-    role: "Ecommerce Quality Analyst",
-    relationship: "Trained by Akshay",
-    text: `I have been working actively with Akshay Iyer as the trainer of my team for 10 months, and passively for 3 years before that as a cross team collaborator. I have yet to come across a colleague so efficient, professional, and incredibly supportive. As a cross team collaborator he always made sure all the given tasks and duties were well understood by both of the teams all the while welcoming questions and confusions. He displays the qualities of genuine leadership as both a colleague and a trainer. In my months being trained under Akshay I have not found one instance where he was not available to help, be it one member of the team or the whole team. He schedules trainings and meetings meticulously, shadows tasks with great attention, and encourages curiosity and enthusiasm all the same. Not only is his work constantly nudging the team forward, but also the whole venture of this project which have been appreciated time and time again by higher ups. I have no doubt he will be a pioneer in his future endeavours for himself as well as for the projects he chooses to improve. I highly recommend work collaboration with Akshay Iyer.`,
-    date: "2026-10-01",
-  },
-];
+// sheet-fed ones. Currently empty: the published sheet is the source of
+// truth. Add entries here only for curated items that bypass the sheet.
+export const STATIC_COMMUNITY: CommunityRecommendation[] = [];
 
 // Minimal CSV parser that handles quoted fields (what Google exports).
 export function parseCsv(csv: string): string[][] {
