@@ -28,16 +28,27 @@ import {
 } from "@/lib/recommendations";
 
 // ---------------------------------------------------------------------------
-// LinkedIn recommendation (verbatim from the LinkedIn profile)
+// LinkedIn recommendations (verbatim from the LinkedIn profile), newest first
 // ---------------------------------------------------------------------------
-const linkedInRecommendation = {
-  author: "Dariusz Wilisowski",
-  role: "Sales Operations & Deal Desk | Salesforce CPQ, SAP, Order-to-Cash | Google Cloud EMEA & PMI",
-  relationship: "Worked with Akshay on different teams",
-  date: "June 2023",
-  text: `I highly recommend Akshay! He is known for his exceptional analytical skills, and deep industry knowledge. Akshay's expertise in analyzing and interpreting complex data, coupled with his warm and personable nature, makes him a great part of the team. He is not only highly skilled but also a great team player!`,
-  profileUrl: "https://www.linkedin.com/in/akshayiyer23/details/recommendations/",
-};
+const LINKEDIN_PROFILE_URL =
+  "https://www.linkedin.com/in/akshayiyer23/details/recommendations/";
+
+const linkedInRecommendations = [
+  {
+    author: "Mohammad Jahangir",
+    role: "Senior Data Analyst | Business Intelligence | Data-Driven Decision Making",
+    relationship: "Worked with Akshay on the same team",
+    date: "September 2026",
+    text: `I’ve had the pleasure of working with Akshay and can say he’s a genuinely reliable and supportive professional. He’s great with analytics, training, and helping others grow. A great person to have on any team, and I’d happily recommend him.`,
+  },
+  {
+    author: "Dariusz Wilisowski",
+    role: "Sales Operations & Deal Desk | Salesforce CPQ, SAP, Order-to-Cash | Google Cloud EMEA & PMI",
+    relationship: "Worked with Akshay on different teams",
+    date: "June 2023",
+    text: `I highly recommend Akshay! He is known for his exceptional analytical skills, and deep industry knowledge. Akshay's expertise in analyzing and interpreting complex data, coupled with his warm and personable nature, makes him a great part of the team. He is not only highly skilled but also a great team player!`,
+  },
+];
 
 function RecommendationCard({
   name,
@@ -160,15 +171,15 @@ export default function RecommendationsPage() {
         className="w-full"
       />
 
-      {/* LinkedIn recommendation */}
+      {/* LinkedIn recommendations */}
       <section className="relative z-10 px-6 py-20">
-        <div className="mx-auto max-w-4xl space-y-10">
+        <div className="mx-auto max-w-5xl space-y-10">
           <div className="flex items-center justify-between">
             <h2 className="font-orbitron text-3xl font-bold text-sci-cyan">
               From LinkedIn
             </h2>
             <a
-              href={linkedInRecommendation.profileUrl}
+              href={LINKEDIN_PROFILE_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-sci-cyan"
@@ -177,13 +188,18 @@ export default function RecommendationsPage() {
               View on LinkedIn
             </a>
           </div>
-          <RecommendationCard
-            name={linkedInRecommendation.author}
-            role={linkedInRecommendation.role}
-            relationship={linkedInRecommendation.relationship}
-            date={linkedInRecommendation.date}
-            text={linkedInRecommendation.text}
-          />
+          <div className="grid gap-6 md:grid-cols-2">
+            {linkedInRecommendations.map((rec) => (
+              <RecommendationCard
+                key={rec.author}
+                name={rec.author}
+                role={rec.role}
+                relationship={rec.relationship}
+                date={rec.date}
+                text={rec.text}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
