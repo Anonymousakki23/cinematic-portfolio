@@ -98,7 +98,7 @@ export default function ExperienceHud({
       <div aria-hidden className="pointer-events-none fixed inset-0 z-[61] hidden font-mono-sci text-[10px] tracking-[0.22em] text-sci-cyan/60 uppercase sm:block">
         <div className="absolute left-10 top-9">AI_ // experience</div>
         <div className="absolute right-10 top-9">traverse {String(pct).padStart(3, "0")}%</div>
-        <div className="absolute bottom-9 left-10">depth −{depth}m · sector 7G</div>
+        <div className="absolute bottom-9 left-10">dist −{depth}m · sector 7G</div>
         <div className="absolute bottom-9 right-10">
           <span className="mr-2 inline-block h-1.5 w-1.5 animate-blink rounded-full bg-sci-cyan" />
           sys.online

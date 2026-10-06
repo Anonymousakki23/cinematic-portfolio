@@ -118,7 +118,7 @@ export default function ExperiencePage() {
       <div className="relative z-10">
         {/* 00 — ENTER */}
         <section id="ch-intro" data-chapter className="flex min-h-[130vh] flex-col items-center justify-center px-6 text-center">
-          <Eyebrow>{"00 // enter — signal online"}</Eyebrow>
+          <Eyebrow>{"00 // enter — night city online"}</Eyebrow>
           <h1 className="font-orbitron text-5xl font-bold leading-[1.05] sm:text-7xl md:text-8xl">
             <RevealLine>TRAVERSE</RevealLine>
             <RevealLine delay={0.12}>
@@ -132,8 +132,9 @@ export default function ExperiencePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.35 }}
           >
-            A scroll-driven flight through data, craft and light.
-            Keep scrolling — the world moves with you.
+            A scroll-flight down the neon avenue. Every district is a craft I
+            practice: data, training, photography. Keep scrolling — the city
+            moves with you.
           </motion.p>
           <motion.div
             className="mt-16 flex flex-col items-center gap-3 font-mono-sci text-[10px] tracking-[0.3em] text-sci-cyan/60 uppercase"
@@ -152,7 +153,7 @@ export default function ExperiencePage() {
         {/* 01 — DATA */}
         <section id="ch-data" data-chapter className="flex min-h-[150vh] items-center px-6">
           <div className="mx-auto w-full max-w-6xl md:ml-[8%] md:max-w-xl md:text-left text-center">
-            <Eyebrow>{"01 // data"}</Eyebrow>
+            <Eyebrow>{"01 // data district"}</Eyebrow>
             <h2 className="font-orbitron text-4xl font-bold leading-tight sm:text-5xl md:text-6xl">
               <RevealLine>DATA,</RevealLine>
               <RevealLine delay={0.12}>
@@ -183,7 +184,7 @@ export default function ExperiencePage() {
         {/* 02 — TRAINING */}
         <section id="ch-training" data-chapter className="flex min-h-[150vh] items-center justify-end px-6">
           <div className="mx-auto w-full max-w-6xl md:mr-[8%] md:max-w-xl md:text-right text-center">
-            <Eyebrow>{"02 // training"}</Eyebrow>
+            <Eyebrow>{"02 // training district"}</Eyebrow>
             <h2 className="font-orbitron text-4xl font-bold leading-tight sm:text-5xl md:text-6xl">
               <RevealLine>400+ MINDS,</RevealLine>
               <RevealLine delay={0.12}>
@@ -213,7 +214,7 @@ export default function ExperiencePage() {
 
         {/* 03 — PHOTOGRAPHY */}
         <section id="ch-photo" data-chapter className="flex min-h-[160vh] flex-col items-center justify-center px-6 text-center">
-          <Eyebrow>{"03 // photography"}</Eyebrow>
+          <Eyebrow>{"03 // photo district"}</Eyebrow>
           <h2 className="font-orbitron text-4xl font-bold leading-tight sm:text-5xl md:text-6xl">
             <RevealLine>LIGHT,</RevealLine>
             <RevealLine delay={0.12}>
@@ -228,7 +229,7 @@ export default function ExperiencePage() {
             transition={{ duration: 0.7, delay: 0.2 }}
           >
             Macro and wildlife photography — patience, light and a Canon 77D.
-            The frames floating around you are real shots from the field.
+            The holographic billboards around you are real shots from the field.
           </motion.p>
           <motion.div
             initial={{ opacity: 0 }}
@@ -242,7 +243,7 @@ export default function ExperiencePage() {
 
         {/* 04 — CONTACT */}
         <section id="ch-contact" data-chapter className="flex min-h-[130vh] flex-col items-center justify-center px-6 text-center">
-          <Eyebrow>{"04 // contact"}</Eyebrow>
+          <Eyebrow>{"04 // city exit"}</Eyebrow>
           <h2 className="font-orbitron text-4xl font-bold leading-tight sm:text-5xl md:text-7xl">
             <RevealLine>OPEN A</RevealLine>
             <RevealLine delay={0.12}>
@@ -256,7 +257,7 @@ export default function ExperiencePage() {
             viewport={{ once: true, margin: "-20%" }}
             transition={{ duration: 0.7, delay: 0.2 }}
           >
-            You have reached the edge of the signal. The moon is close.
+            You have reached the end of the avenue. The city hums below.
             Say hello — I answer fast.
           </motion.p>
           <motion.div
