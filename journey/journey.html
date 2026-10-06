@@ -253,6 +253,23 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 .sec-head .k b{ color:var(--vermilion); font-weight:500; }
 .rule{ flex:1 1 auto; height:1px; background:var(--line-soft); }
 
+/* — transition panorama: Goa beach & fort → St. Mary's, Kraków.
+     A 340vh scroll drives one horizontal pan across the 3:1 painting. */
+.pano-sec{ padding:0 !important; }
+.pano{ height:340vh; position:relative; }
+.pano-view{ position:sticky; top:0; height:100vh; height:100svh; overflow:hidden; background:#0a0705; }
+.pano-img{ position:absolute; top:0; left:0; height:100%; width:auto; max-width:none; will-change:transform; }
+.pano-shade{ position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(to top, rgba(6,5,8,.62), transparent 34%, transparent 72%, rgba(6,5,8,.30)); }
+.pano-ends{ position:absolute; top:max(4vh,72px); left:6vw; right:6vw; display:flex; justify-content:space-between;
+  font-size:11px; font-weight:500; letter-spacing:.34em; text-transform:uppercase;
+  color:#e8ddc4; opacity:.85; pointer-events:none; }
+.pano-cap{ position:absolute; left:6vw; bottom:8vh; max-width:36rem; z-index:2; }
+.pano-cap .k{ margin-bottom:14px; }
+.pano-cap .k b{ color:#f0a840; font-weight:500; }
+.pano-cap .h-sec{ margin:0 0 12px; text-shadow:0 2px 24px rgba(0,0,0,.55); }
+.pano-cap .body{ text-shadow:0 1px 14px rgba(0,0,0,.6); }
+
 /* — chapter I: the gate */
 .gate-grid{ display:grid; grid-template-columns:minmax(0,1.02fr) minmax(0,1fr); gap:clamp(28px,5vw,90px); align-items:start; }
 .gate-grid h2{ max-width:11ch; }
@@ -1064,6 +1081,24 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
       </div>
       <div class="card-meta"><span>Kraków, Poland</span><span>03 / 03</span></div>
     </article>
+  </div>
+</section>
+
+<!-- ============================================================ transition -->
+<!-- the crossing panorama: Goa beach & fort → St. Mary's, Kraków.
+     No data-cam: the rig keeps drifting from crossing to craft behind it. -->
+<section class="sec pano-sec" id="pano">
+  <div class="pano">
+    <div class="pano-view">
+      <img class="pano-img" src="fg/crossing-panorama.webp" alt="Watercolor panorama: a Goan beach with a sea fort giving way to St. Mary's Basilica in Kraków" width="2736" height="912" loading="lazy" decoding="async">
+      <div class="pano-shade" aria-hidden="true"></div>
+      <div class="pano-ends" aria-hidden="true"><span>Goa, IN</span><span>Kraków, PL</span></div>
+      <div class="pano-cap">
+        <div class="k" data-rv="fade"><b>02</b> — The Crossing</div>
+        <h2 class="display h-sec" data-rv="up">From the fort to the towers.</h2>
+        <p class="body" data-rv="up">Keep scrolling — the coast falls behind and Kraków rises out of the dusk.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -4172,6 +4207,24 @@ function splitHeadingWords() {
    only way a cut-out can pass in front of the nav and the chapter rail. The
    move costs nothing in layout: the stage is position:fixed either way, and
    its placement rules key off [data-fg], not off the section it came from. */
+/* the crossing panorama: scroll progress across the 340vh section pans the
+   3:1 painting from the Goan beach & fort to St. Mary's, Kraków */
+function wirePano() {
+  const sec = document.getElementById('pano');
+  const img = sec && sec.querySelector('.pano-img');
+  if (!sec || !img) return;
+  const update = () => {
+    const r = sec.getBoundingClientRect();
+    const total = r.height - innerHeight;
+    const pr = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
+    const w = img.offsetWidth || img.getBoundingClientRect().width;
+    const max = Math.max(0, w - innerWidth);
+    img.style.transform = 'translate3d(' + (-pr * max).toFixed(1) + 'px,0,0)';
+  };
+  addEventListener('scroll', update, { passive: true });
+  addEventListener('resize', update);
+  if (img.complete) update(); else img.addEventListener('load', update);
+}
 function wireForegroundStages() {
   const pairs = $$('.sec .fg, .foot .fg').map(stage => ({
     section:stage.closest('.sec, .foot'), stage
@@ -4299,7 +4352,7 @@ function wireHeroExit() {
 function wireNav() {
   let last = 0;
   const rail = $('#rail');
-  const names = ['The Hidden Gate', 'The Sanmon', 'Still Gardens', 'Sacred Craft', 'Afterlight', 'Colophon'];
+  const names = ['The Journey', 'Origin — Goa', 'The Crossing', 'The Craft', 'Arrival', 'Colophon'];
   SECS.forEach((s, i) => {
     const b = document.createElement('button');
     b.innerHTML = '<i></i>'; b.title = names[i] || '';
@@ -4718,7 +4771,7 @@ const JOBS = [
 ];
 
 function boot() {
-  makeGrain();
+  makeGrain(); wirePano();
   wireReveals(); wireForegroundStages(); wireNav(); wireHeroExit(); wireFocus(); wireCursor();
   document.body.classList.add('is-locked');
   let i = 0;
