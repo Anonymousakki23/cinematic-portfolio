@@ -76,11 +76,13 @@ function Buildings({
   texture,
   count,
   seed,
+  narrow,
 }: {
   side: 1 | -1;
   texture: THREE.Texture;
   count: number;
   seed: number;
+  narrow: boolean;
 }) {
   const ref = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
@@ -95,14 +97,16 @@ function Buildings({
       const z = 36 - (i / count) * 232 - rnd() * 7;
       const h = 26 + rnd() * 44;
       const w = 7 + rnd() * 6;
-      dummy.position.set(side * (15 + rnd() * 8), h / 2 - 0.6, z);
+      // on narrow portrait screens the horizontal FOV collapses — pull the
+      // canyon walls inward so they stay in frame
+      dummy.position.set(side * (narrow ? 10.5 + rnd() * 5 : 15 + rnd() * 8), h / 2 - 0.6, z);
       dummy.scale.set(w, h, w + rnd() * 4);
       dummy.rotation.y = (rnd() - 0.5) * 0.12;
       dummy.updateMatrix();
       ref.current!.setMatrixAt(i, dummy.matrix);
     }
     ref.current!.instanceMatrix.needsUpdate = true;
-  }, [count, dummy, seed, side]);
+  }, [count, dummy, narrow, seed, side]);
 
   return (
     <instancedMesh ref={ref} args={[undefined, undefined, count]} frustumCulled={false}>
@@ -168,19 +172,20 @@ function HoloBillboard({
 /* ------------------------------------------------------------------ */
 /* Neon district gate: ring arching over the street at chapter bounds   */
 /* ------------------------------------------------------------------ */
-function DistrictGate({ z, color }: { z: number; color: string }) {
+function DistrictGate({ z, color, narrow }: { z: number; color: string; narrow: boolean }) {
   const ref = useRef<THREE.Mesh>(null);
+  const radius = narrow ? 8 : 10.5;
   useFrame((state) => {
     if (ref.current) ref.current.rotation.z = state.clock.elapsedTime * 0.08;
   });
   return (
-    <group position={[0, 7.5, z]}>
+    <group position={[0, narrow ? 6.2 : 7.5, z]}>
       <mesh ref={ref}>
-        <torusGeometry args={[10.5, 0.22, 16, 96]} />
+        <torusGeometry args={[radius, 0.22, 16, 96]} />
         <meshBasicMaterial color={color} toneMapped={false} />
       </mesh>
       <mesh>
-        <torusGeometry args={[10.5, 0.9, 16, 96]} />
+        <torusGeometry args={[radius, 0.9, 16, 96]} />
         <meshBasicMaterial color={color} transparent opacity={0.12} toneMapped={false} />
       </mesh>
       <pointLight color={color} intensity={70} distance={55} decay={1.7} />
@@ -298,16 +303,31 @@ export default function ExperienceScene({ rig }: { rig: React.MutableRefObject<S
     () => [makeFacadeTexture(CYAN, 11), makeFacadeTexture(MAGENTA, 47), makeFacadeTexture(PURPLE, 83)],
     []
   );
-  const rainCount = useMemo(
-    () => (typeof window !== "undefined" && window.innerWidth < 768 ? 600 : 1300),
+  // portrait phones collapse the horizontal FOV — widen the lens and pull the
+  // whole street inward so buildings and billboards stay in frame
+  const narrow = useMemo(
+    () => typeof window !== "undefined" && window.innerWidth < 768,
     []
   );
+  const rainCount = useMemo(() => (narrow ? 600 : 1300), [narrow]);
+  const bx = narrow ? 8.6 : 11.5; // billboard distance from street center
+  const curbX = narrow ? 5.8 : 7.2;
+
+  // billboard layout: [photo, x-side, y, z, inward tilt]
+  const billboards: [string, 1 | -1, number, number, number][] = [
+    [PHOTOS[0], -1, 11, -58, 0.25],
+    [PHOTOS[1], 1, 13, -72, 0.22],
+    [PHOTOS[2], -1, 9, -102, 0.3],
+    [PHOTOS[3], 1, 12, -114, 0.28],
+    [PHOTOS[4], -1, 14, -126, 0.2],
+    [PHOTOS[5], 1, 10, -136, 0.25],
+  ];
 
   return (
     <div className="pointer-events-none fixed inset-0 z-0" aria-hidden>
       <Canvas
         dpr={[1, 1.75]}
-        camera={{ position: [0, 3.1, 26], fov: 58, near: 0.1, far: 500 }}
+        camera={{ position: [0, 3.1, 26], fov: narrow ? 76 : 58, near: 0.1, far: 500 }}
         gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
         style={{ width: "100%", height: "100%" }}
       >
@@ -336,35 +356,39 @@ export default function ExperienceScene({ rig }: { rig: React.MutableRefObject<S
             fadeStrength={2.5}
           />
           {/* neon curb strips */}
-          <mesh position={[-7.2, 0.05, -80]}>
+          <mesh position={[-curbX, 0.05, -80]}>
             <boxGeometry args={[0.35, 0.12, 260]} />
             <meshBasicMaterial color={CYAN} toneMapped={false} />
           </mesh>
-          <mesh position={[7.2, 0.05, -80]}>
+          <mesh position={[curbX, 0.05, -80]}>
             <boxGeometry args={[0.35, 0.12, 260]} />
             <meshBasicMaterial color={MAGENTA} toneMapped={false} />
           </mesh>
 
           {/* building canyons */}
           {facades.map((tex, i) => (
-            <Buildings key={i} side={1} texture={tex} count={15} seed={100 + i * 37} />
+            <Buildings key={i} side={1} texture={tex} count={15} seed={100 + i * 37} narrow={narrow} />
           ))}
           {facades.map((tex, i) => (
-            <Buildings key={`l${i}`} side={-1} texture={tex} count={15} seed={500 + i * 53} />
+            <Buildings key={`l${i}`} side={-1} texture={tex} count={15} seed={500 + i * 53} narrow={narrow} />
           ))}
 
           {/* district gates */}
-          <DistrictGate z={-44} color={CYAN} />
-          <DistrictGate z={-94} color={PURPLE} />
-          <DistrictGate z={-142} color={MAGENTA} />
+          <DistrictGate z={-44} color={CYAN} narrow={narrow} />
+          <DistrictGate z={-94} color={PURPLE} narrow={narrow} />
+          <DistrictGate z={-142} color={MAGENTA} narrow={narrow} />
 
           {/* holographic billboards — his photography as neon ads */}
-          <HoloBillboard src={PHOTOS[0]} position={[-11.5, 11, -58]} rotationY={Math.PI / 2 - 0.25} accent={CYAN} seed={1} />
-          <HoloBillboard src={PHOTOS[1]} position={[11.5, 13, -72]} rotationY={-Math.PI / 2 + 0.22} accent={MAGENTA} seed={2} />
-          <HoloBillboard src={PHOTOS[2]} position={[-11.5, 9, -102]} rotationY={Math.PI / 2 - 0.3} accent={PURPLE} seed={3} />
-          <HoloBillboard src={PHOTOS[3]} position={[11.5, 12, -114]} rotationY={-Math.PI / 2 + 0.28} accent={CYAN} seed={4} />
-          <HoloBillboard src={PHOTOS[4]} position={[-11.5, 14, -126]} rotationY={Math.PI / 2 - 0.2} accent={MAGENTA} seed={5} />
-          <HoloBillboard src={PHOTOS[5]} position={[11.5, 10, -136]} rotationY={-Math.PI / 2 + 0.25} accent={PURPLE} seed={6} />
+          {billboards.map(([src, side, y, z, tilt], i) => (
+            <HoloBillboard
+              key={src}
+              src={src}
+              position={[side * bx, y, z]}
+              rotationY={side === -1 ? Math.PI / 2 - tilt : -Math.PI / 2 + tilt}
+              accent={[CYAN, MAGENTA, PURPLE][i % 3]}
+              seed={i + 1}
+            />
+          ))}
 
           {/* street lights */}
           <pointLight color={CYAN} intensity={50} distance={60} decay={1.8} position={[-6, 9, -50]} />
