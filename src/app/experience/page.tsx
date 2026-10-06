@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useInView } from "motion/react";
+import { motion } from "motion/react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import ExperienceHud, { CHAPTERS } from "@/components/experience/ExperienceHud";
@@ -13,23 +13,31 @@ const ExperienceScene = dynamic(() => import("@/components/experience/Experience
 });
 
 /* Masked line reveal: line rises out of an overflow-hidden mask.
-   NOTE: the IntersectionObserver must watch the mask (parent), not the
-   translated child — a fully clipped child has zero intersection area and
-   whileInView would never fire. */
+   The whileInView trigger sits on the OUTER mask element (which is never
+   clipped, so the observer fires reliably); the inner line animates via
+   variants. Observing the translated child directly never fires — a fully
+   clipped element has zero intersection area. */
 function RevealLine({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-18%" as never });
   return (
-    <span ref={ref} className="block overflow-hidden pb-1">
+    <motion.span
+      className="block overflow-hidden pb-1"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-18%" }}
+    >
       <motion.span
         className="block will-change-transform"
-        initial={{ y: "112%" }}
-        animate={{ y: inView ? "0%" : "112%" }}
-        transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
+        variants={{
+          hidden: { y: "112%" },
+          show: {
+            y: "0%",
+            transition: { duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] },
+          },
+        }}
       >
         {children}
       </motion.span>
-    </span>
+    </motion.span>
   );
 }
 
