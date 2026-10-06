@@ -5,16 +5,19 @@ import { motion } from "motion/react";
 
 export const CHAPTERS = [
   { id: "ch-intro", label: "ENTER", index: "00" },
-  { id: "ch-data", label: "DATA", index: "01" },
-  { id: "ch-training", label: "TRAINING", index: "02" },
-  { id: "ch-photo", label: "PHOTO", index: "03" },
-  { id: "ch-contact", label: "CONTACT", index: "04" },
+  { id: "ch-origin", label: "ORIGIN", index: "01" },
+  { id: "ch-crossing", label: "CROSSING", index: "02" },
+  { id: "ch-krakow", label: "KRAKÓW", index: "03" },
+  { id: "ch-photo", label: "LIGHT", index: "04" },
+  { id: "ch-contact", label: "CONTACT", index: "05" },
 ];
+
+const AMBER = "#ffb454";
 
 const GRAIN_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
-function Corner({ className }: { className: string }) {
-  return <div aria-hidden className={`pointer-events-none absolute h-8 w-8 border-sci-cyan/60 ${className}`} />;
+function Corner({ className, style }: { className: string; style?: React.CSSProperties }) {
+  return <div aria-hidden style={style} className={`pointer-events-none absolute h-8 w-8 ${className}`} />;
 }
 
 /* Custom cursor: difference-blend ring that lerps after the pointer */
@@ -48,10 +51,17 @@ function CursorRing() {
     <div
       ref={ref}
       aria-hidden
-      className="pointer-events-none fixed left-0 top-0 z-[70] h-7 w-7 rounded-full border border-sci-cyan/80 mix-blend-difference"
-      style={{ willChange: "transform" }}
+      className="pointer-events-none fixed left-0 top-0 z-[70] h-7 w-7 rounded-full border mix-blend-difference"
+      style={{ borderColor: `${AMBER}cc`, willChange: "transform" }}
     />
   );
+}
+
+/* Goa 15.4969°N 73.8278°E → Kraków 50.0647°N 19.9450°E */
+function useCoordinates(progress: number) {
+  const lat = 15.4969 + progress * (50.0647 - 15.4969);
+  const lon = 73.8278 + progress * (19.945 - 73.8278);
+  return `${lat.toFixed(2)}°N · ${Math.abs(lon).toFixed(2)}°E`;
 }
 
 export default function ExperienceHud({
@@ -64,44 +74,43 @@ export default function ExperienceHud({
   onJump: (id: string) => void;
 }) {
   const pct = Math.round(progress * 100);
-  const depth = Math.round(progress * 178);
+  const km = Math.round(progress * 6500);
+  const coords = useCoordinates(progress);
 
   return (
     <>
-      {/* film grain + vignette + scanlines */}
+      {/* film grain + vignette */}
       <div aria-hidden className="pointer-events-none fixed inset-0 z-[60]">
         <div
-          className="absolute inset-0 opacity-[0.055] mix-blend-overlay animate-grain"
+          className="absolute inset-0 opacity-[0.05] mix-blend-overlay animate-grain"
           style={{ backgroundImage: GRAIN_SVG, backgroundSize: "180px 180px" }}
         />
         <div
           className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at center, transparent 52%, rgba(2,2,8,0.55) 100%)" }}
-        />
-        <div
-          className="absolute inset-0 opacity-[0.05]"
-          style={{
-            backgroundImage: "repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,255,255,0.5) 2px 3px)",
-          }}
+          style={{ background: "radial-gradient(ellipse at center, transparent 52%, rgba(4,3,10,0.55) 100%)" }}
         />
       </div>
 
       {/* corner brackets */}
       <div aria-hidden className="pointer-events-none fixed inset-4 z-[61] hidden sm:block">
-        <Corner className="left-0 top-0 border-l-2 border-t-2" />
-        <Corner className="right-0 top-0 border-r-2 border-t-2" />
-        <Corner className="bottom-0 left-0 border-b-2 border-l-2" />
-        <Corner className="bottom-0 right-0 border-b-2 border-r-2" />
+        <Corner className="left-0 top-0 border-l-2 border-t-2" style={{ borderColor: `${AMBER}99` }} />
+        <Corner className="right-0 top-0 border-r-2 border-t-2" style={{ borderColor: `${AMBER}99` }} />
+        <Corner className="bottom-0 left-0 border-b-2 border-l-2" style={{ borderColor: `${AMBER}99` }} />
+        <Corner className="bottom-0 right-0 border-b-2 border-r-2" style={{ borderColor: `${AMBER}99` }} />
       </div>
 
       {/* mono telemetry labels */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 z-[61] hidden font-mono-sci text-[10px] tracking-[0.22em] text-sci-cyan/60 uppercase sm:block">
-        <div className="absolute left-10 top-9">AI_ // experience</div>
-        <div className="absolute right-10 top-9">traverse {String(pct).padStart(3, "0")}%</div>
-        <div className="absolute bottom-9 left-10">dist −{depth}m · sector 7G</div>
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-[61] hidden font-mono-sci text-[10px] tracking-[0.22em] uppercase sm:block"
+        style={{ color: `${AMBER}99` }}
+      >
+        <div className="absolute left-10 top-9">goa, in → kraków, pl</div>
+        <div className="absolute right-10 top-9">journey {String(pct).padStart(3, "0")}%</div>
+        <div className="absolute bottom-9 left-10">{km.toLocaleString()} km · {coords}</div>
         <div className="absolute bottom-9 right-10">
-          <span className="mr-2 inline-block h-1.5 w-1.5 animate-blink rounded-full bg-sci-cyan" />
-          sys.online
+          <span className="mr-2 inline-block h-1.5 w-1.5 animate-blink rounded-full" style={{ backgroundColor: AMBER }} />
+          en route
         </div>
       </div>
 
@@ -118,15 +127,17 @@ export default function ExperienceHud({
             >
               <span
                 className={`mr-3 font-mono-sci text-[9px] tracking-[0.2em] transition-opacity ${
-                  active ? "text-sci-cyan opacity-100" : "text-white/40 opacity-0 group-hover:opacity-100"
+                  active ? "opacity-100" : "text-white/40 opacity-0 group-hover:opacity-100"
                 }`}
+                style={active ? { color: AMBER } : undefined}
               >
                 {ch.label}
               </span>
               <motion.span
                 className={`block rounded-full transition-colors ${
-                  active ? "bg-sci-cyan shadow-[0_0_10px_rgba(0,255,255,0.9)]" : "bg-white/25 group-hover:bg-white/60"
+                  active ? "" : "bg-white/25 group-hover:bg-white/60"
                 }`}
+                style={active ? { backgroundColor: AMBER, boxShadow: `0 0 10px ${AMBER}e6` } : undefined}
                 animate={{ width: active ? 10 : 6, height: active ? 10 : 6 }}
                 transition={{ duration: 0.25 }}
               />
@@ -134,7 +145,7 @@ export default function ExperienceHud({
           );
         })}
         <div className="mt-1 h-16 w-px bg-white/10">
-          <motion.div className="w-px bg-sci-cyan/70" style={{ height: `${progress * 100}%` }} />
+          <motion.div className="w-px" style={{ height: `${progress * 100}%`, backgroundColor: `${AMBER}b3` }} />
         </div>
       </nav>
 
