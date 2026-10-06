@@ -694,10 +694,12 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 .sec > *:not(.fg), .foot > *:not(.fg){ position:relative; z-index:2; }
 .fg-el{ position:absolute; display:block; opacity:0; }
 .fg-el > img{
-  mix-blend-mode:screen;
+  /* transparency is baked into the image alpha — no blend-mode needed
+     (screen blend isolated inside the fixed stage on some mobile browsers,
+     painting the cut-out's black box opaque) */
   width:100%; height:auto;   /* the width/height attrs hold the box before the lazy image lands */
   opacity:1;
-  filter:saturate(.88) brightness(.86);
+  filter:saturate(.92) brightness(.92);
 }
 .fg-el--flip > img{ transform:scaleX(-1); }
 /* each piece waits off the edge it is anchored to until its chapter is called */
