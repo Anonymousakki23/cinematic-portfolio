@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Home } from "lucide-react";
+import { Home } from "lucide-react";
 
 /**
  * /welcome — the card-scan landing. A short JARVIS handshake ("card
@@ -146,18 +146,12 @@ export default function WelcomePage() {
               analyst, photographer. You scanned the card, so let me show you
               around properly.
             </p>
-            <div className="mt-8 space-y-3">
-              <Link
-                href="/experience"
-                className="font-mono-sci flex items-center justify-center gap-3 border border-sci-cyan/50 bg-sci-cyan/10 px-6 py-4 text-xs tracking-[0.25em] text-sci-cyan uppercase transition-colors hover:bg-sci-cyan/20"
-              >
-                Enter the journey <ArrowRight className="h-4 w-4" />
-              </Link>
+            <div className="mt-8">
               <Link
                 href="/"
-                className="font-mono-sci flex items-center justify-center gap-3 border border-white/20 px-6 py-4 text-xs tracking-[0.25em] text-white/70 uppercase transition-colors hover:border-sci-cyan/40 hover:text-white"
+                className="font-mono-sci flex items-center justify-center gap-3 border border-sci-cyan/50 bg-sci-cyan/10 px-6 py-4 text-xs tracking-[0.25em] text-sci-cyan uppercase transition-colors hover:bg-sci-cyan/20"
               >
-                <Home className="h-4 w-4" /> Home interface
+                <Home className="h-4 w-4" /> Enter home
               </Link>
             </div>
             <p className="font-mono-sci mt-8 text-[10px] tracking-[0.3em] text-white/25 uppercase">
