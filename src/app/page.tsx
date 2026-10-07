@@ -300,6 +300,40 @@ export default function HomePage() {
             ))}
           </div>
         </section>
+        {/* Experience — cinematic journey teaser */}
+        <section className="mx-auto max-w-6xl px-6 py-16 pb-24">
+          <SectionEyebrow>{"// experience — the journey"}</SectionEyebrow>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.6 }}
+          >
+            <Link
+              href="/experience"
+              className="group relative block overflow-hidden rounded-2xl border border-amber-200/15"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-[#2a1503] via-[#0d0a18] to-[#050510]" />
+              <div className="absolute inset-0 bg-[radial-gradient(60%_120%_at_20%_50%,rgba(240,168,64,0.22),transparent_70%)]" />
+              <div className="relative px-8 py-12 md:px-14 md:py-16">
+                <p className="font-mono-sci text-xs tracking-[0.3em] text-amber-200/70 uppercase mb-4">
+                  Goa, IN ————— Kraków, PL
+                </p>
+                <h2 className="font-orbitron text-2xl md:text-4xl font-bold text-white mb-4">
+                  From Goa to Kraków.
+                </h2>
+                <p className="max-w-xl text-sm md:text-base leading-relaxed text-white/60 mb-8">
+                  A cinematic scroll through my story — the coast that raised
+                  me, the 6,500 km crossing, and the city that made me. Palms,
+                  chapels and church towers in watercolor dusk.
+                </p>
+                <span className="inline-flex items-center gap-3 rounded-full border border-amber-200/30 px-6 py-3 font-mono-sci text-xs tracking-[0.25em] text-amber-100 uppercase transition-colors group-hover:bg-amber-200/10">
+                  Enter the journey <span aria-hidden="true">→</span>
+                </span>
+              </div>
+            </Link>
+          </motion.div>
+        </section>
       </div>
     </main>
   );
