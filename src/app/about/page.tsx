@@ -11,6 +11,7 @@ import {
   Fingerprint,
   Cpu,
   Radio,
+  Activity,
 } from "lucide-react";
 
 /* ---------------------------------- data --------------------------------- */
@@ -57,6 +58,14 @@ const languages = [
   { lang: "Polish", level: 35, prof: "A2" },
 ];
 
+const telemetry: Array<[string, string]> = [
+  ["CORE", "NOMINAL"],
+  ["POWER", "100%"],
+  ["UPLINK", "SECURE"],
+  ["THREATS", "NONE"],
+  ["MODE", "STANDBY"],
+];
+
 /* --------------------------------- pieces -------------------------------- */
 
 function Corners() {
@@ -97,10 +106,111 @@ function HudPanel({
           <span className="mx-3 text-white/20">//</span>
           {title}
         </p>
-        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-sci-cyan" />
+        <span className="flex items-center gap-2 font-mono-sci text-[10px] tracking-[0.25em] text-sci-cyan/60 uppercase">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-sci-cyan" />
+          live
+        </span>
       </div>
       {children}
     </motion.section>
+  );
+}
+
+/** Arc-reactor avatar — rotating HUD rings around the monogram core. */
+function ReactorAvatar() {
+  return (
+    <div className="relative mx-auto h-48 w-48 shrink-0 md:mx-0 md:h-56 md:w-56">
+      <style>{`
+        @keyframes j-spin { to { transform: rotate(360deg); } }
+        @keyframes j-spin-rev { to { transform: rotate(-360deg); } }
+        .j-ring-a { transform-box: fill-box; transform-origin: center; animation: j-spin 50s linear infinite; }
+        .j-ring-b { transform-box: fill-box; transform-origin: center; animation: j-spin-rev 32s linear infinite; }
+        .j-ring-c { transform-box: fill-box; transform-origin: center; animation: j-spin 85s linear infinite; }
+      `}</style>
+      <svg viewBox="0 0 200 200" className="h-full w-full" aria-hidden>
+        <defs>
+          <radialGradient id="jcore" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#cffafe" />
+            <stop offset="30%" stopColor="#22d3ee" stopOpacity="0.95" />
+            <stop offset="65%" stopColor="#0e7490" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#0e7490" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <g className="j-ring-a">
+          <circle cx="100" cy="100" r="96" fill="none" stroke="#22d3ee" strokeOpacity="0.55" strokeWidth="2.5" strokeDasharray="2 8" />
+        </g>
+        <circle cx="100" cy="100" r="88" fill="none" stroke="#22d3ee" strokeOpacity="0.28" strokeWidth="1" />
+        <g className="j-ring-b">
+          <circle cx="100" cy="100" r="78" fill="none" stroke="#22d3ee" strokeOpacity="0.7" strokeWidth="5" strokeDasharray="42 30" strokeLinecap="round" />
+        </g>
+        <g className="j-ring-c">
+          <circle cx="100" cy="100" r="66" fill="none" stroke="#22d3ee" strokeOpacity="0.4" strokeWidth="1.5" strokeDasharray="1 6" />
+        </g>
+        <circle cx="100" cy="100" r="58" fill="url(#jcore)" opacity="0.92" />
+        <circle cx="100" cy="100" r="58" fill="none" stroke="#a5f3fc" strokeOpacity="0.85" strokeWidth="1.5" />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="font-orbitron text-4xl font-bold text-[#04121a] drop-shadow-[0_0_10px_rgba(165,243,252,0.9)]">
+          AI
+        </span>
+      </div>
+      <span className="absolute right-3 bottom-3 h-4 w-4 rounded-full border-2 border-[#050510] bg-emerald-400" />
+    </div>
+  );
+}
+
+/** Circular HUD gauge for a capability. */
+function RingGauge({
+  level,
+  label,
+  note,
+  delay = 0,
+}: {
+  level: number;
+  label: string;
+  note: string;
+  delay?: number;
+}) {
+  const r = 52;
+  const c = 2 * Math.PI * r;
+  return (
+    <div className="relative flex flex-col items-center border border-white/10 bg-white/[0.02] p-6 text-center">
+      <span className="pointer-events-none absolute top-1 left-1 h-3 w-3 border-t border-l border-sci-cyan/50" />
+      <span className="pointer-events-none absolute right-1 bottom-1 h-3 w-3 border-r border-b border-sci-cyan/50" />
+      <div className="relative h-36 w-36">
+        <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90" aria-hidden>
+          <circle cx="60" cy="60" r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="8" />
+          <circle cx="60" cy="60" r="40" fill="none" stroke="#22d3ee" strokeOpacity="0.25" strokeWidth="1" strokeDasharray="1 5" />
+          <motion.circle
+            cx="60"
+            cy="60"
+            r={r}
+            fill="none"
+            stroke="#22d3ee"
+            strokeWidth="8"
+            strokeLinecap="round"
+            strokeDasharray={c}
+            initial={{ strokeDashoffset: c }}
+            whileInView={{ strokeDashoffset: c * (1 - level / 100) }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 1.3, delay, ease: "easeOut" }}
+            style={{ filter: "drop-shadow(0 0 6px rgba(34,211,238,0.6))" }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="font-orbitron text-2xl font-bold text-white tabular-nums">
+            {level}
+            <span className="text-sm text-sci-cyan">%</span>
+          </span>
+        </div>
+      </div>
+      <h3 className="mt-4 font-orbitron text-xs font-semibold tracking-[0.12em] text-white">
+        {label.toUpperCase()}
+      </h3>
+      <p className="mt-1 font-mono-sci text-[11px] tracking-[0.25em] text-sci-cyan/70">
+        {note}
+      </p>
+    </div>
   );
 }
 
@@ -122,15 +232,28 @@ function Meter({ level, delay = 0 }: { level: number; delay?: number }) {
 
 export default function AboutPage() {
   const [now, setNow] = useState("--:--:--");
+  const [today, setToday] = useState("");
   useEffect(() => {
-    const tick = () =>
+    const tick = () => {
+      const d = new Date();
       setNow(
-        new Date().toLocaleTimeString("en-GB", {
+        d.toLocaleTimeString("en-GB", {
           hour: "2-digit",
           minute: "2-digit",
           second: "2-digit",
         })
       );
+      setToday(
+        d
+          .toLocaleDateString("en-GB", {
+            weekday: "short",
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          })
+          .toUpperCase()
+      );
+    };
     tick();
     const t = setInterval(tick, 1000);
     return () => clearInterval(t);
@@ -138,7 +261,7 @@ export default function AboutPage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#050510]">
-      {/* backdrop grid */}
+      {/* backdrop grid + scanlines */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.35]"
@@ -152,17 +275,26 @@ export default function AboutPage() {
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_0%,rgba(34,211,238,0.08),transparent_70%)]"
       />
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-40 opacity-[0.05]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(0deg, transparent 0 2px, #22d3ee 2px 3px)",
+        }}
+      />
 
       {/* system bar */}
       <div className="relative z-10 border-b border-sci-cyan/15">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-6 py-4">
           <p className="font-mono-sci text-xs tracking-[0.35em] text-sci-cyan uppercase">
             J.A.R.V.I.S.
           </p>
-          <p className="hidden font-mono-sci text-xs tracking-[0.25em] text-white/40 uppercase sm:block">
+          <p className="hidden font-mono-sci text-xs tracking-[0.25em] text-white/40 uppercase md:block">
             Personnel file // access granted
           </p>
-          <p className="font-mono-sci text-xs tracking-[0.2em] text-white/60 tabular-nums">
+          <p className="font-mono-sci text-xs tracking-[0.15em] text-white/60 tabular-nums">
+            <span className="mr-3 hidden text-white/35 sm:inline">{today}</span>
             {now} <span className="ml-2 text-sci-cyan">● SYS NOMINAL</span>
           </p>
         </div>
@@ -177,14 +309,9 @@ export default function AboutPage() {
           className="relative overflow-hidden border border-sci-cyan/20 bg-[#070b16]/85 p-8 backdrop-blur-sm md:p-12"
         >
           <Corners />
-          <div className="flex flex-col gap-8 md:flex-row md:items-center">
-            <div className="relative mx-auto md:mx-0">
-              <div className="flex h-28 w-28 items-center justify-center rounded-full border-2 border-sci-cyan/60 font-orbitron text-3xl font-bold text-sci-cyan">
-                AI
-              </div>
-              <span className="absolute -right-1 -bottom-1 h-4 w-4 rounded-full border-2 border-[#050510] bg-emerald-400" />
-            </div>
-            <div className="text-center md:text-left">
+          <div className="flex flex-col items-center gap-8 md:flex-row">
+            <ReactorAvatar />
+            <div className="flex-1 text-center md:text-left">
               <p className="mb-3 font-mono-sci text-xs tracking-[0.35em] text-sci-cyan/80 uppercase">
                 Subject identification
               </p>
@@ -203,8 +330,8 @@ export default function AboutPage() {
                 </span>
               </div>
             </div>
-            <div className="hidden flex-1 lg:block">
-              <div className="ml-auto grid max-w-xs grid-cols-3 gap-px bg-sci-cyan/15 font-mono-sci text-center">
+            <div className="hidden w-full max-w-[240px] lg:block">
+              <div className="grid grid-cols-3 gap-px bg-sci-cyan/15 text-center font-mono-sci">
                 {[
                   ["400+", "TEAM LED"],
                   ["8+", "YRS FIELD"],
@@ -216,56 +343,80 @@ export default function AboutPage() {
                   </div>
                 ))}
               </div>
+              <p className="mt-3 flex items-center justify-center gap-2 font-mono-sci text-[10px] tracking-[0.25em] text-white/30 uppercase">
+                <Activity className="h-3 w-3 text-sci-cyan/60" /> vitals steady
+              </p>
             </div>
           </div>
         </motion.header>
 
-        {/* dossier */}
+        {/* dossier + telemetry */}
         <HudPanel index="01" title="Dossier">
-          <div className="flex items-start gap-4">
-            <Fingerprint className="mt-1 h-5 w-5 shrink-0 text-sci-cyan/70" />
-            <div className="space-y-4 text-base leading-relaxed text-white/80 md:text-lg">
-              <p>
-                Results-oriented trainer and analyst with proven expertise in
-                global operations management across{" "}
-                <span className="text-sci-cyan">400+ team members</span>, data
-                analytics and project leadership. Demonstrated success in
-                delivering agreed outcomes, generating quality reports and
-                fostering collaborative team environments.
-              </p>
-              <p className="text-white/60">
-                Adept at onboarding, technical guidance and proactive
-                communication with stakeholders — from ecommerce AI data
-                solutions at TELUS Digital to Google-scale analytics programs
-                at HCLTech. Started in hospitality kitchens before moving into
-                tech and data; still applies what the coast taught him:
-                patience, observation, and that light changes everything.
-              </p>
+          <div className="grid gap-8 md:grid-cols-[1fr_230px]">
+            <div className="flex items-start gap-4">
+              <Fingerprint className="mt-1 h-5 w-5 shrink-0 text-sci-cyan/70" />
+              <div className="space-y-4 text-base leading-relaxed text-white/80 md:text-lg">
+                <p>
+                  Results-oriented trainer and analyst with proven expertise in
+                  global operations management across{" "}
+                  <span className="text-sci-cyan">400+ team members</span>, data
+                  analytics and project leadership. Demonstrated success in
+                  delivering agreed outcomes, generating quality reports and
+                  fostering collaborative team environments.
+                </p>
+                <p className="text-white/60">
+                  Adept at onboarding, technical guidance and proactive
+                  communication with stakeholders — from ecommerce AI data
+                  solutions at TELUS Digital to Google-scale analytics programs
+                  at HCLTech. Started in hospitality kitchens before moving into
+                  tech and data; still applies what the coast taught him:
+                  patience, observation, and that light changes everything.
+                </p>
+              </div>
             </div>
+            <aside className="border border-sci-cyan/15 bg-black/30 p-5">
+              <p className="mb-4 font-mono-sci text-[10px] tracking-[0.3em] text-sci-cyan/70 uppercase">
+                System telemetry
+              </p>
+              <ul className="space-y-3 font-mono-sci text-xs">
+                {telemetry.map(([k, v]) => (
+                  <li key={k} className="flex items-baseline gap-2">
+                    <span className="text-white/40">{k}</span>
+                    <span className="mx-1 flex-1 border-b border-dotted border-white/15" />
+                    <span className="text-sci-cyan">{v}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-5 border-t border-sci-cyan/10 pt-4">
+                <div className="flex items-end justify-between font-mono-sci text-[10px] text-white/35">
+                  <span>REACTOR OUTPUT</span>
+                  <span className="text-sci-cyan">3.1 GJ/s</span>
+                </div>
+                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
+                  <motion.div
+                    className="h-full rounded-full bg-sci-cyan shadow-[0_0_10px_rgba(34,211,238,0.7)]"
+                    initial={{ width: "12%" }}
+                    whileInView={{ width: "100%" }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1.6, ease: "easeOut" }}
+                  />
+                </div>
+              </div>
+            </aside>
           </div>
         </HudPanel>
 
-        {/* capability modules */}
+        {/* capability modules — ring gauges */}
         <HudPanel index="02" title="Capability modules">
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {capabilities.map((c, i) => (
-              <div
+              <RingGauge
                 key={c.name}
-                className="border border-white/10 bg-white/[0.02] p-5"
-              >
-                <div className="mb-3 flex items-center justify-between">
-                  <h3 className="font-orbitron text-sm font-semibold tracking-wide text-white">
-                    {c.name.toUpperCase()}
-                  </h3>
-                  <span className="font-mono-sci text-sm text-sci-cyan tabular-nums">
-                    {c.level}%
-                  </span>
-                </div>
-                <Meter level={c.level} delay={i * 0.12} />
-                <p className="mt-3 font-mono-sci text-[11px] tracking-[0.25em] text-white/40">
-                  RATING: <span className="text-sci-cyan/80">{c.note}</span>
-                </p>
-              </div>
+                level={c.level}
+                label={c.name}
+                note={c.note}
+                delay={i * 0.12}
+              />
             ))}
           </div>
         </HudPanel>
