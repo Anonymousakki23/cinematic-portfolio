@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView, animate, useScroll } from "motion/react";
+import { motion, useInView, animate, useScroll, useTransform } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import * as THREE from "three";
@@ -230,7 +230,7 @@ function ParallaxShot({ src, tag, index }: { src: string; tag: string; index: nu
           className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <p className="font-mono-sci absolute bottom-0 left-0 bg-black/60 px-2 py-1 text-[9px] tracking-[0.2em] text-sci-cyan">
-          {s.tag}
+          {tag}
         </p>
       </motion.div>
     </div>
