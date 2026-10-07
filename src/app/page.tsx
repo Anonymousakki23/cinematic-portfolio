@@ -1,70 +1,72 @@
 "use client";
 
-import { motion, useInView, animate, useTransform } from "motion/react";
-import { ChevronRight, ChevronDown, BarChart3, Users, Camera } from "lucide-react";
-import Link from "next/link";
+import { motion, useInView, animate } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import Hero3D from "@/components/hero-3d";
+import Link from "next/link";
+import * as THREE from "three";
+import { BarChart3, Users, Camera, ArrowRight } from "lucide-react";
 import ClassicalIntro from "@/components/classical-intro";
-import { usePointerMotion, TiltCard } from "@/components/motion-controls";
 
-const navItems = [
-  { href: "/about", label: "About", color: "bg-sci-cyan" },
-  { href: "/resume", label: "Resume", color: "bg-sci-purple" },
-  { href: "/photography", label: "Photography", color: "bg-sci-magenta" },
-  { href: "/recommendations", label: "Recommendations", color: "bg-sci-purple" },
-  { href: "/contact", label: "Contact", color: "bg-sci-cyan" },
-];
+/**
+ * HOME-DEMO — sample: the home page restyled in the JARVIS module system,
+ * with a scroll-driven 3D hologram layer behind the content.
+ * Standalone demo; not linked in nav.
+ */
 
-const galleryShots = [
-  { src: "/photography/ig-bee.webp", alt: "Honey bee macro" },
-  { src: "/photography/ig-lightning.jpg", alt: "Lightning storm over the city" },
-  { src: "/photography/ig-squirrel.webp", alt: "Red squirrel, Park Jordana" },
-  { src: "/photography/ig-spider.jpg", alt: "Striped lynx spider" },
-  { src: "/photography/ig-kingfisher.jpg", alt: "Common kingfisher with catch" },
-  { src: "/photography/ig-moss.jpg", alt: "Forest floor micro-ecosystem" },
-  { src: "/photography/ig-snake.jpg", alt: "Checkered keelback" },
-  { src: "/photography/ig-glowshroom.jpg", alt: "Glowing mushroom in the forest" },
-  { src: "/photography/ig-ant.jpg", alt: "Weaver ant" },
-  { src: "/photography/ig-butterfly.jpg", alt: "Butterfly in monochrome" },
-];
+/* --------------------------------- pieces -------------------------------- */
 
-const stats = [
-  { value: 10, suffix: "+", label: "Years Experience" },
-  { value: 400, suffix: "+", label: "Team Members Led" },
-  { value: 2, suffix: "", label: "Countries Worked" },
-  { value: 2, suffix: "+", label: "Awards Won" },
-];
+function Corners() {
+  const c = "pointer-events-none absolute h-4 w-4 border-sci-cyan/80";
+  return (
+    <>
+      <span className={`${c} top-0 left-0 border-t-2 border-l-2`} />
+      <span className={`${c} top-0 right-0 border-t-2 border-r-2`} />
+      <span className={`${c} bottom-0 left-0 border-b-2 border-l-2`} />
+      <span className={`${c} right-0 bottom-0 border-r-2 border-b-2`} />
+    </>
+  );
+}
 
-const capabilities = [
-  {
-    icon: <BarChart3 className="h-7 w-7" />,
-    title: "Data Analysis",
-    text: "Pipelines, dashboards and insights that turn raw data into decisions.",
-    accent: "text-sci-cyan",
-    ring: "hover:border-sci-cyan/50",
-  },
-  {
-    icon: <Users className="h-7 w-7" />,
-    title: "Training & Leadership",
-    text: "Built and mentored high-performing teams across regions and time zones.",
-    accent: "text-sci-purple",
-    ring: "hover:border-sci-purple/50",
-  },
-  {
-    icon: <Camera className="h-7 w-7" />,
-    title: "Photography",
-    text: "Macro and wildlife photography — patience, light and a Canon 77D.",
-    accent: "text-sci-magenta",
-    ring: "hover:border-sci-magenta/50",
-  },
-];
+function HudPanel({
+  index,
+  title,
+  children,
+  className = "",
+}: {
+  index: string;
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.55 }}
+      className={`relative border border-sci-cyan/15 bg-[#070b16]/85 p-6 backdrop-blur-sm md:p-8 ${className}`}
+    >
+      <Corners />
+      <div className="mb-6 flex items-center justify-between border-b border-sci-cyan/10 pb-4">
+        <p className="font-mono-sci text-xs tracking-[0.3em] text-sci-cyan/90 uppercase">
+          <span className="text-white/30">{index}</span>
+          <span className="mx-3 text-white/20">//</span>
+          {title}
+        </p>
+        <span className="flex items-center gap-2 font-mono-sci text-[10px] tracking-[0.25em] text-sci-cyan/60 uppercase">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-sci-cyan" />
+          live
+        </span>
+      </div>
+      {children}
+    </motion.section>
+  );
+}
 
-function StatCounter({ to, suffix }: { to: number; suffix: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
+function StatCell({ to, suffix, label }: { to: number; suffix: string; label: string }) {
+  const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
   const [val, setVal] = useState(0);
-
   useEffect(() => {
     if (!inView) return;
     const controls = animate(0, to, {
@@ -74,266 +76,325 @@ function StatCounter({ to, suffix }: { to: number; suffix: string }) {
     });
     return () => controls.stop();
   }, [inView, to]);
-
   return (
-    <span ref={ref}>
-      {val}
-      {suffix}
-    </span>
+    <div ref={ref} className="relative border border-white/10 bg-white/[0.02] p-6 text-center">
+      <span className="pointer-events-none absolute top-1 left-1 h-3 w-3 border-t border-l border-sci-cyan/50" />
+      <span className="pointer-events-none absolute right-1 bottom-1 h-3 w-3 border-r border-b border-sci-cyan/50" />
+      <p className="font-orbitron text-3xl font-bold text-sci-cyan tabular-nums md:text-4xl">
+        {val}
+        {suffix}
+      </p>
+      <p className="font-mono-sci mt-2 text-[10px] tracking-[0.25em] text-white/40 uppercase">
+        {label}
+      </p>
+    </div>
   );
 }
 
-function SectionEyebrow({ children }: { children: string }) {
-  return (
-    <motion.p
-      className="mb-8 text-center font-mono-sci text-xs tracking-[0.3em] text-sci-cyan/80 uppercase"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
-    >
-      {children}
-    </motion.p>
-  );
+/** Scroll-driven 3D hologram layer: wireframe reactor + particle field. */
+function HologramLayer() {
+  const mountRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const mount = mountRef.current;
+    if (!mount) return;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    mount.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.5, 500);
+    camera.position.set(0, 0, 62);
+
+    const holo = new THREE.Group();
+    const mat = new THREE.MeshBasicMaterial({ color: "#22d3ee", wireframe: true, transparent: true, opacity: 0.32 });
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(15, 3.6, 10, 42), mat);
+    const core = new THREE.Mesh(new THREE.IcosahedronGeometry(6.5, 1), mat.clone());
+    (core.material as THREE.Material).transparent = true;
+    (core.material as THREE.MeshBasicMaterial).opacity = 0.22;
+    const orbit = new THREE.Mesh(new THREE.TorusGeometry(22, 0.5, 8, 64), mat.clone());
+    (orbit.material as THREE.MeshBasicMaterial).opacity = 0.18;
+    orbit.rotation.x = Math.PI / 2.4;
+    holo.add(ring, core, orbit);
+    holo.position.set(window.innerWidth > 768 ? 20 : 0, 2, 0);
+    scene.add(holo);
+
+    // particle field
+    const pCount = 260;
+    const pGeo = new THREE.BufferGeometry();
+    const pArr = new Float32Array(pCount * 3);
+    for (let i = 0; i < pCount; i++) {
+      pArr[i * 3] = (Math.random() - 0.5) * 160;
+      pArr[i * 3 + 1] = (Math.random() - 0.5) * 100;
+      pArr[i * 3 + 2] = (Math.random() - 0.5) * 80 - 10;
+    }
+    pGeo.setAttribute("position", new THREE.BufferAttribute(pArr, 3));
+    const points = new THREE.Points(
+      pGeo,
+      new THREE.PointsMaterial({ color: "#22d3ee", size: 0.55, transparent: true, opacity: 0.5 })
+    );
+    scene.add(points);
+
+    let raf = 0;
+    const clock = new THREE.Clock();
+    function scrollP() {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      return Math.min(1, Math.max(0, window.scrollY / (total || 1)));
+    }
+    function tick() {
+      raf = requestAnimationFrame(tick);
+      const t = clock.getElapsedTime();
+      const p = scrollP();
+      // scroll choreography: spin up, rise, fade as content takes over
+      holo.rotation.y = t * 0.08 + p * Math.PI * 2.5;
+      holo.rotation.x = Math.sin(t * 0.2) * 0.15 + p * 0.6;
+      holo.position.y = 2 - p * 34;
+      const fade = 1 - p * 0.75;
+      (ring.material as THREE.MeshBasicMaterial).opacity = 0.32 * fade;
+      (core.material as THREE.MeshBasicMaterial).opacity = 0.22 * fade;
+      (orbit.material as THREE.MeshBasicMaterial).opacity = 0.18 * fade;
+      (points.material as THREE.PointsMaterial).opacity = 0.5 * fade;
+      points.rotation.y = t * 0.015;
+      camera.position.z = 62 - p * 14;
+      renderer.render(scene, camera);
+    }
+    tick();
+
+    function onResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      holo.position.x = window.innerWidth > 768 ? 20 : 0;
+    }
+    window.addEventListener("resize", onResize);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+      renderer.dispose();
+      mount.removeChild(renderer.domElement);
+    };
+  }, []);
+
+  return <div ref={mountRef} className="pointer-events-none fixed inset-0 z-0" aria-hidden />;
 }
+
+/* ---------------------------------- data --------------------------------- */
+
+const stats = [
+  { value: 10, suffix: "+", label: "Years Experience" },
+  { value: 400, suffix: "+", label: "Team Members Led" },
+  { value: 2, suffix: "", label: "Countries Worked" },
+  { value: 2, suffix: "+", label: "Awards Won" },
+];
+
+const capabilities = [
+  { icon: BarChart3, title: "Data Analysis", text: "Pipelines, dashboards and insights that turn raw data into decisions.", accent: "text-sci-cyan" },
+  { icon: Users, title: "Training & Leadership", text: "Built and mentored high-performing teams across regions and time zones.", accent: "text-sci-purple" },
+  { icon: Camera, title: "Photography", text: "Macro and wildlife photography — patience, light and a Canon 77D.", accent: "text-sci-magenta" },
+];
+
+const shots = [
+  { src: "/photography/ig-bee.webp", tag: "HONEY BEE MACRO" },
+  { src: "/photography/ig-lightning.jpg", tag: "LIGHTNING // KRAKÓW" },
+  { src: "/photography/ig-squirrel.webp", tag: "RED SQUIRREL" },
+  { src: "/photography/ig-spider.jpg", tag: "LYNX SPIDER" },
+  { src: "/photography/ig-kingfisher.jpg", tag: "KINGFISHER" },
+  { src: "/photography/ig-moss.jpg", tag: "FOREST FLOOR" },
+  { src: "/photography/ig-snake.jpg", tag: "KEELBACK" },
+  { src: "/photography/ig-glowshroom.jpg", tag: "GLOWSHROOM" },
+  { src: "/photography/ig-ant.jpg", tag: "WEAVER ANT" },
+  { src: "/photography/ig-butterfly.jpg", tag: "BUTTERFLY" },
+];
+
+const navLinks = [
+  { href: "/experience", label: "Experience" },
+  { href: "/about", label: "About" },
+  { href: "/resume", label: "Resume" },
+  { href: "/recommendations", label: "Recommendations" },
+  { href: "/photography", label: "Photography" },
+  { href: "/contact", label: "Contact" },
+];
+
+/* ---------------------------------- page --------------------------------- */
 
 export default function HomePage() {
   const [showIntro, setShowIntro] = useState(true);
-  const { x, y, needsPermission, enableTilt } = usePointerMotion();
-  // Hero drifts subtly against the pointer; the glow follows it.
-  const heroX = useTransform(x, (v) => v * -22);
-  const heroY = useTransform(y, (v) => v * -14);
-  const glowX = useTransform(x, (v) => v * 140);
-  const glowY = useTransform(y, (v) => v * 100);
+  const [now, setNow] = useState("--:--:--");
+  const [today, setToday] = useState("");
+  useEffect(() => {
+    const tick = () => {
+      const d = new Date();
+      setNow(d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
+      setToday(
+        d.toLocaleDateString("en-GB", { weekday: "short", day: "2-digit", month: "short", year: "numeric" }).toUpperCase()
+      );
+    };
+    tick();
+    const t = setInterval(tick, 1000);
+    return () => clearInterval(t);
+  }, []);
 
   return (
-    <main className="relative min-h-screen bg-[#050510] overflow-hidden">
+    <main className="relative min-h-screen overflow-hidden bg-[#050510]">
       {showIntro && <ClassicalIntro onDone={() => setShowIntro(false)} />}
-      <Hero3D />
-      {needsPermission && (
-        <button
-          onClick={enableTilt}
-          className="fixed bottom-5 right-5 z-50 rounded-full border border-sci-cyan/40 bg-black/60 px-4 py-2 font-mono-sci text-xs tracking-widest text-sci-cyan uppercase backdrop-blur-sm hover:bg-sci-cyan/10"
+      <HologramLayer />
+
+      {/* backdrop grid + scanlines */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-[1] opacity-[0.3]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(34,211,238,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,0.05) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-40 opacity-[0.05]"
+        style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent 0 2px, #22d3ee 2px 3px)" }}
+      />
+
+      {/* system bar */}
+      <div className="relative z-10 border-b border-sci-cyan/15">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-6 py-4">
+          <p className="font-mono-sci text-xs tracking-[0.35em] text-sci-cyan uppercase">J.A.R.V.I.S.</p>
+          <p className="hidden font-mono-sci text-xs tracking-[0.25em] text-white/40 uppercase md:block">
+            Home interface
+          </p>
+          <p className="font-mono-sci text-xs tracking-[0.15em] text-white/60 tabular-nums">
+            <span className="mr-3 hidden text-white/35 sm:inline">{today}</span>
+            {now} <span className="ml-2 text-sci-cyan">● SYS NOMINAL</span>
+          </p>
+        </div>
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-6xl space-y-8 px-6 py-14">
+        {/* hero viewport */}
+        <motion.header
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="relative overflow-hidden border border-sci-cyan/20 bg-[#070b16]/80 p-8 backdrop-blur-sm md:p-14"
         >
-          Enable motion
-        </button>
-      )}
-      <div className="relative z-10">
-        {/* Hero */}
-        <section className="grid-bg mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-6 pt-24 pb-16">
-          <motion.div
-            aria-hidden
-            className="pointer-events-none absolute left-1/2 top-1/3 h-[36rem] w-[36rem] rounded-full opacity-25 blur-3xl"
-            style={{
-              x: glowX,
-              y: glowY,
-              marginLeft: "-18rem",
-              marginTop: "-18rem",
-              background:
-                "radial-gradient(circle, rgba(0,255,255,0.35), rgba(123,97,255,0.15) 45%, transparent 65%)",
-            }}
-          />
-          <motion.div className="w-full max-w-4xl text-center" style={{ x: heroX, y: heroY }}>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <motion.p
-              className="mb-6 font-mono-sci text-xs tracking-[0.3em] text-sci-cyan/80 uppercase"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              {"// portfolio v2.0 — online"}
-            </motion.p>
-
-            <motion.h1
-              className="font-orbitron text-6xl font-bold text-white sm:text-7xl md:text-8xl"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.3 }}
-            >
-              Akshay
-              <span className="text-gradient"> Iyer</span>
-            </motion.h1>
-
-            <motion.p
-              className="mx-auto mt-6 max-w-2xl text-center text-lg text-white/70 font-sans sm:text-xl text-balance"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              Lead Analyst & Trainer — Crafting data-driven solutions and global leadership experiences across 400+ team members
-            </motion.p>
-
-            <motion.div
-              className="mt-12 flex flex-wrap justify-center gap-4 sm:gap-6"
-              initial="hidden"
-              animate="show"
-              variants={{
-                hidden: {},
-                show: { transition: { staggerChildren: 0.1, delayChildren: 0.5 } },
-              }}
-            >
-              {navItems.map((item) => (
-                <motion.div
-                  key={item.href}
-                  variants={{
-                    hidden: { opacity: 0, y: 20 },
-                    show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-                  }}
+          <Corners />
+          <p className="font-mono-sci mb-6 text-xs tracking-[0.35em] text-sci-cyan/80 uppercase">
+            Main viewport // subject
+          </p>
+          <h1 className="font-orbitron text-4xl font-bold text-white md:text-6xl">
+            Akshay Iyer
+          </h1>
+          <p className="font-mono-sci mt-4 text-sm tracking-[0.2em] text-sci-cyan uppercase">
+            Ecommerce Trainer — TELUS Digital
+          </p>
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/70 md:text-xl">
+            Chasing light toward the decisive moment.
+          </p>
+          <p className="mt-4 max-w-2xl leading-relaxed text-white/50">
+            Trainer, analyst and photographer — from Goan kitchens to
+            Google-scale data programs, now crafting AI data solutions in Kraków.
+          </p>
+          <div className="mt-10">
+            <p className="font-mono-sci mb-4 text-[11px] tracking-[0.35em] text-white/40 uppercase">
+              Navigation uplink
+            </p>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {navLinks.map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className="group flex items-center justify-between border border-white/10 bg-white/[0.02] px-4 py-3 transition-colors hover:border-sci-cyan/40"
                 >
-                  <TiltCard max={6}>
-                  <Link
-                    href={item.href}
-                    className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-white/10 bg-white/5 px-7 py-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-sci-cyan/50 hover:bg-sci-cyan/10 hover:glow-cyan"
-                  >
-                    <span className={`h-2 w-2 rounded-full ${item.color} animate-pulse`} />
-                    <span className="font-orbitron text-sm tracking-wide text-white group-hover:text-sci-cyan">
-                      {item.label}
-                    </span>
-                    <ChevronRight className="h-4 w-4 text-sci-cyan/50 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-sci-cyan" />
-                  </Link>
-                  </TiltCard>
-                </motion.div>
+                  <span className="font-mono-sci text-xs tracking-[0.2em] text-white/70 uppercase transition-colors group-hover:text-white">
+                    {l.label}
+                  </span>
+                  <ArrowRight className="h-4 w-4 text-sci-cyan/50 transition-all group-hover:translate-x-1 group-hover:text-sci-cyan" />
+                </Link>
               ))}
-            </motion.div>
+            </div>
+          </div>
+        </motion.header>
 
-            <motion.div
-              className="mt-10 font-mono-sci text-xs text-white/40"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 1 }}
-            >
-              <span className="text-sci-cyan/60">krakow,pl</span>
-              <span className="mx-2 text-white/20">|</span>
-              <span>data · training · photography</span>
-            </motion.div>
-          </motion.div>
-          </motion.div>
+        {/* metrics */}
+        <HudPanel index="02" title="Performance metrics">
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+            {stats.map((s) => (
+              <StatCell key={s.label} to={s.value} suffix={s.suffix} label={s.label} />
+            ))}
+          </div>
+        </HudPanel>
 
-          <motion.a
-            href="#showreel"
-            aria-label="Scroll to showreel"
-            className="absolute bottom-8 text-sci-cyan/60 hover:text-sci-cyan transition-colors"
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <ChevronDown className="h-6 w-6" />
-          </motion.a>
-        </section>
-
-        {/* Photo filmstrip */}
-        <section id="showreel" className="relative py-16">
-          <SectionEyebrow>{"// showreel — through my lens"}</SectionEyebrow>
-          <div className="marquee-hover overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
+        {/* optical archive — continuous side scroll, as the original home */}
+        <HudPanel index="03" title="Optical archive">
+          <div className="marquee-hover -mx-6 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)] md:-mx-8">
             <div className="animate-marquee motion-reduce:animate-none flex w-max gap-4 pr-4">
-              {[...galleryShots, ...galleryShots].map((shot, i) => (
+              {[...shots, ...shots].map((s, i) => (
                 <div
-                  key={`${shot.src}-${i}`}
-                  className="group relative h-44 w-44 shrink-0 overflow-hidden rounded-xl border border-white/10 sm:h-52 sm:w-52"
+                  key={`${s.src}-${i}`}
+                  className="group relative h-44 w-44 shrink-0 overflow-hidden border border-white/10 sm:h-52 sm:w-52"
                 >
                   <img
-                    src={shot.src}
-                    alt={shot.alt}
+                    src={s.src}
+                    alt={s.tag}
                     loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
-                    <span className="text-xs text-white/90 font-mono-sci">{shot.alt}</span>
+                  <span className="pointer-events-none absolute top-1 left-1 h-3 w-3 border-t border-l border-sci-cyan/70" />
+                  <span className="pointer-events-none absolute right-1 bottom-1 h-3 w-3 border-r border-b border-sci-cyan/70" />
+                  <div className="absolute inset-x-0 bottom-0 flex items-end bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 pt-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <span className="font-mono-sci text-[10px] tracking-[0.2em] text-sci-cyan">{s.tag}</span>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-          <p className="mt-6 text-center">
-            <Link href="/photography" className="font-mono-sci text-xs tracking-[0.2em] text-sci-cyan/70 uppercase hover:text-sci-cyan transition-colors">
-              {"view full gallery →"}
+          <div className="mt-6 flex items-center justify-between">
+            <p className="font-mono-sci text-[10px] tracking-[0.25em] text-white/30 uppercase">
+              Auto-scroll // hover to pause
+            </p>
+            <Link href="/photography" className="font-mono-sci text-xs tracking-[0.25em] text-sci-cyan/70 uppercase transition-colors hover:text-sci-cyan">
+              Full archive →
             </Link>
-          </p>
-        </section>
-
-        {/* Stats */}
-        <section className="mx-auto max-w-6xl px-6 py-16">
-          <SectionEyebrow>{"// by the numbers"}</SectionEyebrow>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-            {stats.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                className="glass-card p-6 text-center"
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
-              >
-                <div className="font-orbitron text-4xl font-bold text-gradient md:text-5xl">
-                  <StatCounter to={stat.value} suffix={stat.suffix} />
-                </div>
-                <div className="mt-2 font-mono-sci text-xs tracking-widest text-white/50 uppercase">
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
           </div>
-        </section>
+        </HudPanel>
 
-        {/* Capabilities */}
-        <section className="mx-auto max-w-6xl px-6 py-16 pb-24">
-          <SectionEyebrow>{"// what i do"}</SectionEyebrow>
+        {/* capabilities */}
+        <HudPanel index="04" title="Capability modules">
           <div className="grid gap-6 md:grid-cols-3">
-            {capabilities.map((cap, i) => (
-              <TiltCard
-                key={cap.title}
-                max={8}
-                className={`glass-card group p-8 ${cap.ring}`}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-              >
-                <div className={`${cap.accent} mb-5`}>{cap.icon}</div>
-                <h3 className="font-orbitron text-lg font-semibold text-white mb-3">
-                  {cap.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-white/60">{cap.text}</p>
-              </TiltCard>
+            {capabilities.map((c) => (
+              <div key={c.title} className="border border-white/10 bg-white/[0.02] p-6 transition-colors hover:border-sci-cyan/30">
+                <c.icon className={`h-7 w-7 ${c.accent} mb-4`} />
+                <h3 className="font-orbitron mb-2 text-base font-semibold text-white">{c.title}</h3>
+                <p className="text-sm leading-relaxed text-white/55">{c.text}</p>
+              </div>
             ))}
           </div>
-        </section>
-        {/* Experience — cinematic journey teaser */}
-        <section className="mx-auto max-w-6xl px-6 py-16 pb-24">
-          <SectionEyebrow>{"// experience — the journey"}</SectionEyebrow>
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.6 }}
-          >
-            <Link
-              href="/experience"
-              className="group relative block overflow-hidden rounded-2xl border border-amber-200/15"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-[#2a1503] via-[#0d0a18] to-[#050510]" />
-              <div className="absolute inset-0 bg-[radial-gradient(60%_120%_at_20%_50%,rgba(240,168,64,0.22),transparent_70%)]" />
-              <div className="relative px-8 py-12 md:px-14 md:py-16">
-                <p className="font-mono-sci text-xs tracking-[0.3em] text-amber-200/70 uppercase mb-4">
-                  Goa, IN ————— Kraków, PL
-                </p>
-                <h2 className="font-orbitron text-2xl md:text-4xl font-bold text-white mb-4">
-                  From Goa to Kraków.
-                </h2>
-                <p className="max-w-xl text-sm md:text-base leading-relaxed text-white/60 mb-8">
-                  A cinematic scroll through my story — the coast that raised
-                  me, the 6,500 km crossing, and the city that made me. Palms,
-                  chapels and church towers in watercolor dusk.
-                </p>
-                <span className="inline-flex items-center gap-3 rounded-full border border-amber-200/30 px-6 py-3 font-mono-sci text-xs tracking-[0.25em] text-amber-100 uppercase transition-colors group-hover:bg-amber-200/10">
-                  Enter the journey <span aria-hidden="true">→</span>
-                </span>
-              </div>
-            </Link>
-          </motion.div>
-        </section>
+        </HudPanel>
+
+        {/* journey teaser */}
+        <HudPanel index="05" title="The journey">
+          <Link href="/experience" className="group relative block overflow-hidden border border-amber-200/15">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#2a1503] via-[#0d0a18] to-[#050510]" />
+            <div className="absolute inset-0 bg-[radial-gradient(60%_120%_at_20%_50%,rgba(240,168,64,0.22),transparent_70%)]" />
+            <div className="relative px-8 py-10 md:px-12">
+              <p className="font-mono-sci mb-3 text-xs tracking-[0.3em] text-amber-200/70 uppercase">
+                Goa, IN ————— Kraków, PL
+              </p>
+              <h2 className="font-orbitron text-2xl font-bold text-white md:text-3xl">
+                From Goa to Kraków.
+              </h2>
+              <p className="font-mono-sci mt-4 inline-flex items-center gap-3 text-xs tracking-[0.25em] text-amber-100/80 uppercase transition-colors group-hover:text-amber-100">
+                Enter the journey <ArrowRight className="h-4 w-4" />
+              </p>
+            </div>
+          </Link>
+        </HudPanel>
+
+        <p className="pt-4 text-center font-mono-sci text-[11px] tracking-[0.3em] text-white/25 uppercase">
+          End of file // J.A.R.V.I.S. stands by, sir
+        </p>
       </div>
     </main>
   );
