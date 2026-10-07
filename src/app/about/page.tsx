@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { useEffect, useState } from "react";
 import {
   MapPin,
@@ -233,6 +233,11 @@ function Meter({ level, delay = 0 }: { level: number; delay?: number }) {
 export default function AboutPage() {
   const [now, setNow] = useState("--:--:--");
   const [today, setToday] = useState("");
+  const { scrollYProgress, scrollY } = useScroll();
+  // Scroll choreography: progress bar + reactor parallax drift.
+  const reactorY = useTransform(scrollY, [0, 700], [0, 90]);
+  const reactorScale = useTransform(scrollY, [0, 700], [1, 0.92]);
+  const headerFade = useTransform(scrollY, [0, 500], [1, 0.25]);
   useEffect(() => {
     const tick = () => {
       const d = new Date();
@@ -283,6 +288,12 @@ export default function AboutPage() {
             "repeating-linear-gradient(0deg, transparent 0 2px, #22d3ee 2px 3px)",
         }}
       />
+      {/* scroll progress — HUD energy bar */}
+      <motion.div
+        aria-hidden
+        className="fixed top-0 right-0 left-0 z-50 h-[3px] origin-left bg-sci-cyan shadow-[0_0_14px_rgba(34,211,238,0.9)]"
+        style={{ scaleX: scrollYProgress }}
+      />
 
       {/* system bar */}
       <div className="relative z-10 border-b border-sci-cyan/15">
@@ -310,7 +321,9 @@ export default function AboutPage() {
         >
           <Corners />
           <div className="flex flex-col items-center gap-8 md:flex-row">
-            <ReactorAvatar />
+            <motion.div style={{ y: reactorY, scale: reactorScale, opacity: headerFade }}>
+              <ReactorAvatar />
+            </motion.div>
             <div className="flex-1 text-center md:text-left">
               <p className="mb-3 font-mono-sci text-xs tracking-[0.35em] text-sci-cyan/80 uppercase">
                 Subject identification
