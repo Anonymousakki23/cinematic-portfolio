@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView, animate, useScroll, useTransform } from "motion/react";
+import { motion, useInView, animate } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import * as THREE from "three";
@@ -195,10 +195,16 @@ const capabilities = [
 ];
 
 const shots = [
-  { src: "/photography/ig-bee.webp", tag: "MACRO // APIS" },
-  { src: "/photography/ig-kingfisher.jpg", tag: "WILDLIFE // ALCEDO" },
-  { src: "/photography/ig-lightning.jpg", tag: "STORM // KRAKÓW" },
-  { src: "/photography/ig-squirrel.webp", tag: "PARK JORDANA" },
+  { src: "/photography/ig-bee.webp", tag: "HONEY BEE MACRO" },
+  { src: "/photography/ig-lightning.jpg", tag: "LIGHTNING // KRAKÓW" },
+  { src: "/photography/ig-squirrel.webp", tag: "RED SQUIRREL" },
+  { src: "/photography/ig-spider.jpg", tag: "LYNX SPIDER" },
+  { src: "/photography/ig-kingfisher.jpg", tag: "KINGFISHER" },
+  { src: "/photography/ig-moss.jpg", tag: "FOREST FLOOR" },
+  { src: "/photography/ig-snake.jpg", tag: "KEELBACK" },
+  { src: "/photography/ig-glowshroom.jpg", tag: "GLOWSHROOM" },
+  { src: "/photography/ig-ant.jpg", tag: "WEAVER ANT" },
+  { src: "/photography/ig-butterfly.jpg", tag: "BUTTERFLY" },
 ];
 
 const navLinks = [
@@ -209,33 +215,6 @@ const navLinks = [
   { href: "/photography", label: "Photography" },
   { href: "/contact", label: "Contact" },
 ];
-
-/** Archive shot with cheap scroll parallax + 3D tilt (transforms only, no WebGL). */
-function ParallaxShot({ src, tag, index }: { src: string; tag: string; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const dir = index % 2 === 0 ? 1 : -1;
-  const y = useTransform(scrollYProgress, [0, 1], [46 * dir, -46 * dir]);
-  const rotateX = useTransform(scrollYProgress, [0, 1], [9, -9]);
-  return (
-    <div ref={ref} style={{ perspective: 900 }}>
-      <motion.div
-        style={{ y, rotateX }}
-        className="group relative overflow-hidden border border-white/10"
-      >
-        <img
-          src={src}
-          alt={tag}
-          loading="lazy"
-          className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-        <p className="font-mono-sci absolute bottom-0 left-0 bg-black/60 px-2 py-1 text-[9px] tracking-[0.2em] text-sci-cyan">
-          {tag}
-        </p>
-      </motion.div>
-    </div>
-  );
-}
 
 /* ---------------------------------- page --------------------------------- */
 
@@ -254,9 +233,6 @@ export default function HomeDemoPage() {
     const t = setInterval(tick, 1000);
     return () => clearInterval(t);
   }, []);
-
-  const { scrollYProgress } = useScroll();
-  void scrollYProgress;
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#050510]">
@@ -347,14 +323,34 @@ export default function HomeDemoPage() {
           </div>
         </HudPanel>
 
-        {/* optical archive */}
+        {/* optical archive — continuous side scroll, as the original home */}
         <HudPanel index="03" title="Optical archive">
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-            {shots.map((s, i) => (
-              <ParallaxShot key={s.src} src={s.src} tag={s.tag} index={i} />
-            ))}
+          <div className="marquee-hover -mx-6 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)] md:-mx-8">
+            <div className="animate-marquee motion-reduce:animate-none flex w-max gap-4 pr-4">
+              {[...shots, ...shots].map((s, i) => (
+                <div
+                  key={`${s.src}-${i}`}
+                  className="group relative h-44 w-44 shrink-0 overflow-hidden border border-white/10 sm:h-52 sm:w-52"
+                >
+                  <img
+                    src={s.src}
+                    alt={s.tag}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <span className="pointer-events-none absolute top-1 left-1 h-3 w-3 border-t border-l border-sci-cyan/70" />
+                  <span className="pointer-events-none absolute right-1 bottom-1 h-3 w-3 border-r border-b border-sci-cyan/70" />
+                  <div className="absolute inset-x-0 bottom-0 flex items-end bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 pt-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <span className="font-mono-sci text-[10px] tracking-[0.2em] text-sci-cyan">{s.tag}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="mt-6 text-right">
+          <div className="mt-6 flex items-center justify-between">
+            <p className="font-mono-sci text-[10px] tracking-[0.25em] text-white/30 uppercase">
+              Auto-scroll // hover to pause
+            </p>
             <Link href="/photography" className="font-mono-sci text-xs tracking-[0.25em] text-sci-cyan/70 uppercase transition-colors hover:text-sci-cyan">
               Full archive →
             </Link>
