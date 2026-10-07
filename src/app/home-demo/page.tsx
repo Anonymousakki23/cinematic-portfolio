@@ -201,6 +201,42 @@ const shots = [
   { src: "/photography/ig-squirrel.webp", tag: "PARK JORDANA" },
 ];
 
+const navLinks = [
+  { href: "/experience", label: "Experience" },
+  { href: "/about", label: "About" },
+  { href: "/resume", label: "Resume" },
+  { href: "/recommendations", label: "Recommendations" },
+  { href: "/photography", label: "Photography" },
+  { href: "/contact", label: "Contact" },
+];
+
+/** Archive shot with cheap scroll parallax + 3D tilt (transforms only, no WebGL). */
+function ParallaxShot({ src, tag, index }: { src: string; tag: string; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const dir = index % 2 === 0 ? 1 : -1;
+  const y = useTransform(scrollYProgress, [0, 1], [46 * dir, -46 * dir]);
+  const rotateX = useTransform(scrollYProgress, [0, 1], [9, -9]);
+  return (
+    <div ref={ref} style={{ perspective: 900 }}>
+      <motion.div
+        style={{ y, rotateX }}
+        className="group relative overflow-hidden border border-white/10"
+      >
+        <img
+          src={src}
+          alt={tag}
+          loading="lazy"
+          className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <p className="font-mono-sci absolute bottom-0 left-0 bg-black/60 px-2 py-1 text-[9px] tracking-[0.2em] text-sci-cyan">
+          {s.tag}
+        </p>
+      </motion.div>
+    </div>
+  );
+}
+
 /* ---------------------------------- page --------------------------------- */
 
 export default function HomeDemoPage() {
@@ -281,19 +317,24 @@ export default function HomeDemoPage() {
             Trainer, analyst and photographer — from Goan kitchens to
             Google-scale data programs, now crafting AI data solutions in Kraków.
           </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link
-              href="/experience"
-              className="font-mono-sci inline-flex items-center gap-3 border border-sci-cyan/50 bg-sci-cyan/10 px-6 py-3 text-xs tracking-[0.25em] text-sci-cyan uppercase transition-colors hover:bg-sci-cyan/20"
-            >
-              Enter the journey <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/contact"
-              className="font-mono-sci inline-flex items-center gap-3 border border-white/20 px-6 py-3 text-xs tracking-[0.25em] text-white/70 uppercase transition-colors hover:border-sci-cyan/40 hover:text-white"
-            >
-              Open a channel
-            </Link>
+          <div className="mt-10">
+            <p className="font-mono-sci mb-4 text-[11px] tracking-[0.35em] text-white/40 uppercase">
+              Navigation uplink
+            </p>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {navLinks.map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className="group flex items-center justify-between border border-white/10 bg-white/[0.02] px-4 py-3 transition-colors hover:border-sci-cyan/40"
+                >
+                  <span className="font-mono-sci text-xs tracking-[0.2em] text-white/70 uppercase transition-colors group-hover:text-white">
+                    {l.label}
+                  </span>
+                  <ArrowRight className="h-4 w-4 text-sci-cyan/50 transition-all group-hover:translate-x-1 group-hover:text-sci-cyan" />
+                </Link>
+              ))}
+            </div>
           </div>
         </motion.header>
 
@@ -309,13 +350,8 @@ export default function HomeDemoPage() {
         {/* optical archive */}
         <HudPanel index="03" title="Optical archive">
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-            {shots.map((s) => (
-              <div key={s.src} className="group relative overflow-hidden border border-white/10">
-                <img src={s.src} alt={s.tag} className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-                <p className="font-mono-sci absolute bottom-0 left-0 bg-black/60 px-2 py-1 text-[9px] tracking-[0.2em] text-sci-cyan">
-                  {s.tag}
-                </p>
-              </div>
+            {shots.map((s, i) => (
+              <ParallaxShot key={s.src} src={s.src} tag={s.tag} index={i} />
             ))}
           </div>
           <div className="mt-6 text-right">
