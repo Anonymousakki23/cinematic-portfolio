@@ -10,14 +10,16 @@ import {
 import Link from "next/link";
 
 /**
- * FPV voyage demo — the same Goa → Kraków crossing panorama as the
- * experience page, but travelled in first person: scroll drives the
- * camera forward through the scene instead of panning past it.
+ * Drone-flight demo — the Goa → Kraków crossing panorama travelled like
+ * a drone: high and wide over Goa, across the sea, descending onto the
+ * church towers. Same asset as the experience page.
  */
 export default function VoyageDemoPage() {
   const targetRef = useRef<HTMLDivElement>(null);
   const [dims, setDims] = useState({ vw: 0, vh: 0 });
   const [km, setKm] = useState(6500);
+  const [alt, setAlt] = useState(120);
+  const [coords, setCoords] = useState("15.49°N 073.83°E");
   const [arrived, setArrived] = useState(false);
 
   useEffect(() => {
@@ -33,18 +35,27 @@ export default function VoyageDemoPage() {
     offset: ["start start", "end end"],
   });
 
-  // Panorama is 3:1 — at full viewport height it's 300vh wide.
-  const imgW = dims.vh * 3;
-  const maxScale = 1.45;
-  const maxX = Math.max(0, imgW * maxScale - dims.vw);
+  // Wide aerial framing: image is 140vw, so most of the panorama stays
+  // visible — the drone descends (scale up) as it travels right.
+  const imgW = dims.vw * 1.4;
+  const startScale = 0.8;
+  const endScale = 1.12;
+  const maxX = Math.max(0, imgW * endScale - dims.vw);
 
-  // Camera: travel right while pushing in = first-person forward motion.
   const x = useTransform(scrollYProgress, [0, 1], [0, -maxX]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1.08, maxScale]);
+  const scale = useTransform(scrollYProgress, [0, 1], [startScale, endScale]);
 
-  const kmMotion = useTransform(scrollYProgress, [0, 1], [6500, 0]);
-  useMotionValueEvent(kmMotion, "change", (v) => setKm(Math.round(v)));
-  useMotionValueEvent(scrollYProgress, "change", (v) => setArrived(v > 0.93));
+  useMotionValueEvent(scrollYProgress, "change", (p) => {
+    setKm(Math.round(6500 * (1 - p)));
+    setAlt(Math.round(120 - 95 * p));
+    const lat = 15.49 + (50.06 - 15.49) * p;
+    const lng = 73.83 + (19.94 - 73.83) * p;
+    setCoords(
+      `${lat.toFixed(2)}°N ${Math.abs(lng).toFixed(2)}°${lng >= 0 ? "E" : "W"}`
+    );
+    setArrived(p > 0.93);
+  });
+
   const routeW = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   // Caption beats.
@@ -58,71 +69,113 @@ export default function VoyageDemoPage() {
   const endCard = useTransform(scrollYProgress, [0.88, 0.96], [0, 1]);
   const hudDim = useTransform(scrollYProgress, [0.88, 0.96], [1, 0.25]);
 
+  const edgeFade =
+    "linear-gradient(to bottom, transparent, black 18%, black 82%, transparent)";
+
   return (
     <main className="bg-[#050510] text-white">
       {/* intro */}
       <section className="flex min-h-[85vh] flex-col items-center justify-center px-6 text-center">
         <p className="font-mono-sci mb-6 text-xs tracking-[0.35em] text-sci-cyan/80 uppercase">
-          FPV voyage — demo
+          Drone flight — demo
         </p>
         <h1 className="font-orbitron max-w-3xl text-3xl font-bold md:text-5xl">
-          The crossing, in first person.
+          The crossing, by drone.
         </h1>
         <p className="mt-6 max-w-xl text-white/60">
-          The same Goa → Kraków panorama from the experience page — but this
-          time you&apos;re on the boat. Scroll to travel.
+          The same Goa → Kraków panorama from the experience page — flown like
+          a drone: liftoff over the fort, across 6,500 km of sea, descending
+          onto the church towers. Scroll to fly.
         </p>
         <p className="font-mono-sci mt-10 animate-bounce text-xs tracking-[0.3em] text-white/40 uppercase">
           ↓ scroll
         </p>
       </section>
 
-      {/* voyage */}
+      {/* flight */}
       <div ref={targetRef} className="relative h-[450vh]">
         <div className="sticky top-0 h-screen overflow-hidden">
-          {/* camera */}
-          <motion.div
-            style={{ x, scale, transformOrigin: "left center" }}
-            className="absolute inset-y-0 left-0"
-          >
-            {/* gentle boat bob */}
-            <motion.div
-              animate={{ y: [0, -14, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-              className="h-full"
-            >
-              <img
-                src="/journey/fg/crossing-panorama.webp"
-                alt="Watercolor panorama: Goa fort and beach giving way to Kraków's church towers"
-                draggable={false}
-                className="h-full w-auto max-w-none select-none"
-                style={imgW ? { width: `${imgW}px` } : undefined}
-              />
-            </motion.div>
-          </motion.div>
-
-          {/* cinematic vignette + letterbox */}
+          {/* aerial environment: dusk sky above, deep sea below */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(90%_90%_at_50%_50%,transparent_55%,rgba(0,0,0,0.55)_100%)]"
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to bottom, #e9b96e 0%, #cf9460 28%, #7c5580 44%, #22346b 52%, #101a45 62%, #070d28 100%)",
+            }}
           />
-          <div aria-hidden className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/70 to-transparent" />
-          <div aria-hidden className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/70 to-transparent" />
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-[radial-gradient(70%_40%_at_50%_48%,rgba(255,220,160,0.35),transparent_70%)]"
+          />
+
+          {/* drone camera */}
+          <motion.div
+            style={{ x, scale, transformOrigin: "left center" }}
+            className="absolute inset-0"
+          >
+            <div className="flex h-full items-center">
+              {/* gentle hover sway */}
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <img
+                  src="/journey/fg/crossing-panorama.webp"
+                  alt="Watercolor panorama: Goa fort and beach giving way to Kraków's church towers"
+                  draggable={false}
+                  className="h-auto max-w-none select-none"
+                  style={
+                    imgW
+                      ? {
+                          width: `${imgW}px`,
+                          maskImage: edgeFade,
+                          WebkitMaskImage: edgeFade,
+                        }
+                      : undefined
+                  }
+                />
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* cinematic vignette */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(90%_90%_at_50%_50%,transparent_55%,rgba(0,0,0,0.5)_100%)]"
+          />
 
           {/* HUD */}
           <motion.div
             style={{ opacity: hudDim }}
-            className="absolute inset-x-0 top-0 flex items-center justify-between px-6 py-5"
+            className="absolute inset-x-0 top-0 px-6 py-5"
           >
-            <p className="font-mono-sci text-[11px] tracking-[0.3em] text-white/70 uppercase">
-              02 — The Crossing <span className="text-sci-cyan">// FPV</span>
-            </p>
-            <p className="font-mono-sci text-[11px] tracking-[0.25em] text-white/70 uppercase tabular-nums">
-              Kraków{" "}
-              <span className="text-sci-cyan">
-                {km.toLocaleString("en-US")} km
+            <div className="flex items-center justify-between">
+              <p className="font-mono-sci text-[11px] tracking-[0.3em] text-white/80 uppercase">
+                02 — The Crossing <span className="text-sci-cyan">// drone</span>
+              </p>
+              <p className="font-mono-sci text-[11px] tracking-[0.25em] text-white/80 uppercase tabular-nums">
+                alt <span className="text-sci-cyan">{alt} m</span>
+              </p>
+            </div>
+            <div className="font-mono-sci mt-2 flex items-center justify-between text-[11px] tracking-[0.25em] text-white/60 uppercase tabular-nums">
+              <span>{coords}</span>
+              <span>
+                Kraków{" "}
+                <span className="text-sci-cyan">
+                  {km.toLocaleString("en-US")} km
+                </span>
               </span>
-            </p>
+            </div>
+          </motion.div>
+
+          {/* crosshair */}
+          <motion.div
+            style={{ opacity: hudDim }}
+            aria-hidden
+            className="pointer-events-none absolute inset-0 flex items-center justify-center"
+          >
+            <span className="text-xl text-white/25">+</span>
           </motion.div>
 
           {/* route progress */}
@@ -137,7 +190,7 @@ export default function VoyageDemoPage() {
                   style={{ width: routeW }}
                 />
               </div>
-              <div className="font-mono-sci mt-3 flex justify-between text-[10px] tracking-[0.3em] text-white/45 uppercase">
+              <div className="font-mono-sci mt-3 flex justify-between text-[10px] tracking-[0.3em] text-white/50 uppercase">
                 <span>Goa</span>
                 <span>6,500 km</span>
                 <span>Kraków</span>
@@ -152,10 +205,10 @@ export default function VoyageDemoPage() {
           >
             <div>
               <p className="font-mono-sci mb-3 text-[11px] tracking-[0.35em] text-sci-cyan uppercase">
-                Departure
+                Liftoff
               </p>
               <h2 className="font-orbitron text-3xl font-bold md:text-5xl">
-                The fort falls behind.
+                Over the fort.
               </h2>
             </div>
           </motion.div>
@@ -166,7 +219,7 @@ export default function VoyageDemoPage() {
           >
             <div className="text-center">
               <p className="font-mono-sci mb-3 text-[11px] tracking-[0.35em] text-sci-cyan uppercase">
-                Open water
+                Cruise — 120 m
               </p>
               <h2 className="font-orbitron text-3xl font-bold md:text-5xl">
                 6,500 km of blue.
@@ -180,10 +233,10 @@ export default function VoyageDemoPage() {
           >
             <div>
               <p className="font-mono-sci mb-3 text-[11px] tracking-[0.35em] text-sci-cyan uppercase">
-                Landfall
+                Descent
               </p>
               <h2 className="font-orbitron text-3xl font-bold md:text-5xl">
-                The towers rise.
+                Onto the towers.
               </h2>
             </div>
           </motion.div>
@@ -197,7 +250,7 @@ export default function VoyageDemoPage() {
           >
             <div className="text-center">
               <p className="font-mono-sci mb-4 text-xs tracking-[0.35em] text-sci-cyan uppercase">
-                Arrived — Kraków, PL
+                Touchdown — Kraków, PL
               </p>
               <h2 className="font-orbitron text-3xl font-bold md:text-4xl">
                 End of the crossing.
