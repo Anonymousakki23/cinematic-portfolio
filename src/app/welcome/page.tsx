@@ -22,6 +22,7 @@ const SCAN_LINES = [
 export default function WelcomePage() {
   const [phase, setPhase] = useState<"scan" | "granted">("scan");
   const [lineCount, setLineCount] = useState(0);
+  const [countdown, setCountdown] = useState(5);
 
   useEffect(() => {
     if (phase !== "scan") return;
@@ -32,6 +33,17 @@ export default function WelcomePage() {
     const t = setTimeout(() => setPhase("granted"), 900);
     return () => clearTimeout(t);
   }, [lineCount, phase]);
+
+  // Auto-lead into the home screen after access is granted.
+  useEffect(() => {
+    if (phase !== "granted") return;
+    if (countdown <= 0) {
+      window.location.href = "/";
+      return;
+    }
+    const t = setTimeout(() => setCountdown((c) => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [phase, countdown]);
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#050510] px-6">
@@ -150,6 +162,9 @@ export default function WelcomePage() {
             </div>
             <p className="font-mono-sci mt-8 text-[10px] tracking-[0.3em] text-white/25 uppercase">
               Scanned via card // J.A.R.V.I.S. stands by
+            </p>
+            <p className="font-mono-sci mt-3 text-[11px] tracking-[0.3em] text-sci-cyan/70 uppercase tabular-nums">
+              Entering home interface in {countdown}…
             </p>
           </motion.div>
         )}
