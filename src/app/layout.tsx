@@ -20,12 +20,21 @@ export const metadata: Metadata = {
     description:
       "Lead Analyst & Trainer based in Kraków — data analytics, global training leadership, and photography.",
     siteName: "Akshay Iyer",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1376,
+        height: 768,
+        alt: "AKKI — Akshay Iyer",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Akshay Iyer | Cinematic Portfolio",
     description:
       "Lead Analyst & Trainer based in Kraków — data analytics, global training leadership, and photography.",
+    images: ["/og-image.jpg"],
   },
 };
 
