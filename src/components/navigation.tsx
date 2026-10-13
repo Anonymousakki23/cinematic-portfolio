@@ -26,8 +26,8 @@ export function Navigation() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#050510]/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <nav className="fixed left-3 right-3 top-[calc(12px+env(safe-area-inset-top,0px))] z-50 mx-auto max-w-3xl rounded-3xl border border-white/15 bg-[#0a0e24]/60 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_14px_34px_rgba(0,0,0,0.35)] backdrop-blur-2xl backdrop-saturate-150">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
           <Link
             href="/"
             className="font-orbitron text-xl font-bold tracking-wide text-white transition-all hover:text-sci-cyan"
@@ -69,7 +69,7 @@ export function Navigation() {
           </button>
         </div>
         {open && (
-          <div className="border-t border-white/10 bg-[#050510]/95 backdrop-blur-xl md:hidden">
+          <div className="rounded-b-3xl border-t border-white/10 bg-[#0a0e24]/90 backdrop-blur-2xl md:hidden">
             <div className="space-y-1 px-6 py-4">
               {links.map((link) => {
                 const active = isActive(pathname, link.href);

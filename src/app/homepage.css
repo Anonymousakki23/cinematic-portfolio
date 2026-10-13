@@ -27,19 +27,10 @@
   background:radial-gradient(65% 115% at 50% 38%, rgba(4,6,16,.62), transparent 72%); }
 .hp-top .hp-kicker{ color:var(--cyan); font-size:12px; letter-spacing:6px; margin-bottom:10px;
   text-shadow:0 0 14px rgba(62,230,255,.55); }
-/* Solid bright heading by default so it is always legible; gradient text is
-   layered on only where background-clip:text is actually supported. */
+/* Solid bright heading — no gradient-text tricks, so it renders
+   identically on every mobile browser. */
 .hp-top h1{ font-size:clamp(30px,5vw,46px); font-weight:800; letter-spacing:.5px;
-  color:#f4f7ff; text-shadow:0 2px 26px rgba(62,230,255,.4); }
-@supports ((-webkit-background-clip:text) or (background-clip:text)){
-  .hp-top h1{
-    background:linear-gradient(92deg,#ffffff 5%,var(--cyan) 55%,var(--violet) 95%);
-    -webkit-background-clip:text; background-clip:text;
-    color:transparent; -webkit-text-fill-color:transparent;
-    text-shadow:none;
-    filter:drop-shadow(0 2px 18px rgba(62,230,255,.4));
-  }
-}
+  color:#f4f7ff; text-shadow:0 0 26px rgba(62,230,255,.45), 0 2px 10px rgba(0,0,0,.65); }
 .hp-top p{ color:var(--dim); margin-top:8px; font-size:14px; }
 
 .hp-grid{ display:grid; grid-template-columns:1fr 1.15fr 1fr; gap:18px; align-items:start; }
