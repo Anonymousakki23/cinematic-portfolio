@@ -152,6 +152,30 @@ a.hp-card:hover{ border-color:rgba(62,230,255,.45); }
 
 .hp-foot{ text-align:center; color:var(--dim); font-size:11px; letter-spacing:3px; margin-top:26px; }
 
+/* ---------- Jarvis HUD background ---------- */
+.hp-root{ position:relative; }
+.hp-wrap{ position:relative; z-index:1; }
+.hud-layer{
+  position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+  color:#3ee6ff; opacity:.42; will-change:transform;
+  transform-origin:50% 0;
+}
+@media (prefers-color-scheme: light){
+  .hud-layer{ color:#0e9dbd; opacity:.30; }
+}
+.hud-par{ position:absolute; will-change:transform; }
+.hud-p1{ top:-170px; left:-150px; }
+.hud-p2{ top:34%; right:-150px; }
+.hud-p3{ bottom:-120px; left:24%; }
+.hud-p4{ top:8%; left:44%; }
+.hud-spin{
+  filter:drop-shadow(0 0 12px currentColor);
+  animation:hud-spin 110s linear infinite;
+}
+.hud-rev{ animation-direction:reverse; animation-duration:140s; }
+.hud-p3 .hud-spin{ animation-duration:80s; }
+@keyframes hud-spin{ to{ transform:rotate(360deg); } }
+
 @media (max-width:1020px){ .hp-grid{ grid-template-columns:1fr 1fr; } }
 @media (max-width:680px){
   .hp-grid{ grid-template-columns:1fr; }
@@ -192,5 +216,5 @@ a.hp-card:hover{ border-color:rgba(62,230,255,.45); }
 .fintro.fintro-out{ animation:fintro-out .45s ease forwards; }
 @keyframes fintro-out{ to{ opacity:0; visibility:hidden; } }
 @media (prefers-reduced-motion: reduce){
-  .fintro-scan, .hp-caret{ animation:none !important; }
+  .fintro-scan, .hp-caret, .hud-spin{ animation:none !important; }
 }

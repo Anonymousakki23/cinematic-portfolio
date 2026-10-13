@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import FuturisticIntro from "@/components/futuristic-intro";
+import HudBackground from "@/components/hud-background";
 import "./homepage.css";
 
 /* ------------------------------- data ---------------------------------- */
@@ -178,6 +179,7 @@ export default function HomePage() {
     <>
       {showIntro && <FuturisticIntro onDone={introDone} />}
       <main className="hp-root">
+        <HudBackground />
         <div className="hp-wrap">
           <header className="hp-top">
             <div className="hp-kicker">AKSHAYIYER.INFO</div>
