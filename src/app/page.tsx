@@ -1,199 +1,11 @@
 "use client";
 
-import { motion, useInView, animate } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import * as THREE from "three";
-import { BarChart3, Users, Camera, ArrowRight } from "lucide-react";
-import ClassicalIntro from "@/components/classical-intro";
+import FuturisticIntro from "@/components/futuristic-intro";
+import "./homepage.css";
 
-/**
- * HOME-DEMO — sample: the home page restyled in the JARVIS module system,
- * with a scroll-driven 3D hologram layer behind the content.
- * Standalone demo; not linked in nav.
- */
-
-/* --------------------------------- pieces -------------------------------- */
-
-function Corners() {
-  const c = "pointer-events-none absolute h-4 w-4 border-sci-cyan/80";
-  return (
-    <>
-      <span className={`${c} top-0 left-0 border-t-2 border-l-2`} />
-      <span className={`${c} top-0 right-0 border-t-2 border-r-2`} />
-      <span className={`${c} bottom-0 left-0 border-b-2 border-l-2`} />
-      <span className={`${c} right-0 bottom-0 border-r-2 border-b-2`} />
-    </>
-  );
-}
-
-function HudPanel({
-  index,
-  title,
-  children,
-  className = "",
-}: {
-  index: string;
-  title: string;
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <motion.section
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.55 }}
-      className={`relative border border-sci-cyan/15 bg-[#070b16]/85 p-6 backdrop-blur-sm md:p-8 ${className}`}
-    >
-      <Corners />
-      <div className="mb-6 flex items-center justify-between border-b border-sci-cyan/10 pb-4">
-        <p className="font-mono-sci text-xs tracking-[0.3em] text-sci-cyan/90 uppercase">
-          <span className="text-white/30">{index}</span>
-          <span className="mx-3 text-white/20">//</span>
-          {title}
-        </p>
-        <span className="flex items-center gap-2 font-mono-sci text-[10px] tracking-[0.25em] text-sci-cyan/60 uppercase">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-sci-cyan" />
-          live
-        </span>
-      </div>
-      {children}
-    </motion.section>
-  );
-}
-
-function StatCell({ to, suffix, label }: { to: number; suffix: string; label: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-  const [val, setVal] = useState(0);
-  useEffect(() => {
-    if (!inView) return;
-    const controls = animate(0, to, {
-      duration: 1.6,
-      ease: [0.22, 1, 0.36, 1],
-      onUpdate: (v) => setVal(Math.round(v)),
-    });
-    return () => controls.stop();
-  }, [inView, to]);
-  return (
-    <div ref={ref} className="relative border border-white/10 bg-white/[0.02] p-6 text-center">
-      <span className="pointer-events-none absolute top-1 left-1 h-3 w-3 border-t border-l border-sci-cyan/50" />
-      <span className="pointer-events-none absolute right-1 bottom-1 h-3 w-3 border-r border-b border-sci-cyan/50" />
-      <p className="font-orbitron text-3xl font-bold text-sci-cyan tabular-nums md:text-4xl">
-        {val}
-        {suffix}
-      </p>
-      <p className="font-mono-sci mt-2 text-[10px] tracking-[0.25em] text-white/40 uppercase">
-        {label}
-      </p>
-    </div>
-  );
-}
-
-/** Scroll-driven 3D hologram layer: wireframe reactor + particle field. */
-function HologramLayer() {
-  const mountRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const mount = mountRef.current;
-    if (!mount) return;
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    mount.appendChild(renderer.domElement);
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.5, 500);
-    camera.position.set(0, 0, 62);
-
-    const holo = new THREE.Group();
-    const mat = new THREE.MeshBasicMaterial({ color: "#22d3ee", wireframe: true, transparent: true, opacity: 0.32 });
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(15, 3.6, 10, 42), mat);
-    const core = new THREE.Mesh(new THREE.IcosahedronGeometry(6.5, 1), mat.clone());
-    (core.material as THREE.Material).transparent = true;
-    (core.material as THREE.MeshBasicMaterial).opacity = 0.22;
-    const orbit = new THREE.Mesh(new THREE.TorusGeometry(22, 0.5, 8, 64), mat.clone());
-    (orbit.material as THREE.MeshBasicMaterial).opacity = 0.18;
-    orbit.rotation.x = Math.PI / 2.4;
-    holo.add(ring, core, orbit);
-    holo.position.set(window.innerWidth > 768 ? 20 : 0, 2, 0);
-    scene.add(holo);
-
-    // particle field
-    const pCount = 260;
-    const pGeo = new THREE.BufferGeometry();
-    const pArr = new Float32Array(pCount * 3);
-    for (let i = 0; i < pCount; i++) {
-      pArr[i * 3] = (Math.random() - 0.5) * 160;
-      pArr[i * 3 + 1] = (Math.random() - 0.5) * 100;
-      pArr[i * 3 + 2] = (Math.random() - 0.5) * 80 - 10;
-    }
-    pGeo.setAttribute("position", new THREE.BufferAttribute(pArr, 3));
-    const points = new THREE.Points(
-      pGeo,
-      new THREE.PointsMaterial({ color: "#22d3ee", size: 0.55, transparent: true, opacity: 0.5 })
-    );
-    scene.add(points);
-
-    let raf = 0;
-    const clock = new THREE.Clock();
-    function scrollP() {
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      return Math.min(1, Math.max(0, window.scrollY / (total || 1)));
-    }
-    function tick() {
-      raf = requestAnimationFrame(tick);
-      const t = clock.getElapsedTime();
-      const p = scrollP();
-      // scroll choreography: spin up, rise, fade as content takes over
-      holo.rotation.y = t * 0.08 + p * Math.PI * 2.5;
-      holo.rotation.x = Math.sin(t * 0.2) * 0.15 + p * 0.6;
-      holo.position.y = 2 - p * 34;
-      const fade = 1 - p * 0.75;
-      (ring.material as THREE.MeshBasicMaterial).opacity = 0.32 * fade;
-      (core.material as THREE.MeshBasicMaterial).opacity = 0.22 * fade;
-      (orbit.material as THREE.MeshBasicMaterial).opacity = 0.18 * fade;
-      (points.material as THREE.PointsMaterial).opacity = 0.5 * fade;
-      points.rotation.y = t * 0.015;
-      camera.position.z = 62 - p * 14;
-      renderer.render(scene, camera);
-    }
-    tick();
-
-    function onResize() {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      holo.position.x = window.innerWidth > 768 ? 20 : 0;
-    }
-    window.addEventListener("resize", onResize);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("resize", onResize);
-      renderer.dispose();
-      mount.removeChild(renderer.domElement);
-    };
-  }, []);
-
-  return <div ref={mountRef} className="pointer-events-none fixed inset-0 z-0" aria-hidden />;
-}
-
-/* ---------------------------------- data --------------------------------- */
-
-const stats = [
-  { value: 10, suffix: "+", label: "Years Experience" },
-  { value: 400, suffix: "+", label: "Team Members Led" },
-  { value: 2, suffix: "", label: "Countries Worked" },
-  { value: 2, suffix: "+", label: "Awards Won" },
-];
-
-const capabilities = [
-  { icon: BarChart3, title: "Data Analysis", text: "Pipelines, dashboards and insights that turn raw data into decisions.", accent: "text-sci-cyan" },
-  { icon: Users, title: "Training & Leadership", text: "Built and mentored high-performing teams across regions and time zones.", accent: "text-sci-purple" },
-  { icon: Camera, title: "Photography", text: "Macro and wildlife photography — patience, light and a Canon 77D.", accent: "text-sci-magenta" },
-];
+/* ------------------------------- data ---------------------------------- */
 
 const shots = [
   { src: "/photography/ig-bee.webp", tag: "HONEY BEE MACRO" },
@@ -208,194 +20,261 @@ const shots = [
   { src: "/photography/ig-butterfly.jpg", tag: "BUTTERFLY" },
 ];
 
-const navLinks = [
-  { href: "/experience", label: "Experience" },
-  { href: "/about", label: "About" },
-  { href: "/resume", label: "Resume" },
-  { href: "/recommendations", label: "Recommendations" },
-  { href: "/photography", label: "Photography" },
-  { href: "/contact", label: "Contact" },
+type Msg = { from: "ai" | "me"; html: string };
+
+const OPENING: Msg[] = [
+  { from: "ai", html: `<span class="hp-who">ASTRO</span>Good evening, and welcome in. I'm Astro — the voice of this site.` },
+  { from: "me", html: `What do you do, Akshay?` },
+  {
+    from: "ai",
+    html: `<span class="hp-who">ASTRO</span>I train ecommerce &amp; AI teams at TELUS Digital, shoot macro photography on a Canon 77D, and build things for the web — from Kraków to Goa.`,
+  },
 ];
 
-/* ---------------------------------- page --------------------------------- */
+const CHIP_REPLIES: Record<string, string> = {
+  work: `Start with the <a href="/photography">optical archive</a> — macro, lightning and street frames.`,
+  journey: `Goa → Kraków, kitchens → data programs. The full story lives on the <a href="/experience">journey page</a>.`,
+  hello: `The fastest way is the <a href="/contact">contact terminal</a> — I reply properly, not just the holding text.`,
+};
+
+function wxLabel(code: number): string {
+  if (code === 0) return "Clear sky";
+  if (code <= 3) return "Partly cloudy";
+  if (code <= 48) return "Fog";
+  if (code <= 57) return "Drizzle";
+  if (code <= 67) return "Rain";
+  if (code <= 77) return "Snow";
+  if (code <= 82) return "Showers";
+  return "Thunderstorm";
+}
+
+/* --------------------------------- page ---------------------------------- */
 
 export default function HomePage() {
-  const [showIntro, setShowIntro] = useState(true);
-  const [now, setNow] = useState("--:--:--");
-  const [today, setToday] = useState("");
+  const [showIntro, setShowIntro] = useState(false);
+  const [clock, setClock] = useState("--:--");
+  const [msgs, setMsgs] = useState<Msg[]>(OPENING);
+  const [listening, setListening] = useState(false);
+  const [wx, setWx] = useState<{ t: number; label: string; days: { d: string; t: number }[] } | null>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    try {
+      if (!sessionStorage.getItem("hp-intro-seen")) setShowIntro(true);
+    } catch {
+      setShowIntro(true);
+    }
+  }, []);
+
   useEffect(() => {
     const tick = () => {
       const d = new Date();
-      setNow(d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
-      setToday(
-        d.toLocaleDateString("en-GB", { weekday: "short", day: "2-digit", month: "short", year: "numeric" }).toUpperCase()
-      );
+      setClock(`${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`);
     };
     tick();
-    const t = setInterval(tick, 1000);
+    const t = setInterval(tick, 15000);
     return () => clearInterval(t);
   }, []);
 
+  useEffect(() => {
+    fetch(
+      "https://api.open-meteo.com/v1/forecast?latitude=50.0614&longitude=19.9366&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max&timezone=Europe%2FWarsaw&forecast_days=6"
+    )
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => {
+        if (!j?.current) return;
+        const days = (j.daily?.time ?? [])
+          .slice(1, 6)
+          .map((iso: string, i: number) => ({
+            d: new Date(iso + "T12:00:00")
+              .toLocaleDateString("en-GB", { weekday: "short" })
+              .toUpperCase(),
+            t: Math.round(j.daily.temperature_2m_max[i + 1]),
+          }));
+        setWx({ t: Math.round(j.current.temperature_2m), label: wxLabel(j.current.weather_code), days });
+      })
+      .catch(() => {});
+  }, []);
+
+  const introDone = () => {
+    try {
+      sessionStorage.setItem("hp-intro-seen", "1");
+    } catch {}
+    setShowIntro(false);
+  };
+
+  const ask = (key: string, label: string) => {
+    setMsgs((m) => [...m, { from: "me", html: label }, { from: "ai", html: `<span class="hp-who">ASTRO</span>${CHIP_REPLIES[key]}` }]);
+  };
+
+  const scrollToChat = () => chatRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#050510]">
-      {showIntro && <ClassicalIntro onDone={() => setShowIntro(false)} />}
-      <HologramLayer />
+    <>
+      {showIntro && <FuturisticIntro onDone={introDone} />}
+      <main className="hp-root">
+        <div className="hp-wrap">
+          <header className="hp-top">
+            <div className="hp-kicker">AKSHAYIYER.INFO</div>
+            <h1>Hello, I&apos;m Akshay</h1>
+            <p>Data &amp; AI trainer, photographer, builder — based in Kraków. What would you like to explore?</p>
+          </header>
 
-      {/* backdrop grid + scanlines */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 z-[1] opacity-[0.3]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(34,211,238,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,0.05) 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 z-40 opacity-[0.05]"
-        style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent 0 2px, #22d3ee 2px 3px)" }}
-      />
-
-      {/* system bar */}
-      <div className="relative z-10 border-b border-sci-cyan/15">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-6 py-4">
-          <p className="font-mono-sci text-xs tracking-[0.35em] text-sci-cyan uppercase">J.A.R.V.I.S.</p>
-          <p className="hidden font-mono-sci text-xs tracking-[0.25em] text-white/40 uppercase md:block">
-            Home interface
-          </p>
-          <p className="font-mono-sci text-xs tracking-[0.15em] text-white/60 tabular-nums">
-            <span className="mr-3 hidden text-white/35 sm:inline">{today}</span>
-            {now} <span className="ml-2 text-sci-cyan">● SYS NOMINAL</span>
-          </p>
-        </div>
-      </div>
-
-      <div className="relative z-10 mx-auto max-w-6xl space-y-8 px-6 py-14">
-        {/* hero viewport */}
-        <motion.header
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="relative overflow-hidden border border-sci-cyan/20 bg-[#070b16]/80 p-8 backdrop-blur-sm md:p-14"
-        >
-          <Corners />
-          <p className="font-mono-sci mb-6 text-xs tracking-[0.35em] text-sci-cyan/80 uppercase">
-            Main viewport // subject
-          </p>
-          <h1 className="font-orbitron text-4xl font-bold text-white md:text-6xl">
-            Akshay Iyer
-          </h1>
-          <p className="font-mono-sci mt-4 text-sm tracking-[0.2em] text-sci-cyan uppercase">
-            Ecommerce Trainer — TELUS Digital
-          </p>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/70 md:text-xl">
-            Chasing light toward the decisive moment.
-          </p>
-          <p className="mt-4 max-w-2xl leading-relaxed text-white/50">
-            Trainer, analyst and photographer — from Goan kitchens to
-            Google-scale data programs, now crafting AI data solutions in Kraków.
-          </p>
-          <div className="mt-10">
-            <p className="font-mono-sci mb-4 text-[11px] tracking-[0.35em] text-white/40 uppercase">
-              Navigation uplink
-            </p>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {navLinks.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  className="group flex items-center justify-between border border-white/10 bg-white/[0.02] px-4 py-3 transition-colors hover:border-sci-cyan/40"
-                >
-                  <span className="font-mono-sci text-xs tracking-[0.2em] text-white/70 uppercase transition-colors group-hover:text-white">
-                    {l.label}
-                  </span>
-                  <ArrowRight className="h-4 w-4 text-sci-cyan/50 transition-all group-hover:translate-x-1 group-hover:text-sci-cyan" />
-                </Link>
-              ))}
-            </div>
-          </div>
-        </motion.header>
-
-        {/* metrics */}
-        <HudPanel index="02" title="Performance metrics">
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-            {stats.map((s) => (
-              <StatCell key={s.label} to={s.value} suffix={s.suffix} label={s.label} />
-            ))}
-          </div>
-        </HudPanel>
-
-        {/* optical archive — continuous side scroll, as the original home */}
-        <HudPanel index="03" title="Optical archive">
-          <div className="marquee-hover -mx-6 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)] md:-mx-8">
-            <div className="animate-marquee motion-reduce:animate-none flex w-max gap-4 pr-4">
-              {[...shots, ...shots].map((s, i) => (
-                <div
-                  key={`${s.src}-${i}`}
-                  className="group relative h-44 w-44 shrink-0 overflow-hidden border border-white/10 sm:h-52 sm:w-52"
-                >
-                  <img
-                    src={s.src}
-                    alt={s.tag}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <span className="pointer-events-none absolute top-1 left-1 h-3 w-3 border-t border-l border-sci-cyan/70" />
-                  <span className="pointer-events-none absolute right-1 bottom-1 h-3 w-3 border-r border-b border-sci-cyan/70" />
-                  <div className="absolute inset-x-0 bottom-0 flex items-end bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 pt-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    <span className="font-mono-sci text-[10px] tracking-[0.2em] text-sci-cyan">{s.tag}</span>
-                  </div>
+          <div className="hp-grid">
+            {/* LEFT */}
+            <div className="hp-col">
+              <div className="hp-card hp-hello">
+                <div className="hp-wave" aria-hidden>
+                  {Array.from({ length: 20 }).map((_, i) => (
+                    <span key={i} />
+                  ))}
                 </div>
+              </div>
+
+              <div className="hp-card">
+                <h3>MY CRAFT</h3>
+                <div className="hp-tools">
+                  <Link className="hp-tool" href="/photography"><span className="hp-ic">📷</span>Photography<small>macro · street</small></Link>
+                  <Link className="hp-tool" href="/about"><span className="hp-ic">🤖</span>Data &amp; AI<small>trainer</small></Link>
+                  <Link className="hp-tool" href="/experience"><span className="hp-ic">💼</span>Experience<small>10+ yrs</small></Link>
+                  <Link className="hp-tool" href="/experience"><span className="hp-ic">🛠️</span>Projects<small>50+ shipped</small></Link>
+                  <Link className="hp-tool" href="/recommendations"><span className="hp-ic">⭐</span>Reviews<small>kind words</small></Link>
+                  <Link className="hp-tool" href="/contact"><span className="hp-ic">✉️</span>Contact<small>say hello</small></Link>
+                </div>
+              </div>
+
+              <div className="hp-card">
+                <h3>QUICK LINKS</h3>
+                <Link className="hp-row-link" href="/photography"><span className="hp-ic">🖼️</span><span>View my work<small>portfolio &amp; galleries</small></span><span className="hp-arr">›</span></Link>
+                <Link className="hp-row-link" href="/resume"><span className="hp-ic">📄</span><span>Download résumé<small>PDF · updated 2026</small></span><span className="hp-arr">›</span></Link>
+                <Link className="hp-row-link" href="/recommendations"><span className="hp-ic">💬</span><span>Recommendations<small>LinkedIn + community</small></span><span className="hp-arr">›</span></Link>
+                <a className="hp-row-link" href="https://www.etsy.com/shop/PixelNordova" target="_blank" rel="noreferrer"><span className="hp-ic">🚀</span><span>Etsy shop<small>PixelNordova digital goods</small></span><span className="hp-arr">›</span></a>
+              </div>
+
+              <div className="hp-card">
+                <h3>FIND ME</h3>
+                <a className="hp-dev" href="https://github.com/Anonymousakki23" target="_blank" rel="noreferrer">🐙 GitHub <small>· Anonymousakki23</small><span className="hp-dot" /></a>
+                <a className="hp-dev" href="https://www.linkedin.com/in/akshayiyer23" target="_blank" rel="noreferrer">💼 LinkedIn <small>· akshayiyer23</small><span className="hp-dot" /></a>
+                <a className="hp-dev" href="https://www.instagram.com/kaja_krakow/" target="_blank" rel="noreferrer">📸 Instagram <small>· @kaja_krakow</small><span className="hp-dot" /></a>
+                <a className="hp-dev" href="https://www.etsy.com/shop/PixelNordova" target="_blank" rel="noreferrer">🛒 Etsy <small>· PixelNordova</small><span className="hp-dot" /></a>
+              </div>
+            </div>
+
+            {/* CENTER */}
+            <div className="hp-col">
+              <div className="hp-card hp-holo">
+                <div className="hp-tag">AI ASSISTANT</div>
+                <img src="/homepage/ai-hologram.webp" alt="Holographic AI assistant" />
+              </div>
+
+              <div className="hp-card" id="hp-chat" ref={chatRef}>
+                <h3>TODAY · {clock}</h3>
+                <div className="hp-chat">
+                  {msgs.map((m, i) => (
+                    <div
+                      key={i}
+                      className={`hp-bubble ${m.from === "ai" ? "hp-ai" : "hp-me"}`}
+                      dangerouslySetInnerHTML={{ __html: m.html }}
+                    />
+                  ))}
+                </div>
+                <div className="hp-chips">
+                  <button className="hp-chip" onClick={() => ask("work", "Show me your work")}>See my work</button>
+                  <button className="hp-chip" onClick={() => ask("journey", "Tell me your story")}>The journey</button>
+                  <button className="hp-chip" onClick={() => ask("hello", "How do I reach you?")}>Say hello</button>
+                </div>
+              </div>
+
+              <div className="hp-card hp-orb-wrap">
+                <button className="hp-orb" onClick={() => setListening((v) => !v)} aria-label="Toggle voice">
+                  🎙️
+                </button>
+                <p>{listening ? "Listening…" : "Voice ready"}</p>
+                <small>Tap to {listening ? "mute" : "speak"}</small>
+              </div>
+            </div>
+
+            {/* RIGHT */}
+            <div className="hp-col">
+              <div className="hp-card">
+                <h3>📍 KRAKÓW</h3>
+                <div className="hp-wx-big">{wx ? `${wx.t}°` : "––°"}</div>
+                <div className="hp-wx-sub">{wx ? wx.label : "checking sky…"}</div>
+                <div className="hp-days">
+                  {wx ? (
+                    wx.days.map((d) => (
+                      <div key={d.d}>{d.d}<b>{d.t}°</b></div>
+                    ))
+                  ) : (
+                    ["···", "···", "···", "···", "···"].map((d, i) => (
+                      <div key={i}>{d}<b>–</b></div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              <div className="hp-card">
+                <h3>AT A GLANCE</h3>
+                <div className="hp-stat-ring">
+                  <div className="hp-ring"><span>10+</span></div>
+                  <div><b>Years of experience</b><br /><small>hospitality → tech → AI</small></div>
+                </div>
+                <div className="hp-bars">
+                  <div className="hp-bar"><i style={{ height: 52 }} /><b>50+</b><br /><small>projects</small></div>
+                  <div className="hp-bar"><i style={{ height: 64 }} /><b>5</b><br /><small>languages</small></div>
+                  <div className="hp-bar"><i style={{ height: 40 }} /><b>2</b><br /><small>countries</small></div>
+                </div>
+              </div>
+
+              <Link className="hp-card" href="/experience">
+                <h3>JOURNEY</h3>
+                <div className="hp-tl">
+                  <div><b>2014</b>Chef &amp; hospitality — India</div>
+                  <div><b>2018</b>Moved to Kraków · MSc Biotechnology</div>
+                  <div><b>2022</b>HCLTech — Google project</div>
+                  <div><b>2025</b>TELUS Digital — Ecommerce Trainer</div>
+                </div>
+              </Link>
+
+              <div className="hp-card">
+                <h3>FEATURED</h3>
+                <Link className="hp-trend" href="/experience"><span className="hp-th">🗺️</span><span><b>The Journey</b><small>Goa → Kraków · the full story</small></span></Link>
+                <a className="hp-trend" href="https://www.etsy.com/shop/PixelNordova" target="_blank" rel="noreferrer"><span className="hp-th">🃏</span><span><b>Photographer&apos;s Pose Deck</b><small>Etsy · 50 posing cards</small></span></a>
+                <a className="hp-trend" href="https://www.instagram.com/kaja_krakow/" target="_blank" rel="noreferrer"><span className="hp-th">🤳</span><span><b>Kaja — AI influencer</b><small>@kaja_krakow · Kraków guide</small></span></a>
+              </div>
+            </div>
+          </div>
+
+          {/* gallery — full width */}
+          <div className="hp-card" style={{ marginTop: 18 }}>
+            <h3>OPTICAL ARCHIVE</h3>
+            <div className="hp-gal">
+              {shots.map((s) => (
+                <figure key={s.src}>
+                  <img src={s.src} alt={s.tag} loading="lazy" />
+                  <figcaption>{s.tag}</figcaption>
+                </figure>
               ))}
             </div>
-          </div>
-          <div className="mt-6 flex items-center justify-between">
-            <p className="font-mono-sci text-[10px] tracking-[0.25em] text-white/30 uppercase">
-              Auto-scroll // hover to pause
-            </p>
-            <Link href="/photography" className="font-mono-sci text-xs tracking-[0.25em] text-sci-cyan/70 uppercase transition-colors hover:text-sci-cyan">
-              Full archive →
-            </Link>
-          </div>
-        </HudPanel>
-
-        {/* capabilities */}
-        <HudPanel index="04" title="Capability modules">
-          <div className="grid gap-6 md:grid-cols-3">
-            {capabilities.map((c) => (
-              <div key={c.title} className="border border-white/10 bg-white/[0.02] p-6 transition-colors hover:border-sci-cyan/30">
-                <c.icon className={`h-7 w-7 ${c.accent} mb-4`} />
-                <h3 className="font-orbitron mb-2 text-base font-semibold text-white">{c.title}</h3>
-                <p className="text-sm leading-relaxed text-white/55">{c.text}</p>
-              </div>
-            ))}
-          </div>
-        </HudPanel>
-
-        {/* journey teaser */}
-        <HudPanel index="05" title="The journey">
-          <Link href="/experience" className="group relative block overflow-hidden border border-amber-200/15">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#2a1503] via-[#0d0a18] to-[#050510]" />
-            <div className="absolute inset-0 bg-[radial-gradient(60%_120%_at_20%_50%,rgba(240,168,64,0.22),transparent_70%)]" />
-            <div className="relative px-8 py-10 md:px-12">
-              <p className="font-mono-sci mb-3 text-xs tracking-[0.3em] text-amber-200/70 uppercase">
-                Goa, IN ————— Kraków, PL
-              </p>
-              <h2 className="font-orbitron text-2xl font-bold text-white md:text-3xl">
-                From Goa to Kraków.
-              </h2>
-              <p className="font-mono-sci mt-4 inline-flex items-center gap-3 text-xs tracking-[0.25em] text-amber-100/80 uppercase transition-colors group-hover:text-amber-100">
-                Enter the journey <ArrowRight className="h-4 w-4" />
-              </p>
+            <div className="hp-card-foot">
+              <p className="hp-gal-hint">SWIPE →</p>
+              <Link className="hp-more" href="/photography">FULL ARCHIVE →</Link>
             </div>
-          </Link>
-        </HudPanel>
+          </div>
 
-        <p className="pt-4 text-center font-mono-sci text-[11px] tracking-[0.3em] text-white/25 uppercase">
-          End of file // J.A.R.V.I.S. stands by, sir
-        </p>
-      </div>
-    </main>
+          <p className="hp-foot">END OF FILE // ASTRO STANDS BY</p>
+        </div>
+
+        <nav className="hp-bottom" aria-label="Quick navigation">
+          <div className="hp-in">
+            <Link href="/"><span className="hp-ic">🏠</span>HOME</Link>
+            <Link href="/experience"><span className="hp-ic">🗺️</span>JOURNEY</Link>
+            <button className="hp-cta" onClick={scrollToChat} aria-label="Talk to Astro"><span className="hp-ic">AI</span></button>
+            <Link href="/photography"><span className="hp-ic">📷</span>WORK</Link>
+            <Link href="/contact"><span className="hp-ic">👤</span>CONTACT</Link>
+          </div>
+        </nav>
+      </main>
+    </>
   );
 }
