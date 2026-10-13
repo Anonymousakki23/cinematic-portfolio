@@ -19,6 +19,11 @@ const shots = [
   { src: "/photography/ig-glowshroom.jpg", tag: "GLOWSHROOM" },
   { src: "/photography/ig-ant.jpg", tag: "WEAVER ANT" },
   { src: "/photography/ig-butterfly.jpg", tag: "BUTTERFLY" },
+  { src: "/photography/ig-mushroom.jpg", tag: "FOREST LANTERN" },
+  { src: "/photography/ig-lizard.jpg", tag: "GARDEN LIZARD" },
+  { src: "/photography/ig-sunset-ride.jpg", tag: "SUNSET RIDE" },
+  { src: "/photography/ig-winter-stream.jpg", tag: "WINTER STREAM" },
+  { src: "/photography/ig-jellyfish.jpg", tag: "NIGHT TIDE" },
 ];
 
 type Msg = { from: "ai" | "me"; html: string };
