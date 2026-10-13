@@ -88,6 +88,7 @@ export default function HomePage() {
   const [msgs, setMsgs] = useState<Msg[]>(OPENING);
   const [wx, setWx] = useState<{ t: number; label: string; days: { d: string; t: number }[] } | null>(null);
   const chatRef = useRef<HTMLDivElement>(null);
+  const galRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     try {
@@ -139,6 +140,39 @@ export default function HomePage() {
   };
 
   const scrollToChat = () => chatRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+
+  /* Auto-scroll the photo gallery; pauses while the user interacts. */
+  useEffect(() => {
+    const el = galRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let paused = false;
+    let resumeT: ReturnType<typeof setTimeout>;
+    const pause = () => {
+      paused = true;
+      clearTimeout(resumeT);
+      resumeT = setTimeout(() => {
+        paused = false;
+      }, 5000);
+    };
+    el.addEventListener("pointerdown", pause);
+    el.addEventListener("wheel", pause, { passive: true });
+    el.addEventListener("touchstart", pause, { passive: true });
+    const id = setInterval(() => {
+      if (paused || document.hidden) return;
+      const max = el.scrollWidth - el.clientWidth;
+      if (max <= 0) return;
+      if (el.scrollLeft >= max - 8) el.scrollTo({ left: 0, behavior: "smooth" });
+      else el.scrollBy({ left: Math.min(340, el.clientWidth * 0.8), behavior: "smooth" });
+    }, 2600);
+    return () => {
+      clearInterval(id);
+      clearTimeout(resumeT);
+      el.removeEventListener("pointerdown", pause);
+      el.removeEventListener("wheel", pause);
+      el.removeEventListener("touchstart", pause);
+    };
+  }, []);
 
   return (
     <>
@@ -268,7 +302,7 @@ export default function HomePage() {
           {/* gallery — full width */}
           <div className="hp-card" style={{ marginTop: 18 }}>
             <h3>OPTICAL ARCHIVE</h3>
-            <div className="hp-gal">
+            <div className="hp-gal" ref={galRef}>
               {shots.map((s) => (
                 <figure key={s.src}>
                   <img src={s.src} alt={s.tag} loading="lazy" />
@@ -277,7 +311,7 @@ export default function HomePage() {
               ))}
             </div>
             <div className="hp-card-foot">
-              <p className="hp-gal-hint">SWIPE →</p>
+              <p className="hp-gal-hint">AUTO-SCROLL · SWIPE TO TAKE OVER</p>
               <Link className="hp-more" href="/photography">FULL ARCHIVE →</Link>
             </div>
           </div>
