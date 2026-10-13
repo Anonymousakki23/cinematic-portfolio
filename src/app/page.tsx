@@ -164,7 +164,7 @@ export default function HomePage() {
             <div className="hp-col">
               <div className="hp-card hp-holo">
                 <div className="hp-tag">AI ASSISTANT</div>
-                <img src="/homepage/ai-hologram.webp" alt="Holographic AI assistant" />
+                <img src="/homepage/ai-hologram.jpg" alt="Holographic AI assistant" />
               </div>
 
               <div className="hp-card" id="hp-chat" ref={chatRef}>
