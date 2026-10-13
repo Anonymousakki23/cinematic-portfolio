@@ -41,11 +41,11 @@ a.hp-card:hover{ border-color:rgba(62,230,255,.45); }
 
 .hp-hello h2{ font-size:30px; font-weight:700; }
 .hp-hello p{ color:var(--dim); margin-top:6px; font-size:14px; line-height:1.55; }
-.hp-wave{ display:flex; gap:4px; align-items:flex-end; height:34px; margin-top:14px; }
-.hp-wave span{ width:4px; border-radius:2px; background:linear-gradient(180deg,var(--cyan),var(--violet));
-  animation:hp-wv 1.2s ease-in-out infinite; }
-.hp-wave span:nth-child(odd){ animation-delay:.3s } .hp-wave span:nth-child(3n){ animation-delay:.6s }
-@keyframes hp-wv{ 0%,100%{height:8px} 50%{height:30px} }
+.hp-typer{ margin-top:14px; font-size:15px; color:var(--cyan); min-height:26px;
+  font-family:ui-monospace,Menlo,Consolas,monospace; letter-spacing:.5px; }
+.hp-typer .hp-prompt{ color:var(--violet); margin-right:6px; }
+.hp-caret{ animation:hp-blink 1.05s steps(1) infinite; }
+@keyframes hp-blink{ 50%{ opacity:0; } }
 
 .hp-tools{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
 .hp-tool{ background:var(--panel2); border:1px solid var(--line); border-radius:16px; padding:14px 6px;
@@ -85,17 +85,6 @@ a.hp-card:hover{ border-color:rgba(62,230,255,.45); }
 .hp-chip{ font-size:12px; padding:8px 14px; border-radius:20px; border:1px solid rgba(62,230,255,.4);
   color:var(--cyan); background:rgba(62,230,255,.07); cursor:pointer; font-family:inherit; }
 .hp-chip:hover{ background:rgba(62,230,255,.16); }
-
-.hp-orb-wrap{ text-align:center; padding:10px 0 2px; }
-.hp-orb{ width:110px; height:110px; margin:0 auto; border-radius:50%;
-  background:radial-gradient(circle at 50% 40%, #2b1b5e 0%, #12082e 60%, #05060f 100%);
-  border:2px solid rgba(168,85,247,.6); box-shadow:0 0 34px rgba(168,85,247,.55), inset 0 0 24px rgba(62,230,255,.35);
-  display:flex; align-items:center; justify-content:center; font-size:38px;
-  animation:hp-pulse 2.6s ease-in-out infinite; cursor:pointer; }
-@keyframes hp-pulse{ 0%,100%{ box-shadow:0 0 26px rgba(168,85,247,.45), inset 0 0 22px rgba(62,230,255,.3);}
-  50%{ box-shadow:0 0 52px rgba(62,230,255,.7), inset 0 0 30px rgba(168,85,247,.45);} }
-.hp-orb-wrap p{ color:var(--cyan); font-size:13px; margin-top:10px; }
-.hp-orb-wrap small{ color:var(--dim); font-size:11px; }
 
 .hp-wx-big{ font-size:52px; font-weight:700; }
 .hp-wx-sub{ color:var(--dim); font-size:13px; margin:4px 0 12px; }
@@ -203,5 +192,5 @@ a.hp-card:hover{ border-color:rgba(62,230,255,.45); }
 .fintro.fintro-out{ animation:fintro-out .45s ease forwards; }
 @keyframes fintro-out{ to{ opacity:0; visibility:hidden; } }
 @media (prefers-reduced-motion: reduce){
-  .fintro-scan, .hp-wave span, .hp-orb{ animation:none !important; }
+  .fintro-scan, .hp-caret{ animation:none !important; }
 }

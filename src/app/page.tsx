@@ -37,8 +37,40 @@ const CHIP_REPLIES: Record<string, string> = {
   hello: `The fastest way is the <a href="/contact">contact terminal</a> — I reply properly, not just the holding text.`,
 };
 
-function wxLabel(code: number): string {
-  if (code === 0) return "Clear sky";
+/** Rotating role line with typewriter effect — replaces the old equalizer. */
+function RoleTyper() {
+  const roles = ["Data & AI Trainer", "Macro Photographer", "Builder of Things", "Based in Kraków"];
+  const [ri, setRi] = useState(0);
+  const [txt, setTxt] = useState("");
+  const [phase, setPhase] = useState<"type" | "hold" | "del">("type");
+
+  useEffect(() => {
+    const role = roles[ri % roles.length];
+    let t: ReturnType<typeof setTimeout>;
+    if (phase === "type") {
+      if (txt.length < role.length) t = setTimeout(() => setTxt(role.slice(0, txt.length + 1)), 55);
+      else t = setTimeout(() => setPhase("hold"), 1500);
+    } else if (phase === "hold") {
+      t = setTimeout(() => setPhase("del"), 250);
+    } else if (txt.length > 0) {
+      t = setTimeout(() => setTxt(role.slice(0, txt.length - 1)), 26);
+    } else {
+      setRi((r) => r + 1);
+      setPhase("type");
+      return;
+    }
+    return () => clearTimeout(t);
+  }, [txt, phase, ri]);
+
+  return (
+    <p className="hp-typer" aria-live="polite">
+      <span className="hp-prompt">▸</span> {txt}
+      <span className="hp-caret">▌</span>
+    </p>
+  );
+}
+
+function wxLabel(code: number): string {  if (code === 0) return "Clear sky";
   if (code <= 3) return "Partly cloudy";
   if (code <= 48) return "Fog";
   if (code <= 57) return "Drizzle";
@@ -54,7 +86,6 @@ export default function HomePage() {
   const [showIntro, setShowIntro] = useState(false);
   const [clock, setClock] = useState("--:--");
   const [msgs, setMsgs] = useState<Msg[]>(OPENING);
-  const [listening, setListening] = useState(false);
   const [wx, setWx] = useState<{ t: number; label: string; days: { d: string; t: number }[] } | null>(null);
   const chatRef = useRef<HTMLDivElement>(null);
 
@@ -124,11 +155,7 @@ export default function HomePage() {
             {/* LEFT */}
             <div className="hp-col">
               <div className="hp-card hp-hello">
-                <div className="hp-wave" aria-hidden>
-                  {Array.from({ length: 20 }).map((_, i) => (
-                    <span key={i} />
-                  ))}
-                </div>
+                <RoleTyper />
               </div>
 
               <div className="hp-card">
@@ -185,13 +212,6 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="hp-card hp-orb-wrap">
-                <button className="hp-orb" onClick={() => setListening((v) => !v)} aria-label="Toggle voice">
-                  🎙️
-                </button>
-                <p>{listening ? "Listening…" : "Voice ready"}</p>
-                <small>Tap to {listening ? "mute" : "speak"}</small>
-              </div>
             </div>
 
             {/* RIGHT */}
