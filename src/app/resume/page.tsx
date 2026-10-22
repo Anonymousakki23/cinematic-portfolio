@@ -15,7 +15,7 @@ const experience = [
       "Assist in new hire onboarding and standardized vendor knowledge transfers",
       "Track deliverables, reporting, and comprehensive project documentation",
       "Lead cross-regional calibrations across India and Vietnam",
-      "Designed modules on LLM models within the Google ecosystem",
+      "Designed training modules on LLM models",
     ],
   },
   {

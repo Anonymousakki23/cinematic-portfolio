@@ -292,7 +292,7 @@ export default function HomePage() {
                 <div className="hp-tl">
                   <div><b>2014</b>Technical Lead, PC-Clinik — Goa · alongside BSc</div>
                   <div><b>2018</b>Kraków · MSc Biotechnology · part-time hospitality alongside</div>
-                  <div><b>2022</b>HCLTech — Google project</div>
+                  <div><b>2022</b>HCLTech</div>
                   <div><b>2025</b>TELUS Digital — Ecommerce Trainer</div>
                 </div>
               </Link>

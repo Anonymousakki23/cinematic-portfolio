@@ -33,13 +33,13 @@ const serviceRecord = [
   {
     period: "2024 — 2025",
     role: "Lead Analyst Trainer",
-    org: "HCLTech · Google project",
+    org: "HCLTech",
     detail: "Led analyst training tracks; owned onboarding and capability uplift.",
   },
   {
     period: "2022 — 2024",
     role: "Senior Analyst",
-    org: "HCLTech · Google project",
+    org: "HCLTech",
     detail: "Data analysis, quality reporting and stakeholder delivery at global scale.",
   },
   {
@@ -380,7 +380,7 @@ export default function AboutPage() {
                 <p className="text-white/60">
                   Adept at onboarding, technical guidance and proactive
                   communication with stakeholders — from ecommerce AI data
-                  solutions at TELUS Digital to Google-scale analytics programs
+                  solutions at TELUS Digital to large-scale analytics programs
                   at HCLTech. Started in tech — a Goa service centre, worked
                   alongside his degree — before Kraków added an MSc, years
                   of part-time hospitality alongside work, and the move
