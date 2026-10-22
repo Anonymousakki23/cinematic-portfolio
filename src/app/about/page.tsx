@@ -381,8 +381,10 @@ export default function AboutPage() {
                   Adept at onboarding, technical guidance and proactive
                   communication with stakeholders — from ecommerce AI data
                   solutions at TELUS Digital to Google-scale analytics programs
-                  at HCLTech. Started in hospitality kitchens before moving into
-                  tech and data; still applies what the coast taught him:
+                  at HCLTech. Started in tech — a Goa service centre, worked
+                  alongside his degree — before Kraków added an MSc, years
+                  of part-time hospitality alongside work, and the move
+                  into data; still applies what the coast taught him:
                   patience, observation, and that light changes everything.
                 </p>
               </div>

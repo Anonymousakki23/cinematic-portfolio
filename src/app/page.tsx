@@ -39,7 +39,7 @@ const OPENING: Msg[] = [
 
 const CHIP_REPLIES: Record<string, string> = {
   work: `Start with the <a href="/photography">optical archive</a> — macro, lightning and street frames.`,
-  journey: `Goa → Kraków, kitchens → data programs. The full story lives on the <a href="/experience">journey page</a>.`,
+  journey: `Goa → Kraków — tech lead alongside my studies, now data & AI. The full story lives on the <a href="/experience">journey page</a>.`,
   hello: `The fastest way is the <a href="/contact">contact terminal</a> — I reply properly, not just the holding text.`,
 };
 
@@ -278,7 +278,7 @@ export default function HomePage() {
                 <h3>AT A GLANCE</h3>
                 <div className="hp-stat-ring">
                   <div className="hp-ring"><span>10+</span></div>
-                  <div><b>Years of experience</b><br /><small>hospitality → tech → AI</small></div>
+                  <div><b>Years of experience</b><br /><small>tech → data → AI</small></div>
                 </div>
                 <div className="hp-bars">
                   <div className="hp-bar"><i style={{ height: 52 }} /><b>50+</b><br /><small>projects</small></div>
@@ -290,8 +290,8 @@ export default function HomePage() {
               <Link className="hp-card" href="/experience">
                 <h3>JOURNEY</h3>
                 <div className="hp-tl">
-                  <div><b>2014</b>Chef &amp; hospitality — India</div>
-                  <div><b>2018</b>Moved to Kraków · MSc Biotechnology</div>
+                  <div><b>2014</b>Technical Lead, PC-Clinik — Goa · alongside BSc</div>
+                  <div><b>2018</b>Kraków · MSc Biotechnology · part-time hospitality alongside</div>
                   <div><b>2022</b>HCLTech — Google project</div>
                   <div><b>2025</b>TELUS Digital — Ecommerce Trainer</div>
                 </div>
